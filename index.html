@@ -202,8 +202,11 @@
   .content-list.tight-top{top:157px; width:334.29px;}
   .list-wrap{
     position:absolute;
-    left:30px; top:185.09px; width:333px;
+    left:30px; top:185.09px; width:333px; bottom:85px;
+    overflow-y:auto; padding-bottom:24px;
+    scrollbar-width:none; -ms-overflow-style:none;
   }
+  .list-wrap::-webkit-scrollbar{display:none; width:0; height:0;}
   .content-list.in-flow{
     position:static; left:auto; top:auto; width:100%;
   }
@@ -308,6 +311,32 @@
     font-family:inherit; font-size:15px; color:var(--c-400); letter-spacing:-0.3px;
     text-transform:capitalize; line-height:1.15;
   }
+  .view-order.in-flow{position:static; left:auto; top:auto; margin-top:24px;}
+
+  /* ---------- order-filled scrollable content ---------- */
+  .filled-scroll{
+    position:absolute; left:0; top:150px; right:0; bottom:98.75px;
+    padding:0 30px 24px; overflow-y:auto;
+    scrollbar-width:none; -ms-overflow-style:none;
+  }
+  .filled-scroll::-webkit-scrollbar{display:none; width:0; height:0;}
+
+  /* ---------- memo ---------- */
+  .memo-block{display:flex; flex-direction:column; gap:24px; margin-top:24px;}
+  .memo-title-row{display:flex; align-items:center; justify-content:space-between;}
+  .memo-title{font-size:15px; font-weight:500; color:var(--c-white); letter-spacing:-0.3px;}
+  .revise-memo-link{
+    font-size:13px; color:var(--c-400); letter-spacing:-0.2px; text-decoration:underline;
+    background:none; border:none; padding:0; font-family:inherit; cursor:pointer;
+  }
+  .revise-memo-link:hover, .revise-memo-link:active{color:var(--c-white);}
+  .memo-list{display:flex; flex-direction:column; gap:36px;}
+  .memo-field{display:flex; flex-direction:column; gap:5px;}
+  .memo-field--case{gap:10px;}
+  .memo-label{font-size:11px; color:var(--c-700);}
+  .memo-value{font-size:15px; color:var(--c-700); letter-spacing:-0.3px; line-height:1.15; margin:0;}
+  .memo-case-text{display:flex; align-items:baseline; gap:6px; flex-wrap:wrap;}
+  .case-arrow{flex:none; color:var(--c-700); position:relative; top:1px;}
 
   /* ---------- done bar ---------- */
   .done-bar{
@@ -1078,6 +1107,37 @@
         <div class="divider"></div>
       </div>
 
+      <div class="memo-block">
+        <div class="memo-title-row">
+          <span class="memo-title">Memo</span>
+          <button class="revise-memo-link" type="button" data-action="none">Revise Memo</button>
+        </div>
+        <div class="memo-list">
+          <div class="memo-field">
+            <span class="memo-label">Classification</span>
+            <span class="memo-value">Compounder</span>
+          </div>
+          <div class="memo-field">
+            <span class="memo-label">Role</span>
+            <span class="memo-value">Core Position</span>
+          </div>
+          <div class="memo-field memo-field--case">
+            <span class="memo-label">Investment case</span>
+            <p class="memo-value memo-case-text">Aritzia is a premium-apparel compounder whose next leg is US square-footage growth, not same-store comps ...
+              <svg class="case-arrow" viewBox="0 0 9 8" width="9" height="8" fill="none"><path d="M1 4H8M8 4L4.8 1M8 4L4.8 7" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </p>
+          </div>
+          <div class="memo-field">
+            <span class="memo-label">Prediction</span>
+            <span class="memo-value">60% Probability 20% / yr over 5 years</span>
+          </div>
+          <div class="memo-field">
+            <span class="memo-label">Source</span>
+            <span class="memo-value">Screener</span>
+          </div>
+        </div>
+      </div>
+
       <p class="helper-text in-flow">Market is currently closed.<br>This order will be queued and submitted at the next market open.</p>
     </div>
 
@@ -1167,42 +1227,72 @@
       <div class="ticker-row"><span class="ticker-symbol dim">ATZ.TO</span><span class="ticker-action">Order Filled</span></div>
     </div>
 
-    <div class="content-list tight-top">
-      <div class="row">
-        <span class="row-label">Type</span>
-        <span class="row-value plain">Limit Buy</span>
-      </div>
-      <div class="divider"></div>
+    <div class="filled-scroll">
+      <div class="content-list in-flow">
+        <div class="row">
+          <span class="row-label">Type</span>
+          <span class="row-value plain">Limit Buy</span>
+        </div>
+        <div class="divider"></div>
 
-      <div class="row">
-        <span class="row-label">Estimated Portfolio weight</span>
-        <span class="row-value plain review-weight" style="text-transform:uppercase;">5.12%</span>
-      </div>
-      <div class="divider"></div>
+        <div class="row">
+          <span class="row-label">Portfolio weight</span>
+          <span class="row-value plain review-weight" style="text-transform:uppercase;">5.12%</span>
+        </div>
+        <div class="divider"></div>
 
-      <div class="row">
-        <span class="row-label">Shares</span>
-        <span class="row-value plain review-shares" style="text-transform:uppercase;">1</span>
-      </div>
-      <div class="divider"></div>
+        <div class="row">
+          <span class="row-label">Shares</span>
+          <span class="row-value plain review-shares" style="text-transform:uppercase;">1</span>
+        </div>
+        <div class="divider"></div>
 
-      <div class="row">
-        <span class="row-label">Price</span>
-        <span class="row-value plain review-price" style="text-transform:uppercase;">309.95 CAD</span>
-      </div>
-      <div class="divider"></div>
+        <div class="row">
+          <span class="row-label">Price</span>
+          <span class="row-value plain review-price" style="text-transform:uppercase;">309.95 CAD</span>
+        </div>
+        <div class="divider"></div>
 
-      <div class="row">
-        <span class="row-label">Estimated Cost</span>
-        <span class="row-value plain review-cost" style="text-transform:uppercase;">309.95 CAD</span>
+        <div class="row">
+          <span class="row-label">Total Cost</span>
+          <span class="row-value plain review-cost" style="text-transform:uppercase;">309.95 CAD</span>
+        </div>
+        <div class="divider"></div>
       </div>
-      <div class="divider"></div>
+
+      <div class="memo-block">
+        <span class="memo-title">Memo</span>
+        <div class="memo-list">
+          <div class="memo-field">
+            <span class="memo-label">Classification</span>
+            <span class="memo-value">Compounder</span>
+          </div>
+          <div class="memo-field">
+            <span class="memo-label">Role</span>
+            <span class="memo-value">Core Position</span>
+          </div>
+          <div class="memo-field memo-field--case">
+            <span class="memo-label">Investment case</span>
+            <p class="memo-value memo-case-text">Aritzia is a premium-apparel compounder whose next leg is US square-footage growth, not same-store comps ...
+              <svg class="case-arrow" viewBox="0 0 9 8" width="9" height="8" fill="none"><path d="M1 4H8M8 4L4.8 1M8 4L4.8 7" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </p>
+          </div>
+          <div class="memo-field">
+            <span class="memo-label">Prediction</span>
+            <span class="memo-value">60% Probability 20% / yr over 5 years</span>
+          </div>
+          <div class="memo-field">
+            <span class="memo-label">Source</span>
+            <span class="memo-value">Screener</span>
+          </div>
+        </div>
+      </div>
+
+      <button class="view-order in-flow" data-action="none">
+        <svg viewBox="0 0 9 8" width="9" height="8" fill="none"><path d="M1 4H8M8 4L4.8 1M8 4L4.8 7" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        View Order
+      </button>
     </div>
-
-    <button class="view-order" data-action="none">
-      <svg viewBox="0 0 9 8" width="9" height="8" fill="none"><path d="M1 4H8M8 4L4.8 1M8 4L4.8 7" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      View Order
-    </button>
 
     <button class="done-bar" data-action="goto" data-target="limit-order">Done</button>
   </section>
@@ -1784,6 +1874,37 @@
         <div class="divider"></div>
       </div>
 
+      <div class="memo-block">
+        <div class="memo-title-row">
+          <span class="memo-title">Memo</span>
+          <button class="revise-memo-link" type="button" data-action="none">Revise Memo</button>
+        </div>
+        <div class="memo-list">
+          <div class="memo-field">
+            <span class="memo-label">Classification</span>
+            <span class="memo-value">Compounder</span>
+          </div>
+          <div class="memo-field">
+            <span class="memo-label">Role</span>
+            <span class="memo-value">Core Position</span>
+          </div>
+          <div class="memo-field memo-field--case">
+            <span class="memo-label">Investment case</span>
+            <p class="memo-value memo-case-text">Aritzia is a premium-apparel compounder whose next leg is US square-footage growth, not same-store comps ...
+              <svg class="case-arrow" viewBox="0 0 9 8" width="9" height="8" fill="none"><path d="M1 4H8M8 4L4.8 1M8 4L4.8 7" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </p>
+          </div>
+          <div class="memo-field">
+            <span class="memo-label">Prediction</span>
+            <span class="memo-value">60% Probability 20% / yr over 5 years</span>
+          </div>
+          <div class="memo-field">
+            <span class="memo-label">Source</span>
+            <span class="memo-value">Screener</span>
+          </div>
+        </div>
+      </div>
+
       <p class="helper-text in-flow">Market is currently closed.<br>This order will be queued and submitted at the next market open.</p>
     </div>
 
@@ -1879,42 +2000,78 @@
       <div class="ticker-row"><span class="ticker-symbol dim">ATZ.TO</span><span class="ticker-action">Order Filled</span></div>
     </div>
 
-    <div class="content-list tight-top">
-      <div class="row">
-        <span class="row-label">Type</span>
-        <span class="row-value plain">Limit Buy</span>
-      </div>
-      <div class="divider"></div>
+    <div class="filled-scroll">
+      <div class="content-list in-flow">
+        <div class="row">
+          <span class="row-label">Type</span>
+          <span class="row-value plain">Limit Buy</span>
+        </div>
+        <div class="divider"></div>
 
-      <div class="row">
-        <span class="row-label">Estimated Portfolio weight</span>
-        <span class="row-value plain usd-review-weight" style="text-transform:uppercase;">5.12%</span>
-      </div>
-      <div class="divider"></div>
+        <div class="row">
+          <span class="row-label">Portfolio weight</span>
+          <span class="row-value plain usd-review-weight" style="text-transform:uppercase;">5.12%</span>
+        </div>
+        <div class="divider"></div>
 
-      <div class="row">
-        <span class="row-label">Shares</span>
-        <span class="row-value plain usd-review-shares" style="text-transform:uppercase;">1</span>
-      </div>
-      <div class="divider"></div>
+        <div class="row">
+          <span class="row-label">Shares</span>
+          <span class="row-value plain usd-review-shares" style="text-transform:uppercase;">1</span>
+        </div>
+        <div class="divider"></div>
 
-      <div class="row">
-        <span class="row-label">Price</span>
-        <span class="row-value plain usd-review-price" style="text-transform:uppercase;">300.00 USD</span>
-      </div>
-      <div class="divider"></div>
+        <div class="row">
+          <span class="row-label">Price</span>
+          <span class="row-value plain usd-review-price" style="text-transform:uppercase;">300.00 USD</span>
+        </div>
+        <div class="divider"></div>
 
-      <div class="row">
-        <span class="row-label">Estimated Cost</span>
-        <span class="row-value plain usd-review-cost" style="text-transform:uppercase;">421.57 CAD</span>
+        <div class="row">
+          <span class="row-label">Exchange Rate</span>
+          <span class="row-value plain" style="text-transform:uppercase;">1.36</span>
+        </div>
+        <div class="divider"></div>
+
+        <div class="row">
+          <span class="row-label">Total Cost</span>
+          <span class="row-value plain usd-review-cost" style="text-transform:uppercase;">421.57 CAD</span>
+        </div>
+        <div class="divider"></div>
       </div>
-      <div class="divider"></div>
+
+      <div class="memo-block">
+        <span class="memo-title">Memo</span>
+        <div class="memo-list">
+          <div class="memo-field">
+            <span class="memo-label">Classification</span>
+            <span class="memo-value">Compounder</span>
+          </div>
+          <div class="memo-field">
+            <span class="memo-label">Role</span>
+            <span class="memo-value">Core Position</span>
+          </div>
+          <div class="memo-field memo-field--case">
+            <span class="memo-label">Investment case</span>
+            <p class="memo-value memo-case-text">Aritzia is a premium-apparel compounder whose next leg is US square-footage growth, not same-store comps ...
+              <svg class="case-arrow" viewBox="0 0 9 8" width="9" height="8" fill="none"><path d="M1 4H8M8 4L4.8 1M8 4L4.8 7" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </p>
+          </div>
+          <div class="memo-field">
+            <span class="memo-label">Prediction</span>
+            <span class="memo-value">60% Probability 20% / yr over 5 years</span>
+          </div>
+          <div class="memo-field">
+            <span class="memo-label">Source</span>
+            <span class="memo-value">Screener</span>
+          </div>
+        </div>
+      </div>
+
+      <button class="view-order in-flow" data-action="none">
+        <svg viewBox="0 0 9 8" width="9" height="8" fill="none"><path d="M1 4H8M8 4L4.8 1M8 4L4.8 7" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        View Order
+      </button>
     </div>
-
-    <button class="view-order" data-action="none">
-      <svg viewBox="0 0 9 8" width="9" height="8" fill="none"><path d="M1 4H8M8 4L4.8 1M8 4L4.8 7" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      View Order
-    </button>
 
     <button class="done-bar" data-action="goto" data-target="usd-limit-order">Done</button>
   </section>
@@ -2135,16 +2292,22 @@
     });
   }
 
+  // Seed the typed string with what's on screen (the live quote, if this is the first
+  // touch) so backspace deletes it character-by-character instead of jumping straight to
+  // empty/0.00. Needed in two places: tapping the field (setActiveField) AND pressing a
+  // key directly — "price" is the default activeField from load, so the very first key
+  // a user presses can reach pressBackspace/pressDigit before any tap ever seeds it.
+  function seedPriceIfUntouched(s){
+    if(!s.priceTouched) s.priceStr = formatMoney(s.priceCents);
+    s.priceTouched = true;
+  }
+
   function setActiveField(field){
     const s = activeState();
     s.activeField = field;
     s.bottomMode = "keyboard";
     if(field === "price"){
-      // Seed the typed string with what's on screen (the live quote, if this is the
-      // first touch) so backspace deletes it character-by-character instead of jumping
-      // straight to empty/0.00.
-      if(!s.priceTouched) s.priceStr = formatMoney(s.priceCents);
-      s.priceTouched = true;
+      seedPriceIfUntouched(s);
     }
     const root = document.querySelector('.iteration.active') || document;
     root.querySelectorAll(".field-row.editable").forEach(b=>{
@@ -2188,8 +2351,8 @@
   function pressBackspace(){
     const s = activeState();
     if(s.activeField === "price"){
-      s.priceTouched = true;
-      s.priceStr = (s.priceStr || "").slice(0, -1);
+      seedPriceIfUntouched(s);
+      s.priceStr = s.priceStr.slice(0, -1);
       s.priceCents = priceCentsFromStr(s.priceStr);
     }
     else if(s.activeField === "shares") s.shares = Math.floor(s.shares / 10);
