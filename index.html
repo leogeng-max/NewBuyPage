@@ -427,11 +427,6 @@
     font-size:11px; font-weight:500; color:#929292;
     letter-spacing:-0.22px; text-transform:capitalize;
   }
-  .field-hint-inline{
-    font-size:11px; color:#6d6d6d; letter-spacing:-0.2px; white-space:nowrap;
-    display:flex; align-items:center; gap:4px;
-  }
-  .field-hint-inline .info-icon{width:9px; height:9px;}
   .field-plain{
     font-size:16px; font-weight:500; color:var(--c-white); letter-spacing:-0.3px;
   }
@@ -473,6 +468,16 @@
   .field-line.dropdown{cursor:pointer;}
   .field-line.dropdown .field-value{font-size:15px; color:var(--c-400);}
   .field-line.dropdown svg{color:#8a8a8a; flex:none;}
+
+  /* ---------- plain-row: compact single-line field rows (v2 top section) ---------- */
+  .field-row.plain-row .field-label{
+    font-size:14px; font-weight:400; color:var(--c-400); text-transform:none;
+    letter-spacing:-0.28px; margin-bottom:0; display:flex; align-items:center; gap:4px;
+  }
+  .field-row.plain-row .field-label-row{margin-bottom:10px;}
+  .field-row.plain-row .field-value{font-size:15px;}
+  .field-row.plain-row .field-plain{font-size:15px;}
+  .field-row.plain-row .info-icon{flex:none;}
 
   /* ---------- positions / orders / history — collapsible summary row ---------- */
   .activity-row{margin-top:8px;}
@@ -531,6 +536,15 @@
   .position-pl.up{color:var(--bid-green);}
   .position-pl.down{color:var(--ask-red);}
   .position-list{display:flex; flex-direction:column; gap:14px;}
+  .list-columns{
+    display:flex; align-items:center; gap:8px;
+    font-size:11px; color:#6d6d6d; margin-bottom:10px;
+  }
+  .list-columns .col-action{width:58px; flex:none;}
+  .list-columns .col-name{flex:1; min-width:0;}
+  .list-columns .col-price{width:56px; flex:none; text-align:right;}
+  .list-columns .col-qty{width:60px; flex:none; text-align:right;}
+  .list-columns.positions-columns{justify-content:space-between;}
   .history-empty{font-size:13px; color:#6d6d6d;}
   .stats-grid{display:grid; grid-template-columns:1fr 1fr; gap:20px 16px;}
   .split-stat-row{display:flex; justify-content:space-between; gap:24px;}
@@ -553,6 +567,8 @@
   <div class="d-group">Currency</div>
   <a href="#" data-iteration-target="cad" class="active">CAD</a>
   <a href="#" data-iteration-target="usd">USD</a>
+  <div class="d-group">Design</div>
+  <a href="#" data-iteration-target="v2">Page Update</a>
 </nav>
 
 <div class="phone-shell">
@@ -1348,10 +1364,6 @@
       <div class="field-row" data-action="goto" data-target="usd-select-shares">
         <div class="field-label-row">
           <span class="field-label">Limit Price</span>
-          <span class="field-hint-inline">
-            <svg class="info-icon" viewBox="0 0 11 11" width="9" height="9" fill="none"><circle cx="5.5" cy="5.5" r="5" stroke="currentColor" stroke-width="0.9"/><rect x="5" y="4.6" width="1" height="3.3" fill="currentColor"/><rect x="5" y="3" width="1" height="1" fill="currentColor"/></svg>
-            Mkt 309.95 CAD
-          </span>
         </div>
         <div class="field-line">
           <div class="field-value-wrap">
@@ -1585,10 +1597,6 @@
       <div class="field-row editable" data-field="price">
         <div class="field-label-row">
           <span class="field-label">Limit Price</span>
-          <span class="field-hint-inline">
-            <svg class="info-icon" viewBox="0 0 11 11" width="9" height="9" fill="none"><circle cx="5.5" cy="5.5" r="5" stroke="currentColor" stroke-width="0.9"/><rect x="5" y="4.6" width="1" height="3.3" fill="currentColor"/><rect x="5" y="3" width="1" height="1" fill="currentColor"/></svg>
-            Mkt 309.95 CAD
-          </span>
         </div>
         <div class="field-line">
           <div class="field-value-wrap">
@@ -2079,6 +2087,662 @@
 </div>
 <!-- /iteration: usd -->
 
+<div class="iteration" data-iteration="v2">
+
+  <!-- ============================================================ -->
+  <!-- V2 SCREEN 1 — Limit Order (empty state)                       -->
+  <!-- ============================================================ -->
+  <section class="screen" data-screen="v2-limit-order">
+    <div class="header">
+      <button class="back-btn" data-action="back" aria-label="Back">
+        <svg viewBox="0 0 8 14" width="8" height="14" fill="none"><path d="M7 1L1 7L7 13" stroke="white" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <div class="header-title">
+        <span>Limit Order</span>
+        <svg viewBox="0 0 8 5" width="8" height="5" fill="none"><path d="M1 1L4 4L7 1" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+      <div class="order-type-menu">
+        <button class="order-type-item active" data-order-type="Limit Order" type="button">Limit Order</button>
+        <button class="order-type-item" data-order-type="Market Order" type="button">Market Order</button>
+        <button class="order-type-item" data-order-type="Stop Limit Order" type="button">Stop Limit Order</button>
+      </div>
+    </div>
+
+    <div class="field-list">
+      <div class="quote-row">
+        <div class="quote-left">
+          <div class="ticker-row"><span class="ticker-symbol">ATZ</span><span class="ticker-action">Buy</span></div>
+          <span class="position-tag">Compounder &middot; Core</span>
+          <div class="ticker-sub">Non-Registered&nbsp;&nbsp;50,000.00 CAD</div>        </div>
+        <div class="quote-right">
+          <div><span class="quote-price" data-quote="price">309.95</span></div>
+          <div class="quote-change down" data-quote="change">&minus;1.05 (&minus;0.34%)</div>
+        </div>
+      </div>
+
+      <div class="field-row plain-row" data-action="goto" data-target="v2-select-shares">
+        <div class="field-label-row">
+          <span class="field-label">Estimated Portfolio Weight</span>
+        </div>
+        <div class="field-line">
+          <div class="market-price-row">
+            <span class="market-price-label">Estimated Cost&nbsp;&nbsp;</span>
+            <span class="market-price-value" data-value="v2-cost">0.00 CAD</span>
+          </div>
+          <span class="field-plain" data-value="v2-weight">0.00%</span>
+        </div>
+      </div>
+
+      <div class="field-row plain-row" data-action="goto" data-target="v2-select-shares">
+        <div class="field-label-row">
+          <span class="field-label">Limit Price</span>
+        </div>
+        <div class="field-line">
+          <div class="field-value-wrap">
+            <span class="field-value" data-value="v2-price">0.00</span>
+            <span class="field-suffix">CAD</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="field-row plain-row" data-action="goto" data-target="v2-select-shares">
+        <div class="field-line">
+          <span class="field-label">Shares</span>
+          <span class="field-value" data-value="v2-shares">0</span>
+        </div>
+      </div>
+
+      <div class="field-row plain-row" data-action="goto" data-target="v2-select-shares">
+        <div class="field-line dropdown">
+          <span class="field-label">Duration</span>
+          <span style="display:flex; align-items:center; gap:7px;">
+            <span class="field-value" data-value="v2-duration">Good for Day</span>
+            <svg class="switch-icon" viewBox="0 0 12 10" width="11" height="9" fill="none"><path d="M1 3H10M10 3L7.5 1M10 3L7.5 5" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/><path d="M11 7H2M2 7L4.5 5M2 7L4.5 9" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </span>
+        </div>
+      </div>
+
+      <div class="field-bleed-divider"></div>
+
+      <div class="field-row activity-row">
+        <div class="activity-header">
+          <button class="activity-tab" data-tab="positions" type="button">
+            <span class="field-label">Positions</span><span class="tab-badge">(4)</span>
+          </button>
+          <button class="activity-tab active" data-tab="orders" type="button">
+            <span class="field-label">Orders</span><span class="tab-badge">(2)</span>
+          </button>
+          <button class="activity-tab" data-tab="history" type="button">
+            <span class="field-label">History</span>
+          </button>        </div>
+        <div class="activity-body">
+          <div class="panel-view" data-tab="positions">
+            <div class="position-list">
+              <div class="list-columns positions-columns">
+                <span>Position</span>
+                <span>Value</span>
+                <span>Change</span>
+              </div>
+              <div class="position-row">
+                <div class="position-main">
+                  <span class="position-ticker">ATZ</span>
+                  <span class="position-weight">32.4% wt</span>
+                </div>
+                <span class="position-price">1,847.52 CAD</span>
+                <span class="position-pl up">+2.4%</span>
+              </div>
+              <div class="position-row">
+                <div class="position-main">
+                  <span class="position-ticker">SPACEX</span>
+                  <span class="position-weight">18.7% wt</span>
+                </div>
+                <span class="position-price">963.15 CAD</span>
+                <span class="position-pl up">+5.8%</span>
+              </div>
+              <div class="position-row">
+                <div class="position-main">
+                  <span class="position-ticker">MSFT</span>
+                  <span class="position-weight">28.9% wt</span>
+                </div>
+                <span class="position-price">2,105.40 CAD</span>
+                <span class="position-pl down">&minus;0.6%</span>
+              </div>
+              <div class="position-row">
+                <div class="position-main">
+                  <span class="position-ticker">AAPL</span>
+                  <span class="position-weight">20.0% wt</span>
+                </div>
+                <span class="position-price">1,340.88 CAD</span>
+                <span class="position-pl up">+1.1%</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="panel-view active" data-tab="orders">
+            <div class="subpanel open-orders-subpanel open">
+              <button class="panel-section-header subpanel-toggle" type="button">
+                <span>Open <span class="tab-count">(2)</span></span>
+                <svg class="chev-icon" viewBox="0 0 8 5" width="8" height="5" fill="none"><path d="M1 1L4 4L7 1" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </button>
+              <div class="subpanel-body">
+                <div class="list-columns">
+                  <span class="col-action">Action</span>
+                  <span class="col-name">Company</span>
+                  <span class="col-price">Price</span>
+                  <span class="col-qty">Qty/Filled</span>
+                </div>
+                <div class="order-row">
+                  <div class="order-side">
+                    <span class="side-buy">Buy</span>
+                    <span class="order-status"><i class="status-dot"></i>Queued</span>
+                  </div>
+                  <div class="order-name">
+                    <span class="order-company">Orion Digital Corp</span>
+                    <span class="order-ticker">ORIO</span>
+                  </div>
+                  <div class="order-price">0.85</div>
+                  <div class="order-qty"><span class="qty-total">5,000</span><span class="qty-filled">0</span></div>
+                </div>
+                <div class="order-row">
+                  <div class="order-side">
+                    <span class="side-buy">Buy</span>
+                    <span class="order-status"><i class="status-dot"></i>Queued</span>
+                  </div>
+                  <div class="order-name">
+                    <span class="order-company">Orion Digital Corp</span>
+                    <span class="order-ticker">ORIO</span>
+                  </div>
+                  <div class="order-price">0.90</div>
+                  <div class="order-qty"><span class="qty-total">5,000</span><span class="qty-filled">0</span></div>
+                </div>
+              </div>
+            </div>
+            <div class="subpanel open">
+              <button class="panel-section-header subpanel-toggle" type="button">
+                <span>Filled or Cancelled</span>
+                <svg class="chev-icon" viewBox="0 0 8 5" width="8" height="5" fill="none"><path d="M1 1L4 4L7 1" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </button>
+              <div class="subpanel-body">
+                <div class="order-row">
+                  <div class="order-side">
+                    <span class="side-buy">Buy</span>
+                    <span class="order-status"><i class="status-dot filled"></i>Filled</span>
+                  </div>
+                  <div class="order-name">
+                    <span class="order-company">Orion Digital Corp</span>
+                    <span class="order-ticker">ORIO</span>
+                  </div>
+                  <div class="order-price">0.80</div>
+                  <div class="order-qty"><span class="qty-total">5,000</span><span class="qty-filled">5,000</span></div>
+                </div>
+                <div class="order-row">
+                  <div class="order-side">
+                    <span class="side-buy">Buy</span>
+                    <span class="order-status"><i class="status-dot cancelled"></i>Cancelled</span>
+                  </div>
+                  <div class="order-name">
+                    <span class="order-company">Orion Digital Corp</span>
+                    <span class="order-ticker">ORIO</span>
+                  </div>
+                  <div class="order-price">0.75</div>
+                  <div class="order-qty"><span class="qty-total">2,000</span><span class="qty-filled">0</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="panel-view" data-tab="history">
+            <div class="history-empty">No recent history.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="one-button">
+      <div class="one-button-row">
+        <button class="btn-link btn-cancel" data-action="goto" data-target="v2-limit-order">Exit</button>
+        <button class="btn-link btn-review disabled">
+          Review
+          <svg viewBox="0 0 9 8" width="9" height="8" fill="none"><path d="M1 4H8M8 4L4.8 1M8 4L4.8 7" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- V2 SCREEN 2 — select number of shares (numpad open)           -->
+  <!-- ============================================================ -->
+  <section class="screen" data-screen="v2-select-shares">
+    <div class="header">
+      <button class="back-btn" data-action="goto" data-target="v2-limit-order" aria-label="Back">
+        <svg viewBox="0 0 8 14" width="8" height="14" fill="none"><path d="M7 1L1 7L7 13" stroke="white" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <div class="header-title">
+        <span>Limit Order</span>
+        <svg viewBox="0 0 8 5" width="8" height="5" fill="none"><path d="M1 1L4 4L7 1" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+      <div class="order-type-menu">
+        <button class="order-type-item active" data-order-type="Limit Order" type="button">Limit Order</button>
+        <button class="order-type-item" data-order-type="Market Order" type="button">Market Order</button>
+        <button class="order-type-item" data-order-type="Stop Limit Order" type="button">Stop Limit Order</button>
+      </div>
+    </div>
+
+    <div class="field-list">
+      <div class="quote-row">
+        <div class="quote-left">
+          <div class="ticker-row"><span class="ticker-symbol">ATZ</span><span class="ticker-action">Buy</span></div>
+          <span class="position-tag">Compounder &middot; Core</span>
+          <div class="ticker-sub">Non-Registered&nbsp;&nbsp;50,000.00 CAD</div>        </div>
+        <div class="quote-right">
+          <div><span class="quote-price" data-quote="price">309.95</span></div>
+          <div class="quote-change down" data-quote="change">&minus;1.05 (&minus;0.34%)</div>
+        </div>
+      </div>
+
+      <div class="field-row plain-row">
+        <div class="field-label-row">
+          <span class="field-label">Estimated Portfolio Weight</span>
+        </div>
+        <div class="field-line">
+          <div class="market-price-row">
+            <span class="market-price-label">Estimated Cost&nbsp;&nbsp;</span>
+            <span class="market-price-value" data-value="v2-cost">0.00 CAD</span>
+          </div>
+          <span class="field-plain" data-value="v2-weight">0.00%</span>
+        </div>
+      </div>
+
+      <div class="field-row plain-row editable" data-field="price">
+        <div class="field-label-row">
+          <span class="field-label">Limit Price</span>
+        </div>
+        <div class="field-line">
+          <div class="field-value-wrap">
+            <span class="field-value" data-value="v2-price">0.00</span>
+            <span class="field-caret"></span>
+            <span class="field-suffix">CAD</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="field-row plain-row editable" data-field="shares">
+        <div class="field-line">
+          <span class="field-label">Shares</span>
+          <div class="field-value-wrap">
+            <span class="field-value" data-value="v2-shares">0</span>
+            <span class="field-caret"></span>
+          </div>
+        </div>
+      </div>
+
+      <div class="field-row plain-row">
+        <div class="field-line dropdown">
+          <span class="field-label">Duration</span>
+          <span style="display:flex; align-items:center; gap:7px;">
+            <span class="field-value" data-value="v2-duration">Good for Day</span>
+            <svg class="switch-icon" viewBox="0 0 12 10" width="11" height="9" fill="none"><path d="M1 3H10M10 3L7.5 1M10 3L7.5 5" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/><path d="M11 7H2M2 7L4.5 5M2 7L4.5 9" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </span>
+        </div>
+      </div>
+
+      <div class="field-bleed-divider"></div>
+
+      <div class="field-row activity-row">
+        <div class="activity-header">
+          <button class="activity-tab" data-tab="positions" type="button">
+            <span class="field-label">Positions</span><span class="tab-badge">(4)</span>
+          </button>
+          <button class="activity-tab active" data-tab="orders" type="button">
+            <span class="field-label">Orders</span><span class="tab-badge">(2)</span>
+          </button>
+          <button class="activity-tab" data-tab="history" type="button">
+            <span class="field-label">History</span>
+          </button>        </div>
+        <div class="activity-body">
+          <div class="panel-view" data-tab="positions">
+            <div class="position-list">
+              <div class="list-columns positions-columns">
+                <span>Position</span>
+                <span>Value</span>
+                <span>Change</span>
+              </div>
+              <div class="position-row">
+                <div class="position-main">
+                  <span class="position-ticker">ATZ</span>
+                  <span class="position-weight">32.4% wt</span>
+                </div>
+                <span class="position-price">1,847.52 CAD</span>
+                <span class="position-pl up">+2.4%</span>
+              </div>
+              <div class="position-row">
+                <div class="position-main">
+                  <span class="position-ticker">SPACEX</span>
+                  <span class="position-weight">18.7% wt</span>
+                </div>
+                <span class="position-price">963.15 CAD</span>
+                <span class="position-pl up">+5.8%</span>
+              </div>
+              <div class="position-row">
+                <div class="position-main">
+                  <span class="position-ticker">MSFT</span>
+                  <span class="position-weight">28.9% wt</span>
+                </div>
+                <span class="position-price">2,105.40 CAD</span>
+                <span class="position-pl down">&minus;0.6%</span>
+              </div>
+              <div class="position-row">
+                <div class="position-main">
+                  <span class="position-ticker">AAPL</span>
+                  <span class="position-weight">20.0% wt</span>
+                </div>
+                <span class="position-price">1,340.88 CAD</span>
+                <span class="position-pl up">+1.1%</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="panel-view active" data-tab="orders">
+            <div class="subpanel open-orders-subpanel open">
+              <button class="panel-section-header subpanel-toggle" type="button">
+                <span>Open <span class="tab-count">(2)</span></span>
+                <svg class="chev-icon" viewBox="0 0 8 5" width="8" height="5" fill="none"><path d="M1 1L4 4L7 1" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </button>
+              <div class="subpanel-body">
+                <div class="list-columns">
+                  <span class="col-action">Action</span>
+                  <span class="col-name">Company</span>
+                  <span class="col-price">Price</span>
+                  <span class="col-qty">Qty/Filled</span>
+                </div>
+                <div class="order-row">
+                  <div class="order-side">
+                    <span class="side-buy">Buy</span>
+                    <span class="order-status"><i class="status-dot"></i>Queued</span>
+                  </div>
+                  <div class="order-name">
+                    <span class="order-company">Orion Digital Corp</span>
+                    <span class="order-ticker">ORIO</span>
+                  </div>
+                  <div class="order-price">0.85</div>
+                  <div class="order-qty"><span class="qty-total">5,000</span><span class="qty-filled">0</span></div>
+                </div>
+                <div class="order-row">
+                  <div class="order-side">
+                    <span class="side-buy">Buy</span>
+                    <span class="order-status"><i class="status-dot"></i>Queued</span>
+                  </div>
+                  <div class="order-name">
+                    <span class="order-company">Orion Digital Corp</span>
+                    <span class="order-ticker">ORIO</span>
+                  </div>
+                  <div class="order-price">0.90</div>
+                  <div class="order-qty"><span class="qty-total">5,000</span><span class="qty-filled">0</span></div>
+                </div>
+              </div>
+            </div>
+            <div class="subpanel open">
+              <button class="panel-section-header subpanel-toggle" type="button">
+                <span>Filled or Cancelled</span>
+                <svg class="chev-icon" viewBox="0 0 8 5" width="8" height="5" fill="none"><path d="M1 1L4 4L7 1" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </button>
+              <div class="subpanel-body">
+                <div class="order-row">
+                  <div class="order-side">
+                    <span class="side-buy">Buy</span>
+                    <span class="order-status"><i class="status-dot filled"></i>Filled</span>
+                  </div>
+                  <div class="order-name">
+                    <span class="order-company">Orion Digital Corp</span>
+                    <span class="order-ticker">ORIO</span>
+                  </div>
+                  <div class="order-price">0.80</div>
+                  <div class="order-qty"><span class="qty-total">5,000</span><span class="qty-filled">5,000</span></div>
+                </div>
+                <div class="order-row">
+                  <div class="order-side">
+                    <span class="side-buy">Buy</span>
+                    <span class="order-status"><i class="status-dot cancelled"></i>Cancelled</span>
+                  </div>
+                  <div class="order-name">
+                    <span class="order-company">Orion Digital Corp</span>
+                    <span class="order-ticker">ORIO</span>
+                  </div>
+                  <div class="order-price">0.75</div>
+                  <div class="order-qty"><span class="qty-total">2,000</span><span class="qty-filled">0</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="panel-view" data-tab="history">
+            <div class="history-empty">No recent history.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="one-button" style="bottom:290px; height:70px;">
+      <div class="one-button-row">
+        <button class="btn-link btn-cancel" data-action="goto" data-target="v2-limit-order">Exit</button>
+        <button class="btn-link btn-review review-btn" data-action="goto" data-target="v2-review">
+          Review
+          <svg viewBox="0 0 9 8" width="9" height="8" fill="none"><path d="M1 4H8M8 4L4.8 1M8 4L4.8 7" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <div class="keyboard">
+      <div class="num-row">
+        <div class="num-key"><span class="digit">1</span></div>
+        <div class="num-key"><span class="digit">2</span><span class="letters">ABC</span></div>
+        <div class="num-key"><span class="digit">3</span><span class="letters">DEF</span></div>
+      </div>
+      <div class="num-row">
+        <div class="num-key"><span class="digit">4</span><span class="letters">GHI</span></div>
+        <div class="num-key"><span class="digit">5</span><span class="letters">JKL</span></div>
+        <div class="num-key"><span class="digit">6</span><span class="letters">MNO</span></div>
+      </div>
+      <div class="num-row">
+        <div class="num-key"><span class="digit">7</span><span class="letters">PQRS</span></div>
+        <div class="num-key"><span class="digit">8</span><span class="letters">TUV</span></div>
+        <div class="num-key"><span class="digit">9</span><span class="letters">WXYZ</span></div>
+      </div>
+      <div class="num-row">
+        <div class="num-key dot"><span class="digit">.</span></div>
+        <div class="num-key"><span class="digit">0</span></div>
+        <div class="num-key remove">
+          <svg viewBox="0 0 23 17" width="23" height="17" fill="none"><path d="M6 1H21C21.55 1 22 1.45 22 2V15C22 15.55 21.55 16 21 16H6L1 8.5L6 1Z" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/><path d="M10.5 6L16.5 11.5M16.5 6L10.5 11.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+        </div>
+      </div>
+      <div class="home-bar-wrap"><div class="home-bar"></div></div>
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- V2 SCREEN 3 — Review                                          -->
+  <!-- ============================================================ -->
+  <section class="screen" data-screen="v2-review">
+    <div class="header">
+      <button class="back-btn" data-action="goto" data-target="v2-select-shares" aria-label="Back">
+        <svg viewBox="0 0 8 14" width="8" height="14" fill="none"><path d="M7 1L1 7L7 13" stroke="white" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+    </div>
+
+    <div class="ticker">
+      <div class="ticker-row"><span class="ticker-symbol">ATZ</span><span class="ticker-action">Buy</span></div>
+      <div class="ticker-sub">Non-Registered&nbsp;&nbsp;50,000.00 CAD</div>
+    </div>
+
+    <div class="list-wrap">
+      <div class="content-list in-flow">
+        <div class="row">
+          <span class="row-label">Type</span>
+          <span class="row-value plain">Limit Buy</span>
+        </div>
+        <div class="divider"></div>
+
+        <div class="row">
+          <span class="row-label">Estimated Portfolio weight</span>
+          <span class="row-value plain v2-review-weight">5.12%</span>
+        </div>
+        <div class="divider"></div>
+
+        <div class="row">
+          <span class="row-label">Limit Price</span>
+          <span class="row-value plain v2-review-price">300.00 CAD</span>
+        </div>
+        <div class="divider"></div>
+
+        <div class="row">
+          <span class="row-label">Shares</span>
+          <span class="row-value plain v2-review-shares">1</span>
+        </div>
+        <div class="divider"></div>
+
+        <div class="row">
+          <span class="row-label">Duration</span>
+          <div class="duration-value plain">
+            <span class="v2-review-duration">Good for Day</span>
+          </div>
+        </div>
+        <div class="divider"></div>
+
+        <div class="row">
+          <span class="row-label">Estimated Cost</span>
+          <span class="row-value plain v2-review-cost">421.57 CAD</span>
+        </div>
+        <div class="divider"></div>
+      </div>
+
+      <p class="helper-text in-flow">Market is currently closed.<br>This order will be queued and submitted at the next market open.</p>
+    </div>
+
+    <div class="one-button">
+      <div class="one-button-row">
+        <button class="btn-link btn-cancel" data-action="goto" data-target="v2-limit-order">Exit</button>
+        <button class="btn-link btn-review execute-btn" type="button" aria-label="Execute buy">
+          Execute Buy
+          <span class="execute-icon">
+            <svg class="arrow-icon" viewBox="0 0 9 8" width="9" height="8" fill="none"><path d="M1 4H8M8 4L4.8 1M8 4L4.8 7" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <span class="loading-dot"></span>
+          </span>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- V2 SCREEN 4 — Review, loading / submitting state              -->
+  <!-- ============================================================ -->
+  <section class="screen" data-screen="v2-submitting">
+    <div class="header">
+      <button class="back-btn" data-action="goto" data-target="v2-review" aria-label="Back">
+        <svg viewBox="0 0 8 14" width="8" height="14" fill="none"><path d="M7 1L1 7L7 13" stroke="white" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+    </div>
+
+    <div class="ticker">
+      <div class="ticker-row"><span class="ticker-symbol">ATZ</span><span class="ticker-action">Buy</span></div>
+      <div class="ticker-sub">Non-Registered&nbsp;&nbsp;50,000.00 CAD</div>
+    </div>
+
+    <div class="content-list">
+      <div class="row">
+        <span class="row-label">Type</span>
+        <span class="row-value plain">Limit Buy</span>
+      </div>
+      <div class="divider"></div>
+
+      <div class="row">
+        <span class="row-label">Estimated Portfolio weight</span>
+        <span class="row-value plain v2-review-weight">5.12%</span>
+      </div>
+      <div class="divider"></div>
+
+      <div class="row">
+        <span class="row-label">Limit Price</span>
+        <span class="row-value plain v2-review-price">300.00 CAD</span>
+      </div>
+      <div class="divider"></div>
+
+      <div class="row">
+        <span class="row-label">Shares</span>
+        <span class="row-value plain v2-review-shares">1</span>
+      </div>
+      <div class="divider"></div>
+
+      <div class="row">
+        <span class="row-label">Duration</span>
+        <div class="duration-value plain">
+          <span class="v2-review-duration">Good for Day</span>
+        </div>
+      </div>
+      <div class="divider"></div>
+
+      <div class="row">
+        <span class="row-label">Estimated Cost</span>
+        <span class="row-value plain v2-review-cost">421.57 CAD</span>
+      </div>
+      <div class="divider"></div>
+    </div>
+
+    <div class="submitting"><span class="pulse-dot"></span>Submitting&hellip;</div>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- V2 SCREEN 5 — Order Filled / Queued                           -->
+  <!-- ============================================================ -->
+  <section class="screen" data-screen="v2-order-filled">
+    <div class="ticker no-sub">
+      <div class="ticker-row"><span class="ticker-symbol dim">ATZ.TO</span><span class="ticker-action">Order Filled</span></div>
+    </div>
+
+    <div class="filled-scroll">
+      <div class="content-list in-flow">
+        <div class="row">
+          <span class="row-label">Type</span>
+          <span class="row-value plain">Limit Buy</span>
+        </div>
+        <div class="divider"></div>
+
+        <div class="row">
+          <span class="row-label">Portfolio weight</span>
+          <span class="row-value plain v2-review-weight" style="text-transform:uppercase;">5.12%</span>
+        </div>
+        <div class="divider"></div>
+
+        <div class="row">
+          <span class="row-label">Shares</span>
+          <span class="row-value plain v2-review-shares" style="text-transform:uppercase;">1</span>
+        </div>
+        <div class="divider"></div>
+
+        <div class="row">
+          <span class="row-label">Price</span>
+          <span class="row-value plain v2-review-price" style="text-transform:uppercase;">300.00 CAD</span>
+        </div>
+        <div class="divider"></div>
+
+        <div class="row">
+          <span class="row-label">Total Cost</span>
+          <span class="row-value plain v2-review-cost" style="text-transform:uppercase;">421.57 CAD</span>
+        </div>
+        <div class="divider"></div>
+      </div>
+
+      <button class="view-order in-flow" data-action="none">
+        <svg viewBox="0 0 9 8" width="9" height="8" fill="none"><path d="M1 4H8M8 4L4.8 1M8 4L4.8 7" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        View Order
+      </button>
+    </div>
+
+    <button class="done-bar" data-action="goto" data-target="v2-limit-order">Done</button>
+  </section>
+
+</div>
+<!-- /iteration: v2 -->
+
 </div>
 
 <script>
@@ -2116,6 +2780,19 @@
     priceTouched: false,
     openOrderCount: 2
   };
+  // Third iteration ("v2") — the redesigned layout from Figma (no bid/ask bar, Positions/
+  // Orders/History tabs under Estimated Cost). Same USD-style pricing (price entered in USD,
+  // cost converted to CAD) but its own independent order book, isolated from cad/usd.
+  const stateV2 = {
+    priceCents: 0,
+    priceStr: "",
+    shares: 0,
+    activeField: "price",
+    bottomMode: "keyboard",
+    duration: "Good for Day",
+    priceTouched: false,
+    openOrderCount: 2
+  };
   const EXCHANGE_RATE = 1.36; // CAD per USD — matches the Estimated Exchange Rate row
   const prefersReducedMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
@@ -2123,34 +2800,45 @@
     const el = document.querySelector('.iteration.active');
     return el ? el.dataset.iteration : 'cad';
   }
-  function activeState(){ return activeIterationName() === 'usd' ? stateUsd : state; }
+  // v2 shares the same CAD-quoted top section as cad, so it's priced the same way (unlike usd).
+  function usesUsdPricing(name){ return name === 'usd'; }
+  function stateForIteration(name){
+    if(name === 'usd') return stateUsd;
+    if(name === 'v2') return stateV2;
+    return state;
+  }
+  function activeState(){ return stateForIteration(activeIterationName()); }
   function stateForScreen(screen){
     if(!screen) return state;
     const id = screen.dataset.screen || "";
-    return id.indexOf("usd-") === 0 ? stateUsd : state;
+    if(id.indexOf("usd-") === 0) return stateUsd;
+    if(id.indexOf("v2-") === 0) return stateV2;
+    return state;
   }
 
   // Limit-buy convention: default the price to the current best ask, since that's the
   // price a marketable buy limit needs to match (or beat) to have a chance of filling.
-  // For the USD iteration, cost-per-share is converted to CAD before checking cash on hand.
+  // For USD-priced iterations, cost-per-share is converted to CAD before checking cash on hand.
   function maxAffordableShares(){
-    const usd = activeIterationName() === 'usd';
-    const s = usd ? stateUsd : state;
+    const name = activeIterationName();
+    const s = activeState();
+    const usdPricing = usesUsdPricing(name);
     if(s.priceCents <= 0) return 0;
-    const costPerShareCents = usd ? s.priceCents * EXCHANGE_RATE : s.priceCents;
+    const costPerShareCents = usdPricing ? s.priceCents * EXCHANGE_RATE : s.priceCents;
     return Math.floor(state.availableCashCents / costPerShareCents);
   }
 
   // Adds the order the user just placed into the Open list on the CURRENT iteration only, and
   // bumps every count that reflects it (the Orders tab badge, "Open (n)", "All (n)") so
   // returning here shows the order instead of just the persisted price/shares with nothing
-  // to back it up. CAD and USD orders never mix into each other's list.
+  // to back it up. cad/usd/v2 orders never mix into each other's list.
   function recordPlacedOrder(){
-    const usd = activeIterationName() === 'usd';
-    const s = usd ? stateUsd : state;
-    const root = document.querySelector('.iteration[data-iteration="' + (usd ? 'usd' : 'cad') + '"]');
+    const name = activeIterationName();
+    const s = activeState();
+    const usdPricing = usesUsdPricing(name);
+    const root = document.querySelector('.iteration[data-iteration="' + name + '"]');
     if(!root) return;
-    const priceText = formatMoney(s.priceCents) + (usd ? " USD" : "");
+    const priceText = formatMoney(s.priceCents) + (usdPricing ? " USD" : "");
     const qtyText = s.shares.toLocaleString();
     const rowHtml =
       '<div class="order-row">' +
@@ -2160,7 +2848,11 @@
         '<div class="order-qty"><span class="qty-total">' + qtyText + '</span><span class="qty-filled">0</span></div>' +
       '</div>';
     root.querySelectorAll('.open-orders-subpanel .subpanel-body').forEach(function(body){
-      body.insertAdjacentHTML("afterbegin", rowHtml);
+      // Insert after the column-header row (list-columns) if present, so a newly placed
+      // order never ends up sandwiched above the header and between the existing rows.
+      const cols = body.querySelector('.list-columns');
+      if(cols) cols.insertAdjacentHTML("afterend", rowHtml);
+      else body.insertAdjacentHTML("afterbegin", rowHtml);
     });
     s.openOrderCount += 1;
     const n = s.openOrderCount;
@@ -2203,25 +2895,32 @@
       state.priceStr = "";
       recalc();
     }
+    // v2 shows the same live CAD quote at the top as cad, so its Limit Price follows the
+    // same tick until the user touches it — same convention as cad, unlike usd (static).
+    if(!stateV2.priceTouched){
+      stateV2.priceCents = q.ask;
+      stateV2.priceStr = "";
+      recalc();
+    }
   }
 
   function showScreen(id){
     document.querySelectorAll(".screen").forEach(s=>{
       s.classList.toggle("active", s.dataset.screen === id);
     });
-    if(id === "submitting" || id === "usd-submitting"){
-      var filledId = id === "usd-submitting" ? "usd-order-filled" : "order-filled";
+    if(id.slice(-"submitting".length) === "submitting"){
+      var filledId = id.slice(0, -"submitting".length) + "order-filled";
       window.clearTimeout(window.__submitTimer);
       window.__submitTimer = window.setTimeout(()=>go(filledId), 1600);
     }
-    if(id === "limit-order" || id === "select-shares" || id === "usd-limit-order" || id === "usd-select-shares"){
+    if(id.slice(-"limit-order".length) === "limit-order" || id.slice(-"select-shares".length) === "select-shares"){
       layoutScreenBottom(document.querySelector('[data-screen="'+id+'"]'));
     }
     updateScrollFade();
   }
 
   function go(id){
-    if(id === "review" || id === "usd-review") syncReviewScreens();
+    if(id.slice(-"review".length) === "review") syncReviewScreens();
     historyStack.push(id);
     showScreen(id);
   }
@@ -2239,6 +2938,7 @@
     const curTop = historyStack[historyStack.length-1];
     if(curTop === "limit-order"){ go("select-shares"); }
     else if(curTop === "usd-limit-order"){ go("usd-select-shares"); }
+    else if(curTop === "v2-limit-order"){ go("v2-select-shares"); }
   }
 
   function formatMoney(cents){ return (cents/100).toFixed(2); }
@@ -2290,6 +2990,28 @@
     document.querySelectorAll('[data-screen="usd-select-shares"] .review-btn').forEach(function(reviewBtn){
       reviewBtn.classList.toggle("disabled", !validUsd);
     });
+
+    document.querySelectorAll('[data-value="v2-price"]').forEach(el=>{
+      el.textContent = stateV2.priceTouched ? stateV2.priceStr : formatMoney(stateV2.priceCents);
+    });
+    document.querySelectorAll('[data-value="v2-shares"]').forEach(el=>{
+      el.textContent = String(stateV2.shares);
+    });
+    document.querySelectorAll('[data-value="v2-cost"]').forEach(el=>{
+      const cost = currentCostFor(stateV2, 1);
+      el.textContent = cost.toFixed(2) + " CAD";
+      el.classList.toggle("dim", cost === 0);
+    });
+    document.querySelectorAll('[data-value="v2-weight"]').forEach(el=>{
+      const weight = currentWeightFor(stateV2, 1);
+      el.textContent = weight.toFixed(2) + "%";
+      el.classList.toggle("dim", weight === 0);
+    });
+    document.querySelectorAll('[data-value="v2-duration"]').forEach(el=> el.textContent = stateV2.duration);
+    const validV2 = stateV2.shares > 0 && stateV2.priceCents > 0;
+    document.querySelectorAll('[data-screen="v2-select-shares"] .review-btn').forEach(function(reviewBtn){
+      reviewBtn.classList.toggle("disabled", !validV2);
+    });
   }
 
   // Seed the typed string with what's on screen (the live quote, if this is the first
@@ -2302,8 +3024,19 @@
     s.priceTouched = true;
   }
 
+  // Once the user is done typing and leaves the field (any way — switching fields, closing
+  // the keyboard, tapping Review), pad the raw typed string to a real 2-decimal amount —
+  // "310" -> "310.00", "310.5" -> "310.50" — so they never have to type trailing zeros.
+  function normalizePriceStr(s){
+    if(s.priceTouched && s.priceStr !== ""){
+      s.priceStr = formatMoney(s.priceCents);
+    }
+  }
+
   function setActiveField(field){
     const s = activeState();
+    let leftPrice = false;
+    if(s.activeField === "price" && field !== "price"){ normalizePriceStr(s); leftPrice = true; }
     s.activeField = field;
     s.bottomMode = "keyboard";
     if(field === "price"){
@@ -2315,6 +3048,7 @@
     });
     root.querySelectorAll(".activity-row").forEach(b=> b.classList.remove("open"));
     renderBottom();
+    if(leftPrice) recalc();
   }
 
   // Price is typed as a literal string (like a text field) rather than shifted through as an
@@ -2379,13 +3113,16 @@
     const fl = screen.querySelector('.field-list');
     const quote = screen.querySelector('.quote-block');
     if(!oneBtn || !fl) return;
-    const isKeyboardScreen = screen.dataset.screen === "select-shares" || screen.dataset.screen === "usd-select-shares";
+    const isKeyboardScreen = screen.dataset.screen === "select-shares" || screen.dataset.screen === "usd-select-shares" || screen.dataset.screen === "v2-select-shares";
     const open = isKeyboardScreen && kb && s.bottomMode === "keyboard";
     if(kb) kb.style.display = open ? "flex" : "none";
     oneBtn.style.top = "auto";
     oneBtn.style.bottom = open ? "290px" : "0px";
     const screenTop = screen.getBoundingClientRect().top;
-    const listTop = quote ? Math.round(quote.getBoundingClientRect().bottom - screenTop) + 16 : 190;
+    // No .quote-block on this screen (e.g. v2, which folds its ticker/price into the
+    // scrollable field-list itself instead of a separately-fixed header) — start the list
+    // right under the header bar rather than the 190px CAD/usd quote-block screens need.
+    const listTop = quote ? Math.round(quote.getBoundingClientRect().bottom - screenTop) + 16 : 65;
     const btnTop = Math.round(oneBtn.getBoundingClientRect().top - screenTop);
     fl.style.top = listTop + "px";
     fl.style.height = Math.max(0, btnTop - listTop) + "px";
@@ -2422,6 +3159,15 @@
     document.querySelectorAll(".usd-review-cost").forEach(el=> el.textContent = usdCostText);
     document.querySelectorAll(".usd-review-weight").forEach(el=> el.textContent = usdWeightText);
     document.querySelectorAll(".usd-review-duration").forEach(el=> el.textContent = stateUsd.duration);
+
+    const v2PriceText = formatMoney(stateV2.priceCents) + " CAD";
+    const v2CostText = currentCostFor(stateV2, 1).toFixed(2) + " CAD";
+    const v2WeightText = currentWeightFor(stateV2, 1).toFixed(2) + "%";
+    document.querySelectorAll(".v2-review-price").forEach(el=> el.textContent = v2PriceText);
+    document.querySelectorAll(".v2-review-shares").forEach(el=> el.textContent = String(stateV2.shares));
+    document.querySelectorAll(".v2-review-cost").forEach(el=> el.textContent = v2CostText);
+    document.querySelectorAll(".v2-review-weight").forEach(el=> el.textContent = v2WeightText);
+    document.querySelectorAll(".v2-review-duration").forEach(el=> el.textContent = stateV2.duration);
   }
 
   document.addEventListener("click", (e)=>{
@@ -2525,7 +3271,7 @@
       if(action === "goto"){
         e.preventDefault();
         const target = navEl.dataset.target;
-        if(target === "limit-order" || target === "usd-limit-order"){ historyStack = [target]; showScreen(target); }
+        if(target === "limit-order" || target === "usd-limit-order" || target === "v2-limit-order"){ historyStack = [target]; showScreen(target); }
         else { go(target); }
       } else if(action === "back"){
         e.preventDefault();
@@ -2534,13 +3280,15 @@
       return;
     }
 
-    const activeKeyboardScreen = document.querySelector('[data-screen="select-shares"].active, [data-screen="usd-select-shares"].active');
+    const activeKeyboardScreen = document.querySelector('[data-screen="select-shares"].active, [data-screen="usd-select-shares"].active, [data-screen="v2-select-shares"].active');
     if(activeKeyboardScreen && activeKeyboardScreen.contains(e.target)){
       const s = stateForScreen(activeKeyboardScreen);
       if(s.bottomMode === "keyboard"){
         s.bottomMode = "hidden";
+        if(s.activeField === "price") normalizePriceStr(s);
         activeKeyboardScreen.querySelectorAll(".field-row.editable").forEach(b=>b.classList.remove("active"));
         renderBottom();
+        recalc();
       }
     }
   });
@@ -2580,7 +3328,7 @@
         drawer.querySelectorAll("a[data-iteration-target]").forEach(function(l){
           l.classList.toggle("active", l === a);
         });
-        var entry = name === "usd" ? "usd-limit-order" : "limit-order";
+        var entry = name === "usd" ? "usd-limit-order" : name === "v2" ? "v2-limit-order" : "limit-order";
         historyStack = [entry];
         showScreen(entry);
         closeDrawer();
@@ -2597,10 +3345,13 @@
     document.addEventListener("click", function(e){
       var btn = e.target.closest(".execute-btn");
       if(!btn || btn.classList.contains("loading")) return;
+      var screen = btn.closest(".screen");
+      var reviewId = screen ? screen.dataset.screen : "review";
+      var submittingId = reviewId.slice(0, -"review".length) + "submitting";
       btn.classList.add("loading");
       window.setTimeout(function(){
         recordPlacedOrder();
-        go("submitting");
+        go(submittingId);
         btn.classList.remove("loading");
       }, PULSE_MS);
     });
