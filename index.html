@@ -553,6 +553,77 @@
   .stat-tile .field-plain.up{color:var(--bid-green);}
   .stat-tile .field-plain.down{color:var(--ask-red);}
   .stats-note{font-size:11px; color:#6d6d6d; margin-top:4px;}
+
+  /* ============================================================ */
+  /* Memo flow — account select / classification / role / thesis /  */
+  /* kill criteria / prediction / source / review                   */
+  /* ============================================================ */
+  .memo-screen{position:relative;}
+  .memo-topbar{position:absolute; left:0; top:0; right:0; height:58px; border-bottom:1px solid var(--divider);}
+  .memo-back{position:absolute; left:18px; top:50%; transform:translateY(-50%); background:none; border:none; color:#fff; font-size:22px; cursor:pointer; padding:6px 10px; line-height:1;}
+  .memo-body{position:absolute; left:0; right:0; top:58px; bottom:85px; overflow-y:auto; padding:0 20px; scrollbar-width:none; -ms-overflow-style:none;}
+  .memo-body::-webkit-scrollbar{display:none;}
+  .memo-title-block{padding-top:37px;}
+  .memo-title-row{display:flex; align-items:baseline; justify-content:space-between; gap:10px;}
+  .memo-title{font-size:18px; color:#fff; letter-spacing:-0.36px;}
+  .memo-breadcrumb{text-align:right; font-size:11px; color:#c7c7c7; letter-spacing:1.26px; white-space:nowrap;}
+  .memo-breadcrumb .dim{opacity:.55;}
+  .memo-step{font-size:11px; color:#929292; letter-spacing:0.44px; margin-top:6px;}
+  .memo-ticker-mini{font-size:11px; color:#c7c7c7; text-align:right; line-height:1.5;}
+  .memo-ticker-mini .chg{color:#565b5e;}
+  .memo-section-label{font-size:15px; color:#c7c7c7; margin:34px 0 0; padding-bottom:16px; border-bottom:1px solid var(--divider);}
+  .memo-option-list{display:flex; flex-direction:column;}
+  .memo-option{padding:16px 0; border-bottom:1px solid var(--divider); display:flex; justify-content:space-between; align-items:flex-start; gap:12px; cursor:pointer; background:none; border-left:none; border-right:none; border-top:none; width:100%; text-align:left; font-family:inherit;}
+  .memo-option-title{font-size:14px; color:#fff; margin-bottom:6px;}
+  .memo-option-desc{font-size:13px; color:#929292; line-height:1.32;}
+  .memo-radio{width:12px; height:12px; border-radius:6px; border:1px solid #565b5e; flex:none; margin-top:3px;}
+  .memo-radio.checked{border-color:#fff; background:radial-gradient(circle, #fff 40%, transparent 42%);}
+  .memo-bottom-bar{position:absolute; left:0; right:0; bottom:0; height:85px; padding:0 20px; display:flex; align-items:center; justify-content:space-between;}
+  .memo-exit{background:none; border:none; color:#c7c7c7; font-size:15px; cursor:pointer; padding:0; font-family:inherit;}
+  .memo-continue{background:none; border:none; color:rgba(255,255,255,0.4); font-size:22px; cursor:pointer; padding:8px; pointer-events:none;}
+  .memo-continue.enabled{color:#fff; pointer-events:auto;}
+  .memo-add-later{background:none; border:none; color:#c7c7c7; font-size:15px; cursor:pointer; display:flex; align-items:center; gap:8px; padding:0; font-family:inherit;}
+
+  .memo-textarea-actions{display:flex; justify-content:space-between; align-items:center; padding-bottom:14px; border-bottom:1px solid var(--divider); margin-top:34px;}
+  .memo-clear-btn{background:none; border:none; color:#929292; font-size:13px; cursor:pointer; padding:0; font-family:inherit;}
+  .memo-icon-btn{background:none; border:none; color:#929292; cursor:pointer; padding:0 0 0 14px;}
+  .memo-textarea{width:100%; background:none; border:none; color:#c7c7c7; font-size:13px; line-height:1.6; resize:none; outline:none; margin-top:22px; height:180px; font-family:inherit;}
+  .memo-textarea::placeholder{color:#565b5e;}
+
+  .memo-forecast-sentence{font-size:16px; color:#fff; font-weight:300; line-height:1.5; margin-top:30px;}
+  .memo-forecast-sentence .fill{font-weight:500; text-decoration:underline; text-decoration-skip-ink:none;}
+  .memo-slider-block{margin-top:34px; padding-top:20px; border-top:1px solid var(--divider);}
+  .memo-slider-block:first-of-type{border-top:none; padding-top:0;}
+  .memo-slider-label{font-size:11px; color:#929292; font-weight:500;}
+  .memo-slider-desc{font-size:11.5px; color:#929292; margin-top:8px; line-height:1.5;}
+  .memo-slider-value{font-size:28px; color:#fff; font-weight:300; text-align:center; margin-top:14px;}
+  .memo-slider-value .unit{font-size:12px; color:#929292;}
+  .memo-slider-input{width:100%; margin-top:14px; -webkit-appearance:none; appearance:none; height:1px; background:#737373; outline:none; display:block;}
+  .memo-slider-input::-webkit-slider-thumb{-webkit-appearance:none; width:8px; height:8px; border-radius:50%; background:#fff; cursor:pointer;}
+  .memo-slider-input::-moz-range-thumb{width:8px; height:8px; border-radius:50%; background:#fff; border:none; cursor:pointer;}
+  .memo-slider-scale{display:flex; justify-content:space-between; font-size:10px; color:#929292; letter-spacing:1.4px; margin-top:8px;}
+  .memo-horizon-row{display:flex; border:1px solid #1c1c1c; margin-top:12px;}
+  .memo-horizon-btn{flex:1; background:none; border:none; border-right:1px solid #1c1c1c; color:#929292; font-size:13px; padding:14px 0; cursor:pointer; font-family:inherit;}
+  .memo-horizon-btn:last-child{border-right:none;}
+  .memo-horizon-btn.active{background:#000; color:#fff;}
+  .memo-disclaimer{font-size:10px; color:#565b5e; line-height:1.6; margin-top:30px;}
+
+  .account-list{display:flex; flex-direction:column; gap:34px; margin-top:34px;}
+  .account-row{display:flex; justify-content:space-between; align-items:flex-start; cursor:pointer; background:none; border:none; width:100%; text-align:left; font-family:inherit; padding:0;}
+  .account-name{font-size:15px; color:#fff; margin-bottom:8px;}
+  .account-detail{font-size:14px; color:#c7c7c7; line-height:1.4;}
+
+  .memo-ledger-list{display:flex; flex-direction:column; gap:32px; margin-top:34px;}
+  .memo-ledger-item{cursor:pointer; background:none; border:none; width:100%; text-align:left; font-family:inherit; padding:0;}
+  .memo-ledger-label{font-size:11px; color:#929292; margin-bottom:5px;}
+  .memo-ledger-value{font-size:14px; color:#c7c7c7; font-weight:500; line-height:1.33;}
+  .memo-save-bar{position:absolute; left:0; right:0; bottom:0; height:64px; background:#000; display:flex; align-items:center; justify-content:center; border:none; color:#fff; font-size:14px; cursor:pointer; font-family:inherit;}
+
+  .memo-chip-block{margin-top:4px;}
+  .memo-chip-heading{font-size:11px; color:#6d6d6d; margin-bottom:10px;}
+  .memo-chip-row{display:flex; flex-wrap:wrap; gap:8px;}
+  .memo-chip{background:none; border:1px solid #2a2a2a; border-radius:14px; padding:6px 12px; font-size:12px; color:#929292; cursor:pointer; font-family:inherit;}
+  .memo-chip.filled{border-color:#565b5e; color:#fff;}
 </style>
 </head>
 <body>
@@ -578,7 +649,354 @@
   <!-- ============================================================ -->
   <!-- SCREEN 1 — Limit Order (empty state)                          -->
   <!-- ============================================================ -->
-  <section class="screen active" data-screen="limit-order" data-node-id="14327:12306">
+  <!-- ============================================================ -->
+  <!-- MEMO 1/6 — Classification                                     -->
+  <!-- ============================================================ -->
+  <section class="screen memo-screen active" data-screen="memo-classification">
+    <div class="memo-topbar"><button class="memo-back" data-action="back" aria-label="Back">&lsaquo;</button></div>
+    <div class="memo-body">
+      <div class="memo-title-block">
+        <div class="memo-title-row">
+          <div>
+            <div class="memo-title">Classification</div>
+            <div class="memo-step">1 / 6</div>
+          </div>
+          <div class="memo-ticker-mini">ATZ<br><span data-quote="price">309.95</span> CAD <span class="chg" data-quote="change">+0.01%</span></div>
+        </div>
+      </div>
+      <div class="memo-section-label">Classify</div>
+      <div class="memo-option-list">
+        <button class="memo-option" type="button" data-action="memo-select" data-memo-field="classification" data-memo-value="compounder" data-memo-label="Compounder">
+          <div>
+            <div class="memo-option-title">Compounder</div>
+            <div class="memo-option-desc">Businesses compounding capital at above-market rates with durable competitive position.</div>
+          </div>
+          <div class="memo-radio" data-memo-radio="classification:compounder"></div>
+        </button>
+        <button class="memo-option" type="button" data-action="memo-select" data-memo-field="classification" data-memo-value="emerging-compounder" data-memo-label="Emerging compounder">
+          <div>
+            <div class="memo-option-title">Emerging compounder</div>
+            <div class="memo-option-desc">Businesses early in their compounding lifecycle, with conviction they will graduate.</div>
+          </div>
+          <div class="memo-radio" data-memo-radio="classification:emerging-compounder"></div>
+        </button>
+        <button class="memo-option" type="button" data-action="memo-select" data-memo-field="classification" data-memo-value="situational-mispricing" data-memo-label="Situational mispricing">
+          <div>
+            <div class="memo-option-title">Situational mispricing</div>
+            <div class="memo-option-desc">Businesses trading materially below reasonable estimates of value due to identifiable dislocation.</div>
+          </div>
+          <div class="memo-radio" data-memo-radio="classification:situational-mispricing"></div>
+        </button>
+        <button class="memo-option" type="button" data-action="memo-select" data-memo-field="classification" data-memo-value="speculative" data-memo-label="Speculative">
+          <div>
+            <div class="memo-option-title">Speculative</div>
+            <div class="memo-option-desc">Businesses with asymmetric upside and acknowledged binary or high-variance risk.</div>
+          </div>
+          <div class="memo-radio" data-memo-radio="classification:speculative"></div>
+        </button>
+        <button class="memo-option" type="button" style="border-bottom:none;" data-action="memo-select" data-memo-field="classification" data-memo-value="treasury-allocation" data-memo-label="Treasury allocation">
+          <div>
+            <div class="memo-option-title">Treasury allocation</div>
+            <div class="memo-option-desc">This allocation exists for broad market exposure, liquidity preservation, or long-term compounding.</div>
+          </div>
+          <div class="memo-radio" data-memo-radio="classification:treasury-allocation"></div>
+        </button>
+      </div>
+    </div>
+    <div class="memo-bottom-bar">
+      <button class="memo-exit" data-action="goto" data-target="memo-classification">Exit</button>
+      <button class="memo-continue enabled" data-action="memo-continue-from" data-memo-from="memo-classification" aria-label="Continue">&rarr;</button>
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- MEMO 2/6 — Role                                               -->
+  <!-- ============================================================ -->
+  <section class="screen memo-screen" data-screen="memo-role">
+    <div class="memo-topbar"><button class="memo-back" data-action="back" aria-label="Back">&lsaquo;</button></div>
+    <div class="memo-body">
+      <div class="memo-title-block">
+        <div class="memo-title-row">
+          <div>
+            <div class="memo-title">Role</div>
+            <div class="memo-step">2 / 6</div>
+          </div>
+          <div style="text-align:right;">
+            <div class="memo-ticker-mini">ATZ<br><span data-quote="price">309.95</span> CAD <span class="chg" data-quote="change">+0.01%</span></div>
+            <div class="memo-breadcrumb" data-value="memo-tag-classification" style="margin-top:6px;">&mdash;</div>
+          </div>
+        </div>
+      </div>
+      <div class="memo-section-label">Size position</div>
+      <div class="memo-option-list">
+        <button class="memo-option" type="button" data-action="memo-select" data-memo-field="role" data-memo-value="core" data-memo-label="Core Position">
+          <div><div class="memo-option-title">Core</div><div class="memo-option-desc">Highest-conviction long-term positions.</div></div>
+          <div class="memo-radio" data-memo-radio="role:core"></div>
+        </button>
+        <button class="memo-option" type="button" data-action="memo-select" data-memo-field="role" data-memo-value="conviction" data-memo-label="Conviction Position">
+          <div><div class="memo-option-title">Conviction</div><div class="memo-option-desc">High-confidence investments intended to play a meaningful, but smaller, role than core positions.</div></div>
+          <div class="memo-radio" data-memo-radio="role:conviction"></div>
+        </button>
+        <button class="memo-option" type="button" data-action="memo-select" data-memo-field="role" data-memo-value="starter" data-memo-label="Starter Position">
+          <div><div class="memo-option-title">Starter</div><div class="memo-option-desc">An initial position while building conviction.</div></div>
+          <div class="memo-radio" data-memo-radio="role:starter"></div>
+        </button>
+        <button class="memo-option" type="button" style="border-bottom:none;" data-action="memo-select" data-memo-field="role" data-memo-value="capped" data-memo-label="Capped Position">
+          <div><div class="memo-option-title">Capped</div><div class="memo-option-desc">A position intentionally limited in size due to higher uncertainty.</div></div>
+          <div class="memo-radio" data-memo-radio="role:capped"></div>
+        </button>
+      </div>
+    </div>
+    <div class="memo-bottom-bar">
+      <button class="memo-exit" data-action="goto" data-target="memo-classification">Exit</button>
+      <button class="memo-continue enabled" data-action="memo-continue-from" data-memo-from="memo-role" aria-label="Continue">&rarr;</button>
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- MEMO 3/6 — Thesis (skippable)                                 -->
+  <!-- ============================================================ -->
+  <section class="screen memo-screen" data-screen="memo-thesis">
+    <div class="memo-topbar"><button class="memo-back" data-action="back" aria-label="Back">&lsaquo;</button></div>
+    <div class="memo-body">
+      <div class="memo-title-block">
+        <div class="memo-title-row">
+          <div>
+            <div class="memo-title">Thesis</div>
+            <div class="memo-step">3 / 6</div>
+          </div>
+          <div style="text-align:right;">
+            <div class="memo-ticker-mini">ATZ<br><span data-quote="price">309.95</span> CAD <span class="chg" data-quote="change">+0.01%</span></div>
+            <div class="memo-breadcrumb" data-value="memo-tag-full" style="margin-top:6px;">&mdash;</div>
+          </div>
+        </div>
+      </div>
+      <div class="memo-textarea-actions">
+        <button class="memo-clear-btn" type="button" data-action="memo-clear-text" data-memo-field="thesis">Clear</button>
+      </div>
+      <textarea class="memo-textarea" data-memo-text="thesis" placeholder="The reason this position exists: State why the market is wrong. Be specific enough to be proven wrong later."></textarea>
+    </div>
+    <div class="memo-bottom-bar">
+      <button class="memo-exit" data-action="goto" data-target="memo-classification">Exit</button>
+      <button class="memo-add-later" data-action="memo-text-continue" data-memo-field="thesis" data-memo-next="memo-killcriteria">Add Later <span aria-hidden="true">&rarr;</span></button>
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- MEMO 4/6 — Kill Criteria (skippable)                          -->
+  <!-- ============================================================ -->
+  <section class="screen memo-screen" data-screen="memo-killcriteria">
+    <div class="memo-topbar"><button class="memo-back" data-action="back" aria-label="Back">&lsaquo;</button></div>
+    <div class="memo-body">
+      <div class="memo-title-block">
+        <div class="memo-title-row">
+          <div>
+            <div class="memo-title">Kill Criteria</div>
+            <div class="memo-step">4 / 6</div>
+          </div>
+          <div style="text-align:right;">
+            <div class="memo-ticker-mini">ATZ<br><span data-quote="price">309.95</span> CAD <span class="chg" data-quote="change">+0.01%</span></div>
+            <div class="memo-breadcrumb" data-value="memo-tag-full" style="margin-top:6px;">&mdash;</div>
+          </div>
+        </div>
+      </div>
+      <div class="memo-textarea-actions">
+        <button class="memo-clear-btn" type="button" data-action="memo-clear-text" data-memo-field="killCriteria">Clear</button>
+      </div>
+      <textarea class="memo-textarea" data-memo-text="killCriteria" placeholder="The conditions that invalidate your thesis. Be specific — if any of these are met, the position no longer deserves capital."></textarea>
+    </div>
+    <div class="memo-bottom-bar">
+      <button class="memo-exit" data-action="goto" data-target="memo-classification">Exit</button>
+      <button class="memo-add-later" data-action="memo-text-continue" data-memo-field="killCriteria" data-memo-next="memo-prediction">Add Later <span aria-hidden="true">&rarr;</span></button>
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- MEMO 5/6 — Prediction                                         -->
+  <!-- ============================================================ -->
+  <section class="screen memo-screen" data-screen="memo-prediction">
+    <div class="memo-topbar"><button class="memo-back" data-action="back" aria-label="Back">&lsaquo;</button></div>
+    <div class="memo-body">
+      <div class="memo-title-block">
+        <div class="memo-title-row">
+          <div>
+            <div class="memo-title">Prediction</div>
+            <div class="memo-step">5 / 6</div>
+          </div>
+          <div style="text-align:right;">
+            <div class="memo-ticker-mini">ATZ<br><span data-quote="price">309.95</span> CAD <span class="chg" data-quote="change">+0.01%</span></div>
+            <div class="memo-breadcrumb" data-value="memo-tag-full" style="margin-top:6px;">&mdash;</div>
+          </div>
+        </div>
+      </div>
+      <p class="memo-forecast-sentence">ATZ has a <span class="fill" data-value="memo-prob-inline">50%</span> chance of compounding at <span class="fill" data-value="memo-return-inline">20%/yr</span> or more over <span class="fill" data-value="memo-horizon-inline">3 years</span>.</p>
+
+      <div class="memo-slider-block">
+        <div class="memo-slider-label">Probability</div>
+        <div class="memo-slider-desc">The likelihood you believe this investment achieves the selected return target over the selected horizon.</div>
+        <div class="memo-slider-value"><span data-value="memo-prob-num">50</span><span class="unit">%</span></div>
+        <input class="memo-slider-input" type="range" min="0" max="100" value="50" data-memo-slider="probability">
+        <div class="memo-slider-scale"><span>0</span><span>100</span></div>
+      </div>
+
+      <div class="memo-slider-block">
+        <div class="memo-slider-label">Return Target</div>
+        <div class="memo-slider-desc">The annual return you believe this investment can achieve.</div>
+        <div class="memo-slider-value"><span data-value="memo-return-num">20</span><span class="unit">% annualized</span></div>
+        <input class="memo-slider-input" type="range" min="15" max="100" value="20" data-memo-slider="returnTarget">
+        <div class="memo-slider-scale"><span>15</span><span>100</span></div>
+      </div>
+
+      <div class="memo-slider-block">
+        <div class="memo-slider-label">Horizon</div>
+        <div class="memo-horizon-row">
+          <button class="memo-horizon-btn" type="button" data-action="memo-horizon" data-memo-horizon="1 year">1 year</button>
+          <button class="memo-horizon-btn active" type="button" data-action="memo-horizon" data-memo-horizon="3 years">3 years</button>
+          <button class="memo-horizon-btn" type="button" data-action="memo-horizon" data-memo-horizon="5+ years">5+ years</button>
+        </div>
+      </div>
+
+      <p class="memo-disclaimer">This prediction reflects your judgment under uncertainty, not platform forecasts or guarantees. You make the investment decision.</p>
+    </div>
+    <div class="memo-bottom-bar">
+      <button class="memo-exit" data-action="goto" data-target="memo-classification">Exit</button>
+      <button class="memo-continue enabled" data-action="memo-continue-from" data-memo-from="memo-prediction" aria-label="Continue">&rarr;</button>
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- MEMO 6/6 — Source                                             -->
+  <!-- ============================================================ -->
+  <section class="screen memo-screen" data-screen="memo-source">
+    <div class="memo-topbar"><button class="memo-back" data-action="back" aria-label="Back">&lsaquo;</button></div>
+    <div class="memo-body">
+      <div class="memo-title-block">
+        <div class="memo-title-row">
+          <div>
+            <div class="memo-title">Source</div>
+            <div class="memo-step">6 / 6</div>
+          </div>
+          <div style="text-align:right;">
+            <div class="memo-ticker-mini">ATZ<br><span data-quote="price">309.95</span> CAD <span class="chg" data-quote="change">+0.01%</span></div>
+            <div class="memo-breadcrumb" data-value="memo-tag-full" style="margin-top:6px;">&mdash;</div>
+          </div>
+        </div>
+      </div>
+      <div class="memo-section-label" style="margin-top:20px;">Origin of the idea.</div>
+      <p style="font-size:12.5px; color:#565b5e; margin:14px 0 0; line-height:1.5;">Tracks which inputs convert into good positions.</p>
+      <div class="memo-option-list" style="margin-top:14px;">
+        <button class="memo-option" type="button" data-action="memo-select" data-memo-field="source" data-memo-value="social-media" data-memo-label="Social media">
+          <div class="memo-option-title" style="margin-bottom:0;">Social media</div>
+          <div class="memo-radio" data-memo-radio="source:social-media"></div>
+        </button>
+        <button class="memo-option" type="button" data-action="memo-select" data-memo-field="source" data-memo-value="screener" data-memo-label="Screener">
+          <div class="memo-option-title" style="margin-bottom:0;">Screener</div>
+          <div class="memo-radio" data-memo-radio="source:screener"></div>
+        </button>
+        <button class="memo-option" type="button" data-action="memo-select" data-memo-field="source" data-memo-value="podcast" data-memo-label="Podcast">
+          <div class="memo-option-title" style="margin-bottom:0;">Podcast</div>
+          <div class="memo-radio" data-memo-radio="source:podcast"></div>
+        </button>
+        <button class="memo-option" type="button" data-action="memo-select" data-memo-field="source" data-memo-value="newsletter" data-memo-label="Newsletter">
+          <div class="memo-option-title" style="margin-bottom:0;">Newsletter</div>
+          <div class="memo-radio" data-memo-radio="source:newsletter"></div>
+        </button>
+        <button class="memo-option" type="button" data-action="memo-select" data-memo-field="source" data-memo-value="friend" data-memo-label="Friend">
+          <div class="memo-option-title" style="margin-bottom:0;">Friend</div>
+          <div class="memo-radio" data-memo-radio="source:friend"></div>
+        </button>
+        <button class="memo-option" type="button" data-action="memo-select" data-memo-field="source" data-memo-value="13f" data-memo-label="13F">
+          <div class="memo-option-title" style="margin-bottom:0;">13F</div>
+          <div class="memo-radio" data-memo-radio="source:13f"></div>
+        </button>
+        <button class="memo-option" type="button" style="border-bottom:none;" data-action="memo-select" data-memo-field="source" data-memo-value="other" data-memo-label="Other">
+          <div class="memo-option-title" style="margin-bottom:0;">Other</div>
+          <div class="memo-radio" data-memo-radio="source:other"></div>
+        </button>
+      </div>
+    </div>
+    <div class="memo-bottom-bar">
+      <button class="memo-exit" data-action="goto" data-target="memo-classification">Exit</button>
+      <button class="memo-continue enabled" data-action="goto" data-target="memo-review" aria-label="Continue">&rarr;</button>
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- MEMO REVIEW — ledger / save                                   -->
+  <!-- ============================================================ -->
+  <section class="screen memo-screen" data-screen="memo-review">
+    <div class="memo-topbar"><button class="memo-back" data-action="back" aria-label="Back">&lsaquo;</button></div>
+    <div class="memo-body" style="bottom:64px;">
+      <div style="padding-top:37px;">
+        <div style="font-size:22px; color:#fff; letter-spacing:-1.32px;">ATZ Memo</div>
+        <div style="display:flex; justify-content:space-between; align-items:baseline; margin-top:14px; padding-bottom:16px; border-bottom:1px solid var(--divider);">
+          <span style="font-size:11px; color:#565b5e;">Written <span data-value="memo-date"></span></span>
+          <span style="font-size:9px; color:#929292; letter-spacing:0.9px;">TAP EACH TO UPDATE</span>
+        </div>
+      </div>
+      <div class="memo-ledger-list">
+        <button class="memo-ledger-item" type="button" data-action="goto" data-target="memo-classification">
+          <div class="memo-ledger-label">Classification</div>
+          <div class="memo-ledger-value" data-value="ledger-classification">&mdash;</div>
+        </button>
+        <button class="memo-ledger-item" type="button" data-action="goto" data-target="memo-role">
+          <div class="memo-ledger-label">Role</div>
+          <div class="memo-ledger-value" data-value="ledger-role">&mdash;</div>
+        </button>
+        <button class="memo-ledger-item" type="button" data-action="goto" data-target="memo-thesis">
+          <div class="memo-ledger-label">Thesis</div>
+          <div class="memo-ledger-value" data-value="ledger-thesis">&mdash;</div>
+        </button>
+        <button class="memo-ledger-item" type="button" data-action="goto" data-target="memo-killcriteria">
+          <div class="memo-ledger-label">Kill Criteria</div>
+          <div class="memo-ledger-value" data-value="ledger-killcriteria">&mdash;</div>
+        </button>
+        <button class="memo-ledger-item" type="button" data-action="goto" data-target="memo-prediction">
+          <div class="memo-ledger-label">Prediction</div>
+          <div class="memo-ledger-value" data-value="ledger-prediction">&mdash;</div>
+        </button>
+        <button class="memo-ledger-item" type="button" data-action="goto" data-target="memo-source">
+          <div class="memo-ledger-label">Source</div>
+          <div class="memo-ledger-value" data-value="ledger-source">&mdash;</div>
+        </button>
+      </div>
+    </div>
+    <button class="memo-save-bar" type="button" data-action="goto" data-target="account-select">Save memo</button>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- ACCOUNT SELECT                                                -->
+  <!-- ============================================================ -->
+  <section class="screen memo-screen" data-screen="account-select">
+    <div class="memo-topbar"><button class="memo-back" data-action="back" aria-label="Back">&lsaquo;</button></div>
+    <div class="memo-body">
+      <div class="memo-title-block" style="text-align:right;">
+        <div style="font-size:22px; letter-spacing:-1.32px;"><span style="color:#929292;">ATZ</span> <span style="color:#fff;">Buy</span></div>
+        <div class="memo-breadcrumb" data-value="memo-tag-full" style="margin-top:6px;">&mdash;</div>
+      </div>
+      <div class="memo-section-label" style="border-bottom:none; margin-top:36px; padding-bottom:0;">Select account</div>
+      <div class="account-list">
+        <button class="account-row" type="button" data-action="memo-select-account" data-account="Non-Registered">
+          <div><div class="account-name">Non-Registered</div><div class="account-detail">50,000.00 CAD Available</div></div>
+          <div class="memo-radio" data-account-radio="Non-Registered"></div>
+        </button>
+        <button class="account-row" type="button" data-action="memo-select-account" data-account="TFSA">
+          <div><div class="account-name">TFSA</div><div class="account-detail">31,223.00 CAD Available<br>300 Shares</div></div>
+          <div class="memo-radio" data-account-radio="TFSA"></div>
+        </button>
+        <button class="account-row" type="button" data-action="memo-select-account" data-account="RRSP">
+          <div><div class="account-name">RRSP</div><div class="account-detail">1,545.19 CAD Available<br>100 Shares</div></div>
+          <div class="memo-radio" data-account-radio="RRSP"></div>
+        </button>
+      </div>
+    </div>
+    <div class="memo-bottom-bar">
+      <button class="memo-exit" data-action="goto" data-target="memo-classification">Exit</button>
+      <button class="memo-continue enabled" data-action="goto" data-target="limit-order" aria-label="Continue">&rarr;</button>
+    </div>
+  </section>
+
+  <section class="screen" data-screen="limit-order" data-node-id="14327:12306">
     <div class="header">
       <button class="back-btn" data-action="back" aria-label="Back">
         <svg viewBox="0 0 8 14" width="8" height="14" fill="none"><path d="M7 1L1 7L7 13" stroke="white" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -598,7 +1016,7 @@
       <div class="quote-row">
         <div class="quote-left">
           <div class="ticker-row"><span class="ticker-symbol">ATZ</span><span class="ticker-action">Buy</span></div>
-          <span class="position-tag">Compounder &middot; Core</span>
+          <span class="position-tag" data-value="memo-tag-short">Compounder &middot; Core</span>
           <div class="ticker-sub">Non-Registered&nbsp;&nbsp;50,000.00 CAD</div>        </div>
         <div class="quote-right">
           <div><span class="quote-price" data-quote="price">309.95</span></div>
@@ -664,6 +1082,18 @@
         <div class="stat-tile">
           <span class="field-label">Estimated Portfolio Weight</span>
           <span class="field-plain dim" data-value="weight">0.00%</span>
+        </div>
+      </div>
+
+      <div class="memo-chip-block">
+        <div class="memo-chip-heading">Memo &mdash; tap to show or dismiss a field next time</div>
+        <div class="memo-chip-row">
+          <button class="memo-chip" type="button" data-action="memo-toggle-dismiss" data-memo-field="classification" data-memo-chip="classification">Classification</button>
+          <button class="memo-chip" type="button" data-action="memo-toggle-dismiss" data-memo-field="role" data-memo-chip="role">Role</button>
+          <button class="memo-chip" type="button" data-action="memo-toggle-dismiss" data-memo-field="thesis" data-memo-chip="thesis">Thesis</button>
+          <button class="memo-chip" type="button" data-action="memo-toggle-dismiss" data-memo-field="killCriteria" data-memo-chip="killCriteria">Kill Criteria</button>
+          <button class="memo-chip" type="button" data-action="memo-toggle-dismiss" data-memo-field="probability" data-memo-chip="probability">Prediction</button>
+          <button class="memo-chip" type="button" data-action="memo-toggle-dismiss" data-memo-field="source" data-memo-chip="source">Source</button>
         </div>
       </div>
 
@@ -794,7 +1224,7 @@
 
     <div class="one-button">
       <div class="one-button-row">
-        <button class="btn-link btn-cancel" data-action="goto" data-target="limit-order">Exit</button>
+        <button class="btn-link btn-cancel" data-action="goto" data-target="memo-classification">Exit</button>
         <button class="btn-link btn-review disabled">
           Review
           <svg viewBox="0 0 9 8" width="9" height="8" fill="none"><path d="M1 4H8M8 4L4.8 1M8 4L4.8 7" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -808,7 +1238,7 @@
   <!-- ============================================================ -->
   <section class="screen" data-screen="select-shares" data-node-id="14327:12254">
     <div class="header">
-      <button class="back-btn" data-action="goto" data-target="limit-order" aria-label="Back">
+      <button class="back-btn" data-action="back" aria-label="Back">
         <svg viewBox="0 0 8 14" width="8" height="14" fill="none"><path d="M7 1L1 7L7 13" stroke="white" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </button>
       <div class="header-title">
@@ -826,7 +1256,7 @@
       <div class="quote-row">
         <div class="quote-left">
           <div class="ticker-row"><span class="ticker-symbol">ATZ</span><span class="ticker-action">Buy</span></div>
-          <span class="position-tag">Compounder &middot; Core</span>
+          <span class="position-tag" data-value="memo-tag-short">Compounder &middot; Core</span>
           <div class="ticker-sub">Non-Registered&nbsp;&nbsp;50,000.00 CAD</div>        </div>
         <div class="quote-right">
           <div><span class="quote-price" data-quote="price">309.95</span></div>
@@ -896,6 +1326,18 @@
         <div class="stat-tile">
           <span class="field-label">Estimated Portfolio Weight</span>
           <span class="field-plain dim" data-value="weight">0.00%</span>
+        </div>
+      </div>
+
+      <div class="memo-chip-block">
+        <div class="memo-chip-heading">Memo &mdash; tap to show or dismiss a field next time</div>
+        <div class="memo-chip-row">
+          <button class="memo-chip" type="button" data-action="memo-toggle-dismiss" data-memo-field="classification" data-memo-chip="classification">Classification</button>
+          <button class="memo-chip" type="button" data-action="memo-toggle-dismiss" data-memo-field="role" data-memo-chip="role">Role</button>
+          <button class="memo-chip" type="button" data-action="memo-toggle-dismiss" data-memo-field="thesis" data-memo-chip="thesis">Thesis</button>
+          <button class="memo-chip" type="button" data-action="memo-toggle-dismiss" data-memo-field="killCriteria" data-memo-chip="killCriteria">Kill Criteria</button>
+          <button class="memo-chip" type="button" data-action="memo-toggle-dismiss" data-memo-field="probability" data-memo-chip="probability">Prediction</button>
+          <button class="memo-chip" type="button" data-action="memo-toggle-dismiss" data-memo-field="source" data-memo-chip="source">Source</button>
         </div>
       </div>
 
@@ -1026,7 +1468,7 @@
 
     <div class="one-button" style="bottom:290px; height:70px;">
       <div class="one-button-row">
-        <button class="btn-link btn-cancel" data-action="goto" data-target="limit-order">Exit</button>
+        <button class="btn-link btn-cancel" data-action="goto" data-target="memo-classification">Exit</button>
         <button class="btn-link btn-review review-btn" data-action="goto" data-target="review">
           Review
           <svg viewBox="0 0 9 8" width="9" height="8" fill="none"><path d="M1 4H8M8 4L4.8 1M8 4L4.8 7" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -1126,30 +1568,36 @@
       <div class="memo-block">
         <div class="memo-title-row">
           <span class="memo-title">Memo</span>
-          <button class="revise-memo-link" type="button" data-action="none">Revise Memo</button>
+          <button class="revise-memo-link" type="button" data-action="goto" data-target="memo-review">Revise Memo</button>
         </div>
         <div class="memo-list">
           <div class="memo-field">
             <span class="memo-label">Classification</span>
-            <span class="memo-value">Compounder</span>
+            <span class="memo-value" data-value="ledger-classification">&mdash;</span>
           </div>
           <div class="memo-field">
             <span class="memo-label">Role</span>
-            <span class="memo-value">Core Position</span>
+            <span class="memo-value" data-value="ledger-role">&mdash;</span>
           </div>
           <div class="memo-field memo-field--case">
-            <span class="memo-label">Investment case</span>
-            <p class="memo-value memo-case-text">Aritzia is a premium-apparel compounder whose next leg is US square-footage growth, not same-store comps ...
+            <span class="memo-label">Thesis</span>
+            <p class="memo-value memo-case-text"><span data-value="ledger-thesis">&mdash;</span>
+              <svg class="case-arrow" viewBox="0 0 9 8" width="9" height="8" fill="none"><path d="M1 4H8M8 4L4.8 1M8 4L4.8 7" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </p>
+          </div>
+          <div class="memo-field memo-field--case">
+            <span class="memo-label">Kill Criteria</span>
+            <p class="memo-value memo-case-text"><span data-value="ledger-killcriteria">&mdash;</span>
               <svg class="case-arrow" viewBox="0 0 9 8" width="9" height="8" fill="none"><path d="M1 4H8M8 4L4.8 1M8 4L4.8 7" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
             </p>
           </div>
           <div class="memo-field">
             <span class="memo-label">Prediction</span>
-            <span class="memo-value">60% Probability 20% / yr over 5 years</span>
+            <span class="memo-value" data-value="ledger-prediction">&mdash;</span>
           </div>
           <div class="memo-field">
             <span class="memo-label">Source</span>
-            <span class="memo-value">Screener</span>
+            <span class="memo-value" data-value="ledger-source">&mdash;</span>
           </div>
         </div>
       </div>
@@ -1159,7 +1607,7 @@
 
     <div class="one-button">
       <div class="one-button-row">
-        <button class="btn-link btn-cancel" data-action="goto" data-target="limit-order">Exit</button>
+        <button class="btn-link btn-cancel" data-action="goto" data-target="memo-classification">Exit</button>
         <button class="btn-link btn-review execute-btn" type="button" aria-label="Execute buy">
           Execute Buy
           <span class="execute-icon">
@@ -1281,25 +1729,31 @@
         <div class="memo-list">
           <div class="memo-field">
             <span class="memo-label">Classification</span>
-            <span class="memo-value">Compounder</span>
+            <span class="memo-value" data-value="ledger-classification">&mdash;</span>
           </div>
           <div class="memo-field">
             <span class="memo-label">Role</span>
-            <span class="memo-value">Core Position</span>
+            <span class="memo-value" data-value="ledger-role">&mdash;</span>
           </div>
           <div class="memo-field memo-field--case">
-            <span class="memo-label">Investment case</span>
-            <p class="memo-value memo-case-text">Aritzia is a premium-apparel compounder whose next leg is US square-footage growth, not same-store comps ...
+            <span class="memo-label">Thesis</span>
+            <p class="memo-value memo-case-text"><span data-value="ledger-thesis">&mdash;</span>
+              <svg class="case-arrow" viewBox="0 0 9 8" width="9" height="8" fill="none"><path d="M1 4H8M8 4L4.8 1M8 4L4.8 7" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </p>
+          </div>
+          <div class="memo-field memo-field--case">
+            <span class="memo-label">Kill Criteria</span>
+            <p class="memo-value memo-case-text"><span data-value="ledger-killcriteria">&mdash;</span>
               <svg class="case-arrow" viewBox="0 0 9 8" width="9" height="8" fill="none"><path d="M1 4H8M8 4L4.8 1M8 4L4.8 7" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
             </p>
           </div>
           <div class="memo-field">
             <span class="memo-label">Prediction</span>
-            <span class="memo-value">60% Probability 20% / yr over 5 years</span>
+            <span class="memo-value" data-value="ledger-prediction">&mdash;</span>
           </div>
           <div class="memo-field">
             <span class="memo-label">Source</span>
-            <span class="memo-value">Screener</span>
+            <span class="memo-value" data-value="ledger-source">&mdash;</span>
           </div>
         </div>
       </div>
@@ -1310,7 +1764,7 @@
       </button>
     </div>
 
-    <button class="done-bar" data-action="goto" data-target="limit-order">Done</button>
+    <button class="done-bar" data-action="goto" data-target="memo-classification">Done</button>
   </section>
 
 </div>
@@ -2146,8 +2600,10 @@
       </div>
 
       <div class="field-row plain-row" data-action="goto" data-target="v2-select-shares">
-        <div class="field-line">
+        <div class="field-label-row">
           <span class="field-label">Shares</span>
+        </div>
+        <div class="field-line">
           <span class="field-value" data-value="v2-shares">0</span>
         </div>
       </div>
@@ -2367,8 +2823,10 @@
       </div>
 
       <div class="field-row plain-row editable" data-field="shares">
-        <div class="field-line">
+        <div class="field-label-row">
           <span class="field-label">Shares</span>
+        </div>
+        <div class="field-line">
           <div class="field-value-wrap">
             <span class="field-value" data-value="v2-shares">0</span>
             <span class="field-caret"></span>
@@ -2747,10 +3205,29 @@
 
 <script>
   const ORDER = ["limit-order","select-shares","review","submitting","order-filled"];
-  let historyStack = ["limit-order"];
+  let historyStack = ["memo-classification"];
 
   const TOTAL_PORTFOLIO = 6054; // reference account value used for weight %
   const DURATIONS = ["Good for Day", "Good Till Cancelled"];
+
+  // The memo flow's fixed step order, and the state.memo.dismissed key each step is gated
+  // by. Kept as parallel arrays (rather than baking the skip logic into each screen's own
+  // markup) so "every part of that buy flow optional" only has to be implemented once.
+  const MEMO_STEPS = ["memo-classification", "memo-role", "memo-thesis", "memo-killcriteria", "memo-prediction", "memo-source"];
+  const MEMO_FIELD_KEYS = ["classification", "role", "thesis", "killCriteria", "probability", "source"];
+  function firstMemoStep(){
+    for(let i = 0; i < MEMO_STEPS.length; i++){
+      if(!state.memo.dismissed[MEMO_FIELD_KEYS[i]]) return MEMO_STEPS[i];
+    }
+    return "memo-review";
+  }
+  function nextMemoStep(fromScreen){
+    const idx = MEMO_STEPS.indexOf(fromScreen);
+    for(let i = idx + 1; i < MEMO_STEPS.length; i++){
+      if(!state.memo.dismissed[MEMO_FIELD_KEYS[i]]) return MEMO_STEPS[i];
+    }
+    return "memo-review";
+  }
   const state = {
     priceCents: 0,
     priceStr: "",
@@ -2766,6 +3243,18 @@
       ask: 30995, askSize: 500,
       sizeBase: 500,
       prevAsk: 31100
+    },
+    memo: {
+      classification: null, classificationLabel: null,
+      role: null, roleLabel: null,
+      thesis: "", killCriteria: "",
+      source: null, sourceLabel: null,
+      probability: 50, returnTarget: 20, horizon: "3 years",
+      account: null,
+      // Per Dave: every memo step is dismissible ("don't show this again") — a dismissed
+      // step is skipped on future buy flows but stays reachable via a chip on the Limit
+      // Price screen ("they're not in this flow, but you can turn it on in that moment").
+      dismissed: { classification: false, role: false, thesis: false, killCriteria: false, probability: false, source: false }
     }
   };
   // Same account (availableCashCents lives on `state`), same live quote (renders into both
@@ -2908,6 +3397,7 @@
     document.querySelectorAll(".screen").forEach(s=>{
       s.classList.toggle("active", s.dataset.screen === id);
     });
+    renderMemo();
     if(id.slice(-"submitting".length) === "submitting"){
       var filledId = id.slice(0, -"submitting".length) + "order-filled";
       window.clearTimeout(window.__submitTimer);
@@ -3170,6 +3660,65 @@
     document.querySelectorAll(".v2-review-duration").forEach(el=> el.textContent = stateV2.duration);
   }
 
+  // Drives every memo-*/account-select screen — breadcrumb tags, radio selection state,
+  // the Prediction sliders/sentence, and the memo-review ledger — from the single
+  // state.memo object, so any screen can be entered directly (e.g. tapping a ledger row)
+  // and still show the correct state.
+  function renderMemo(){
+    const m = state.memo;
+    const fullTag = m.classificationLabel ? (m.classificationLabel + (m.roleLabel ? " · " + m.roleLabel : "")) : "—";
+    const roleShort = m.roleLabel ? m.roleLabel.replace(" Position", "") : "";
+    const shortTag = m.classificationLabel ? (m.classificationLabel + (roleShort ? " · " + roleShort : "")) : "Compounder · Core";
+    document.querySelectorAll('[data-value="memo-tag-classification"]').forEach(el=> el.textContent = m.classificationLabel || "—");
+    document.querySelectorAll('[data-value="memo-tag-full"]').forEach(el=> el.textContent = fullTag);
+    document.querySelectorAll('[data-value="memo-tag-short"]').forEach(el=> el.textContent = shortTag);
+
+    document.querySelectorAll('[data-memo-radio]').forEach(el=>{
+      const parts = el.dataset.memoRadio.split(":");
+      el.classList.toggle("checked", m[parts[0]] === parts[1]);
+    });
+    document.querySelectorAll('[data-account-radio]').forEach(el=>{
+      el.classList.toggle("checked", m.account === el.dataset.accountRadio);
+    });
+
+    document.querySelectorAll('[data-memo-text="thesis"]').forEach(el=>{ if(document.activeElement !== el) el.value = m.thesis; });
+    document.querySelectorAll('[data-memo-text="killCriteria"]').forEach(el=>{ if(document.activeElement !== el) el.value = m.killCriteria; });
+
+    document.querySelectorAll('[data-value="memo-prob-num"]').forEach(el=> el.textContent = m.probability);
+    document.querySelectorAll('[data-value="memo-return-num"]').forEach(el=> el.textContent = m.returnTarget);
+    document.querySelectorAll('[data-value="memo-prob-inline"]').forEach(el=> el.textContent = m.probability + "%");
+    document.querySelectorAll('[data-value="memo-return-inline"]').forEach(el=> el.textContent = m.returnTarget + "%/yr");
+    document.querySelectorAll('[data-value="memo-horizon-inline"]').forEach(el=> el.textContent = m.horizon);
+    document.querySelectorAll('.memo-horizon-btn').forEach(b=> b.classList.toggle("active", b.dataset.memoHorizon === m.horizon));
+    document.querySelectorAll('[data-memo-slider="probability"]').forEach(el=>{ if(document.activeElement !== el) el.value = m.probability; });
+    document.querySelectorAll('[data-memo-slider="returnTarget"]').forEach(el=>{ if(document.activeElement !== el) el.value = m.returnTarget; });
+
+    const truncate = (s)=> s && s.length > 80 ? s.slice(0, 80) + "…" : (s || "—");
+    document.querySelectorAll('[data-value="ledger-classification"]').forEach(el=> el.textContent = m.classificationLabel || "—");
+    document.querySelectorAll('[data-value="ledger-role"]').forEach(el=> el.textContent = m.roleLabel || "—");
+    document.querySelectorAll('[data-value="ledger-thesis"]').forEach(el=> el.textContent = truncate(m.thesis));
+    document.querySelectorAll('[data-value="ledger-killcriteria"]').forEach(el=> el.textContent = truncate(m.killCriteria));
+    document.querySelectorAll('[data-value="ledger-prediction"]').forEach(el=> el.textContent = m.probability + "% Probability " + m.returnTarget + "% / yr over " + m.horizon);
+    document.querySelectorAll('[data-value="ledger-source"]').forEach(el=> el.textContent = m.sourceLabel || "—");
+    document.querySelectorAll('[data-value="memo-date"]').forEach(el=>{
+      if(!el.textContent) el.textContent = new Date().toLocaleDateString("en-US", {month:"short", day:"numeric", year:"numeric"});
+    });
+
+    // Chip row on the Limit Price screen: "lit up" (filled) means included in the flow,
+    // dim means dismissed — tapping toggles state.memo.dismissed (see memo-toggle-dismiss).
+    document.querySelectorAll('[data-memo-chip]').forEach(el=>{
+      el.classList.toggle("filled", !m.dismissed[el.dataset.memoChip]);
+    });
+  }
+
+  document.addEventListener("input", (e)=>{
+    const slider = e.target.closest("[data-memo-slider]");
+    if(!slider) return;
+    const key = slider.dataset.memoSlider;
+    state.memo[key] = Number(slider.value);
+    renderMemo();
+  });
+
   document.addEventListener("click", (e)=>{
     const titleBtn = e.target.closest(".header-title");
     const menuItem = e.target.closest(".order-type-item");
@@ -3270,12 +3819,50 @@
       const action = navEl.dataset.action;
       if(action === "goto"){
         e.preventDefault();
-        const target = navEl.dataset.target;
-        if(target === "limit-order" || target === "usd-limit-order" || target === "v2-limit-order"){ historyStack = [target]; showScreen(target); }
+        let target = navEl.dataset.target;
+        if(target === "memo-classification"){
+          target = firstMemoStep();
+          historyStack = [target]; showScreen(target);
+        } else if(target === "usd-limit-order" || target === "v2-limit-order"){ historyStack = [target]; showScreen(target); }
         else { go(target); }
       } else if(action === "back"){
         e.preventDefault();
         back();
+      } else if(action === "memo-select"){
+        const field = navEl.dataset.memoField;
+        state.memo[field] = navEl.dataset.memoValue;
+        state.memo[field + "Label"] = navEl.dataset.memoLabel;
+        renderMemo();
+      } else if(action === "memo-clear-text"){
+        const field = navEl.dataset.memoField;
+        state.memo[field] = "";
+        const ta = document.querySelector('[data-screen="memo-' + (field === "killCriteria" ? "killcriteria" : field) + '"] [data-memo-text="' + field + '"]');
+        if(ta) ta.value = "";
+      } else if(action === "memo-text-continue"){
+        const field = navEl.dataset.memoField;
+        const fromScreen = navEl.closest(".memo-screen").dataset.screen;
+        const ta = navEl.closest(".memo-screen").querySelector('[data-memo-text="' + field + '"]');
+        state.memo[field] = ta ? ta.value : "";
+        go(nextMemoStep(fromScreen));
+      } else if(action === "memo-continue-from"){
+        go(nextMemoStep(navEl.dataset.memoFrom));
+      } else if(action === "memo-horizon"){
+        state.memo.horizon = navEl.dataset.memoHorizon;
+        renderMemo();
+      } else if(action === "memo-select-account"){
+        state.memo.account = navEl.dataset.account;
+        renderMemo();
+      } else if(action === "memo-toggle-dismiss"){
+        // Matches Dave's description exactly: tap a dismissed chip to "bring it up" — it
+        // re-lights (included in future flows) AND opens right now so it can be filled in.
+        // Tap a lit chip again to dismiss it (no navigation, just turns it off).
+        const field = navEl.dataset.memoField;
+        state.memo.dismissed[field] = !state.memo.dismissed[field];
+        renderMemo();
+        if(!state.memo.dismissed[field]){
+          const idx = MEMO_FIELD_KEYS.indexOf(field);
+          if(idx !== -1) go(MEMO_STEPS[idx]);
+        }
       }
       return;
     }
@@ -3300,7 +3887,9 @@
   state.priceCents = state.quote.ask;
   recalc();
   renderBottom();
-  showScreen("limit-order");
+  renderMemo();
+  historyStack = [firstMemoStep()];
+  showScreen(historyStack[0]);
   window.setInterval(tickQuote, 2200);
 
   // ---------- page-level burger menu / iteration switcher ----------
@@ -3328,7 +3917,7 @@
         drawer.querySelectorAll("a[data-iteration-target]").forEach(function(l){
           l.classList.toggle("active", l === a);
         });
-        var entry = name === "usd" ? "usd-limit-order" : name === "v2" ? "v2-limit-order" : "limit-order";
+        var entry = name === "usd" ? "usd-limit-order" : name === "v2" ? "v2-limit-order" : firstMemoStep();
         historyStack = [entry];
         showScreen(entry);
         closeDrawer();
