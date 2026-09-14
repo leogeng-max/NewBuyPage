@@ -391,6 +391,16 @@
     display:flex; align-items:flex-end; justify-content:center;
     padding-bottom:7.82px;
   }
+  /* CAD keyboard redesign — matches the in-app keyboard: only the digit keys get a
+     solid dark key background, "." and backspace sit flush with no key box, no ABC/DEF
+     subscripts, and the whole keyboard is shorter than the original Figma spec. */
+  .cad-keyboard{padding:5.87px 5.87px 0 5.87px; gap:6px;}
+  .cad-keyboard .num-row{gap:6px;}
+  .cad-keyboard .num-key{height:38px; background:#3a3a3c; box-shadow:none;}
+  .cad-keyboard .num-key.dot,
+  .cad-keyboard .num-key.remove{background:none;}
+  .cad-keyboard .num-key .digit{font-size:22px;}
+  .cad-keyboard .home-bar-wrap{height:56px; padding-bottom:7.82px;}
   .home-bar{
     width:135.89px; height:4.89px; border-radius:100px; background:#fff;
   }
@@ -408,6 +418,30 @@
     width:calc(100% + 60px); margin:28px -30px 0 -30px;
   }
   .field-list::-webkit-scrollbar{display:none; width:0; height:0;}
+  /* .split: price/shares/duration/est-cost stay pinned (field-list-fixed); only the
+     positions/orders/history tabs section scrolls and may be covered by the keyboard. */
+  .field-list.split{overflow:visible; gap:0;}
+  .field-list-fixed{display:flex; flex-direction:column; gap:22px; flex:none;}
+  .field-list-scroll{
+    flex:1 1 auto; min-height:0; margin-top:22px;
+    overflow-y:auto; overflow-x:visible;
+    scrollbar-width:none; -ms-overflow-style:none;
+  }
+  .field-list-scroll::-webkit-scrollbar{display:none; width:0; height:0;}
+  .field-list-scroll.scrollable{
+    -webkit-mask-image:linear-gradient(to bottom, black calc(100% - 28px), transparent 100%);
+    mask-image:linear-gradient(to bottom, black calc(100% - 28px), transparent 100%);
+  }
+  /* kb-compact: keyboard is open on a .split screen — reclaim vertical space so the
+     fixed fields (price/shares/duration/est. cost+weight) never end up under the keyboard.
+     Bid/Ask must stay visible, so the room comes from tighter spacing instead of hiding it. */
+  .screen.kb-compact .quote-block{padding-top:14px; padding-bottom:14px;}
+  .screen.kb-compact .bidask-bar{margin-top:12px; height:22px;}
+  .screen.kb-compact .field-list-fixed{gap:10px;}
+  .screen.kb-compact .field-bleed-divider{margin-top:10px;}
+  .screen.kb-compact .field-row:not(.readonly){padding-bottom:8px;}
+  .screen.kb-compact .field-label-row{margin-bottom:4px;}
+  .screen.kb-compact .field-row > .field-label{margin-bottom:4px;}
   .field-list.scrollable{
     -webkit-mask-image:linear-gradient(to bottom, black calc(100% - 28px), transparent 100%);
     mask-image:linear-gradient(to bottom, black calc(100% - 28px), transparent 100%);
@@ -584,9 +618,11 @@
   .memo-continue.enabled{color:#fff; pointer-events:auto;}
   .memo-add-later{background:none; border:none; color:#c7c7c7; font-size:15px; cursor:pointer; display:flex; align-items:center; gap:8px; padding:0; font-family:inherit;}
 
-  .memo-textarea-actions{display:flex; justify-content:space-between; align-items:center; padding-bottom:14px; border-bottom:1px solid var(--divider); margin-top:34px;}
+  .memo-textarea-actions{display:flex; justify-content:space-between; align-items:center; margin-top:34px; padding-top:22px; border-top:1px solid var(--divider);}
   .memo-clear-btn{background:none; border:none; color:#929292; font-size:13px; cursor:pointer; padding:0; font-family:inherit;}
-  .memo-icon-btn{background:none; border:none; color:#929292; cursor:pointer; padding:0 0 0 14px;}
+  .memo-icon-actions{display:flex; align-items:center;}
+  .memo-icon-btn{background:none; border:none; color:#929292; cursor:pointer; padding:0 0 0 14px; display:flex; align-items:center;}
+  .memo-icon-btn:hover, .memo-icon-btn:active{color:var(--c-white);}
   .memo-textarea{width:100%; background:none; border:none; color:#c7c7c7; font-size:13px; line-height:1.6; resize:none; outline:none; margin-top:22px; height:180px; font-family:inherit;}
   .memo-textarea::placeholder{color:#565b5e;}
 
@@ -619,8 +655,9 @@
   .memo-ledger-value{font-size:14px; color:#c7c7c7; font-weight:500; line-height:1.33;}
   .memo-save-bar{position:absolute; left:0; right:0; bottom:0; height:64px; background:#000; display:flex; align-items:center; justify-content:center; border:none; color:#fff; font-size:14px; cursor:pointer; font-family:inherit;}
 
-  .memo-chip-block{margin-top:4px;}
-  .memo-chip-heading{font-size:11px; color:#6d6d6d; margin-bottom:10px;}
+  .memo-chip-block{margin-top:36px;}
+  .memo-chip-heading{font-size:11px; color:#929292; margin-bottom:4px; text-transform:uppercase; letter-spacing:0.3px;}
+  .memo-chip-desc{font-size:12px; color:#6d6d6d; line-height:1.4; margin-bottom:12px;}
   .memo-chip-row{display:flex; flex-wrap:wrap; gap:8px;}
   .memo-chip{background:none; border:1px solid #2a2a2a; border-radius:14px; padding:6px 12px; font-size:12px; color:#929292; cursor:pointer; font-family:inherit;}
   .memo-chip.filled{border-color:#565b5e; color:#fff;}
@@ -659,7 +696,7 @@
         <div class="memo-title-row">
           <div>
             <div class="memo-title">Classification</div>
-            <div class="memo-step">1 / 6</div>
+            <div class="memo-step" data-memo-step-for="memo-classification">1 / 6</div>
           </div>
           <div class="memo-ticker-mini">ATZ<br><span data-quote="price">309.95</span> CAD <span class="chg" data-quote="change">+0.01%</span></div>
         </div>
@@ -719,7 +756,7 @@
         <div class="memo-title-row">
           <div>
             <div class="memo-title">Role</div>
-            <div class="memo-step">2 / 6</div>
+            <div class="memo-step" data-memo-step-for="memo-role">2 / 6</div>
           </div>
           <div style="text-align:right;">
             <div class="memo-ticker-mini">ATZ<br><span data-quote="price">309.95</span> CAD <span class="chg" data-quote="change">+0.01%</span></div>
@@ -763,7 +800,7 @@
         <div class="memo-title-row">
           <div>
             <div class="memo-title">Thesis</div>
-            <div class="memo-step">3 / 6</div>
+            <div class="memo-step" data-memo-step-for="memo-thesis">3 / 6</div>
           </div>
           <div style="text-align:right;">
             <div class="memo-ticker-mini">ATZ<br><span data-quote="price">309.95</span> CAD <span class="chg" data-quote="change">+0.01%</span></div>
@@ -773,6 +810,14 @@
       </div>
       <div class="memo-textarea-actions">
         <button class="memo-clear-btn" type="button" data-action="memo-clear-text" data-memo-field="thesis">Clear</button>
+        <div class="memo-icon-actions">
+          <button class="memo-icon-btn" type="button" aria-label="Copy">
+            <svg viewBox="0 0 16 16" width="15" height="15" fill="none"><rect x="1" y="1" width="9.5" height="9.5" rx="1.5" stroke="currentColor" stroke-width="1"/><path d="M5 5H13.5a1 1 0 0 1 1 1V14a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V5Z" fill="#000" stroke="currentColor" stroke-width="1"/></svg>
+          </button>
+          <button class="memo-icon-btn" type="button" aria-label="Paste from clipboard">
+            <svg viewBox="0 0 16 16" width="15" height="15" fill="none"><rect x="3" y="2.5" width="10" height="12" rx="1.5" stroke="currentColor" stroke-width="1"/><rect x="6" y="1" width="4" height="2.5" rx="1" fill="currentColor"/></svg>
+          </button>
+        </div>
       </div>
       <textarea class="memo-textarea" data-memo-text="thesis" placeholder="The reason this position exists: State why the market is wrong. Be specific enough to be proven wrong later."></textarea>
     </div>
@@ -792,7 +837,7 @@
         <div class="memo-title-row">
           <div>
             <div class="memo-title">Kill Criteria</div>
-            <div class="memo-step">4 / 6</div>
+            <div class="memo-step" data-memo-step-for="memo-killcriteria">4 / 6</div>
           </div>
           <div style="text-align:right;">
             <div class="memo-ticker-mini">ATZ<br><span data-quote="price">309.95</span> CAD <span class="chg" data-quote="change">+0.01%</span></div>
@@ -802,6 +847,14 @@
       </div>
       <div class="memo-textarea-actions">
         <button class="memo-clear-btn" type="button" data-action="memo-clear-text" data-memo-field="killCriteria">Clear</button>
+        <div class="memo-icon-actions">
+          <button class="memo-icon-btn" type="button" aria-label="Copy">
+            <svg viewBox="0 0 16 16" width="15" height="15" fill="none"><rect x="1" y="1" width="9.5" height="9.5" rx="1.5" stroke="currentColor" stroke-width="1"/><path d="M5 5H13.5a1 1 0 0 1 1 1V14a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V5Z" fill="#000" stroke="currentColor" stroke-width="1"/></svg>
+          </button>
+          <button class="memo-icon-btn" type="button" aria-label="Paste from clipboard">
+            <svg viewBox="0 0 16 16" width="15" height="15" fill="none"><rect x="3" y="2.5" width="10" height="12" rx="1.5" stroke="currentColor" stroke-width="1"/><rect x="6" y="1" width="4" height="2.5" rx="1" fill="currentColor"/></svg>
+          </button>
+        </div>
       </div>
       <textarea class="memo-textarea" data-memo-text="killCriteria" placeholder="The conditions that invalidate your thesis. Be specific — if any of these are met, the position no longer deserves capital."></textarea>
     </div>
@@ -821,7 +874,7 @@
         <div class="memo-title-row">
           <div>
             <div class="memo-title">Prediction</div>
-            <div class="memo-step">5 / 6</div>
+            <div class="memo-step" data-memo-step-for="memo-prediction">5 / 6</div>
           </div>
           <div style="text-align:right;">
             <div class="memo-ticker-mini">ATZ<br><span data-quote="price">309.95</span> CAD <span class="chg" data-quote="change">+0.01%</span></div>
@@ -874,7 +927,7 @@
         <div class="memo-title-row">
           <div>
             <div class="memo-title">Source</div>
-            <div class="memo-step">6 / 6</div>
+            <div class="memo-step" data-memo-step-for="memo-source">6 / 6</div>
           </div>
           <div style="text-align:right;">
             <div class="memo-ticker-mini">ATZ<br><span data-quote="price">309.95</span> CAD <span class="chg" data-quote="change">+0.01%</span></div>
@@ -935,30 +988,43 @@
         </div>
       </div>
       <div class="memo-ledger-list">
-        <button class="memo-ledger-item" type="button" data-action="goto" data-target="memo-classification">
+        <button class="memo-ledger-item" type="button" data-action="goto" data-target="memo-classification" data-memo-field="classification">
           <div class="memo-ledger-label">Classification</div>
           <div class="memo-ledger-value" data-value="ledger-classification">&mdash;</div>
         </button>
-        <button class="memo-ledger-item" type="button" data-action="goto" data-target="memo-role">
+        <button class="memo-ledger-item" type="button" data-action="goto" data-target="memo-role" data-memo-field="role">
           <div class="memo-ledger-label">Role</div>
           <div class="memo-ledger-value" data-value="ledger-role">&mdash;</div>
         </button>
-        <button class="memo-ledger-item" type="button" data-action="goto" data-target="memo-thesis">
+        <button class="memo-ledger-item" type="button" data-action="goto" data-target="memo-thesis" data-memo-field="thesis">
           <div class="memo-ledger-label">Thesis</div>
           <div class="memo-ledger-value" data-value="ledger-thesis">&mdash;</div>
         </button>
-        <button class="memo-ledger-item" type="button" data-action="goto" data-target="memo-killcriteria">
+        <button class="memo-ledger-item" type="button" data-action="goto" data-target="memo-killcriteria" data-memo-field="killCriteria">
           <div class="memo-ledger-label">Kill Criteria</div>
           <div class="memo-ledger-value" data-value="ledger-killcriteria">&mdash;</div>
         </button>
-        <button class="memo-ledger-item" type="button" data-action="goto" data-target="memo-prediction">
+        <button class="memo-ledger-item" type="button" data-action="goto" data-target="memo-prediction" data-memo-field="probability">
           <div class="memo-ledger-label">Prediction</div>
           <div class="memo-ledger-value" data-value="ledger-prediction">&mdash;</div>
         </button>
-        <button class="memo-ledger-item" type="button" data-action="goto" data-target="memo-source">
+        <button class="memo-ledger-item" type="button" data-action="goto" data-target="memo-source" data-memo-field="source">
           <div class="memo-ledger-label">Source</div>
           <div class="memo-ledger-value" data-value="ledger-source">&mdash;</div>
         </button>
+      </div>
+
+      <div class="memo-chip-block">
+        <div class="memo-chip-heading">Memo fields</div>
+        <div class="memo-chip-desc">Nothing you wrote is deleted &mdash; tap a field to hide it from this memo. You decide whether it counts as part of your evaluation.</div>
+        <div class="memo-chip-row">
+          <button class="memo-chip" type="button" data-action="memo-toggle-dismiss" data-memo-field="classification" data-memo-chip="classification">Classification</button>
+          <button class="memo-chip" type="button" data-action="memo-toggle-dismiss" data-memo-field="role" data-memo-chip="role">Role</button>
+          <button class="memo-chip" type="button" data-action="memo-toggle-dismiss" data-memo-field="thesis" data-memo-chip="thesis">Thesis</button>
+          <button class="memo-chip" type="button" data-action="memo-toggle-dismiss" data-memo-field="killCriteria" data-memo-chip="killCriteria">Kill Criteria</button>
+          <button class="memo-chip" type="button" data-action="memo-toggle-dismiss" data-memo-field="probability" data-memo-chip="probability">Prediction</button>
+          <button class="memo-chip" type="button" data-action="memo-toggle-dismiss" data-memo-field="source" data-memo-chip="source">Source</button>
+        </div>
       </div>
     </div>
     <button class="memo-save-bar" type="button" data-action="goto" data-target="account-select">Save memo</button>
@@ -1015,13 +1081,13 @@
     <div class="quote-block">
       <div class="quote-row">
         <div class="quote-left">
-          <div class="ticker-row"><span class="ticker-symbol">ATZ</span><span class="ticker-action">Buy</span></div>
-          <span class="position-tag" data-value="memo-tag-short">Compounder &middot; Core</span>
-          <div class="ticker-sub">Non-Registered&nbsp;&nbsp;50,000.00 CAD</div>        </div>
-        <div class="quote-right">
           <div><span class="quote-price" data-quote="price">309.95</span></div>
           <div class="quote-change down" data-quote="change">&minus;1.05 (&minus;0.34%)</div>
         </div>
+        <div class="quote-right">
+          <div class="ticker-row"><span class="ticker-symbol">ATZ</span><span class="ticker-action">Buy</span></div>
+          <span class="position-tag" data-value="memo-tag-short">Compounder &middot; Core</span>
+          <div class="ticker-sub">Non-Registered&nbsp;&nbsp;50,000.00 CAD</div>        </div>
       </div>
       <div class="bidask-bar">
         <div class="bidask-side bid">
@@ -1082,18 +1148,6 @@
         <div class="stat-tile">
           <span class="field-label">Estimated Portfolio Weight</span>
           <span class="field-plain dim" data-value="weight">0.00%</span>
-        </div>
-      </div>
-
-      <div class="memo-chip-block">
-        <div class="memo-chip-heading">Memo &mdash; tap to show or dismiss a field next time</div>
-        <div class="memo-chip-row">
-          <button class="memo-chip" type="button" data-action="memo-toggle-dismiss" data-memo-field="classification" data-memo-chip="classification">Classification</button>
-          <button class="memo-chip" type="button" data-action="memo-toggle-dismiss" data-memo-field="role" data-memo-chip="role">Role</button>
-          <button class="memo-chip" type="button" data-action="memo-toggle-dismiss" data-memo-field="thesis" data-memo-chip="thesis">Thesis</button>
-          <button class="memo-chip" type="button" data-action="memo-toggle-dismiss" data-memo-field="killCriteria" data-memo-chip="killCriteria">Kill Criteria</button>
-          <button class="memo-chip" type="button" data-action="memo-toggle-dismiss" data-memo-field="probability" data-memo-chip="probability">Prediction</button>
-          <button class="memo-chip" type="button" data-action="memo-toggle-dismiss" data-memo-field="source" data-memo-chip="source">Source</button>
         </div>
       </div>
 
@@ -1255,13 +1309,13 @@
     <div class="quote-block">
       <div class="quote-row">
         <div class="quote-left">
-          <div class="ticker-row"><span class="ticker-symbol">ATZ</span><span class="ticker-action">Buy</span></div>
-          <span class="position-tag" data-value="memo-tag-short">Compounder &middot; Core</span>
-          <div class="ticker-sub">Non-Registered&nbsp;&nbsp;50,000.00 CAD</div>        </div>
-        <div class="quote-right">
           <div><span class="quote-price" data-quote="price">309.95</span></div>
           <div class="quote-change down" data-quote="change">&minus;1.05 (&minus;0.34%)</div>
         </div>
+        <div class="quote-right">
+          <div class="ticker-row"><span class="ticker-symbol">ATZ</span><span class="ticker-action">Buy</span></div>
+          <span class="position-tag" data-value="memo-tag-short">Compounder &middot; Core</span>
+          <div class="ticker-sub">Non-Registered&nbsp;&nbsp;50,000.00 CAD</div>        </div>
       </div>
       <div class="bidask-bar">
         <div class="bidask-side bid">
@@ -1275,7 +1329,8 @@
       </div>
     </div>
 
-    <div class="field-list">
+    <div class="field-list split">
+      <div class="field-list-fixed">
       <div class="field-row editable" data-field="price">
         <div class="field-label-row">
           <span class="field-label">Limit Price</span>
@@ -1329,20 +1384,10 @@
         </div>
       </div>
 
-      <div class="memo-chip-block">
-        <div class="memo-chip-heading">Memo &mdash; tap to show or dismiss a field next time</div>
-        <div class="memo-chip-row">
-          <button class="memo-chip" type="button" data-action="memo-toggle-dismiss" data-memo-field="classification" data-memo-chip="classification">Classification</button>
-          <button class="memo-chip" type="button" data-action="memo-toggle-dismiss" data-memo-field="role" data-memo-chip="role">Role</button>
-          <button class="memo-chip" type="button" data-action="memo-toggle-dismiss" data-memo-field="thesis" data-memo-chip="thesis">Thesis</button>
-          <button class="memo-chip" type="button" data-action="memo-toggle-dismiss" data-memo-field="killCriteria" data-memo-chip="killCriteria">Kill Criteria</button>
-          <button class="memo-chip" type="button" data-action="memo-toggle-dismiss" data-memo-field="probability" data-memo-chip="probability">Prediction</button>
-          <button class="memo-chip" type="button" data-action="memo-toggle-dismiss" data-memo-field="source" data-memo-chip="source">Source</button>
-        </div>
+      <div class="field-bleed-divider"></div>
       </div>
 
-      <div class="field-bleed-divider"></div>
-
+      <div class="field-list-scroll">
       <div class="field-row activity-row">
         <div class="activity-header">
           <button class="activity-tab" data-tab="positions" type="button">
@@ -1464,6 +1509,7 @@
           </div>
         </div>
       </div>
+      </div>
     </div>
 
     <div class="one-button" style="bottom:290px; height:70px;">
@@ -1476,27 +1522,27 @@
       </div>
     </div>
 
-    <div class="keyboard">
+    <div class="keyboard cad-keyboard">
       <div class="num-row">
         <div class="num-key"><span class="digit">1</span></div>
-        <div class="num-key"><span class="digit">2</span><span class="letters">ABC</span></div>
-        <div class="num-key"><span class="digit">3</span><span class="letters">DEF</span></div>
+        <div class="num-key"><span class="digit">2</span></div>
+        <div class="num-key"><span class="digit">3</span></div>
       </div>
       <div class="num-row">
-        <div class="num-key"><span class="digit">4</span><span class="letters">GHI</span></div>
-        <div class="num-key"><span class="digit">5</span><span class="letters">JKL</span></div>
-        <div class="num-key"><span class="digit">6</span><span class="letters">MNO</span></div>
+        <div class="num-key"><span class="digit">4</span></div>
+        <div class="num-key"><span class="digit">5</span></div>
+        <div class="num-key"><span class="digit">6</span></div>
       </div>
       <div class="num-row">
-        <div class="num-key"><span class="digit">7</span><span class="letters">PQRS</span></div>
-        <div class="num-key"><span class="digit">8</span><span class="letters">TUV</span></div>
-        <div class="num-key"><span class="digit">9</span><span class="letters">WXYZ</span></div>
+        <div class="num-key"><span class="digit">7</span></div>
+        <div class="num-key"><span class="digit">8</span></div>
+        <div class="num-key"><span class="digit">9</span></div>
       </div>
       <div class="num-row">
         <div class="num-key dot"><span class="digit">.</span></div>
         <div class="num-key"><span class="digit">0</span></div>
         <div class="num-key remove">
-          <svg viewBox="0 0 23 17" width="23" height="17" fill="none"><path d="M6 1H21C21.55 1 22 1.45 22 2V15C22 15.55 21.55 16 21 16H6L1 8.5L6 1Z" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/><path d="M10.5 6L16.5 11.5M16.5 6L10.5 11.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+          <svg viewBox="0 0 20 16" width="20" height="16" fill="none"><path d="M18 8H2M2 8L8 2M2 8L8 14" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </div>
       </div>
       <div class="home-bar-wrap"><div class="home-bar"></div></div>
@@ -3605,9 +3651,15 @@
     if(!oneBtn || !fl) return;
     const isKeyboardScreen = screen.dataset.screen === "select-shares" || screen.dataset.screen === "usd-select-shares" || screen.dataset.screen === "v2-select-shares";
     const open = isKeyboardScreen && kb && s.bottomMode === "keyboard";
+    // Compact the quote header + tighten row spacing so Limit Price/Shares/Duration/
+    // Estimated Cost+Weight always have room to stay above the keyboard — only the
+    // positions/orders/history tabs (field-list-scroll) may end up covered.
+    screen.classList.toggle("kb-compact", open && fl.classList.contains("split"));
     if(kb) kb.style.display = open ? "flex" : "none";
     oneBtn.style.top = "auto";
-    oneBtn.style.bottom = open ? "290px" : "0px";
+    // Sit the button bar right on top of the keyboard — measure it rather than assume a
+    // fixed height, since the CAD keyboard redesign is shorter than the USD/v2 one.
+    oneBtn.style.bottom = open ? Math.round(kb.getBoundingClientRect().height) + "px" : "0px";
     const screenTop = screen.getBoundingClientRect().top;
     // No .quote-block on this screen (e.g. v2, which folds its ticker/price into the
     // scrollable field-list itself instead of a separately-fixed header) — start the list
@@ -3616,8 +3668,6 @@
     const btnTop = Math.round(oneBtn.getBoundingClientRect().top - screenTop);
     fl.style.top = listTop + "px";
     fl.style.height = Math.max(0, btnTop - listTop) + "px";
-    oneBtn.style.top = "auto";
-    oneBtn.style.bottom = open ? "290px" : "0px";
     updateScrollFade();
   }
 
@@ -3626,7 +3676,10 @@
   }
 
   function updateScrollFade(){
-    document.querySelectorAll(".field-list").forEach(fl=>{
+    document.querySelectorAll(".field-list:not(.split)").forEach(fl=>{
+      fl.classList.toggle("scrollable", fl.scrollHeight > fl.clientHeight + 1);
+    });
+    document.querySelectorAll(".field-list-scroll").forEach(fl=>{
       fl.classList.toggle("scrollable", fl.scrollHeight > fl.clientHeight + 1);
     });
   }
@@ -3704,10 +3757,22 @@
       if(!el.textContent) el.textContent = new Date().toLocaleDateString("en-US", {month:"short", day:"numeric", year:"numeric"});
     });
 
-    // Chip row on the Limit Price screen: "lit up" (filled) means included in the flow,
-    // dim means dismissed — tapping toggles state.memo.dismissed (see memo-toggle-dismiss).
+    // Hidden fields drop out of the ledger entirely — they only exist as a chip below.
+    document.querySelectorAll('.memo-ledger-item[data-memo-field]').forEach(el=>{
+      el.hidden = !!m.dismissed[el.dataset.memoField];
+    });
+
+    // Chip row on Memo Review: "lit up" (filled) means shown in the ledger above,
+    // dim means hidden — tapping only toggles state.memo.dismissed (see memo-toggle-dismiss).
     document.querySelectorAll('[data-memo-chip]').forEach(el=>{
       el.classList.toggle("filled", !m.dismissed[el.dataset.memoChip]);
+    });
+
+    // Step counter reflects only the currently-active (non-hidden) steps.
+    const activeSteps = MEMO_STEPS.filter((s,i)=> !m.dismissed[MEMO_FIELD_KEYS[i]]);
+    document.querySelectorAll('[data-memo-step-for]').forEach(el=>{
+      const pos = activeSteps.indexOf(el.dataset.memoStepFor);
+      el.textContent = (pos === -1 ? activeSteps.length : pos + 1) + " / " + activeSteps.length;
     });
   }
 
@@ -3853,16 +3918,14 @@
         state.memo.account = navEl.dataset.account;
         renderMemo();
       } else if(action === "memo-toggle-dismiss"){
-        // Matches Dave's description exactly: tap a dismissed chip to "bring it up" — it
-        // re-lights (included in future flows) AND opens right now so it can be filled in.
-        // Tap a lit chip again to dismiss it (no navigation, just turns it off).
+        // Lives only on Memo Review now (per Aidan: it's the one screen guaranteed to be
+        // seen even if every other step is skipped). Un-hiding just brings the row back
+        // into the ledger above, empty — it does NOT jump into that screen. The user then
+        // taps the reappeared ledger row themselves to go fill it in, matching Aidan's
+        // two-tap description exactly.
         const field = navEl.dataset.memoField;
         state.memo.dismissed[field] = !state.memo.dismissed[field];
         renderMemo();
-        if(!state.memo.dismissed[field]){
-          const idx = MEMO_FIELD_KEYS.indexOf(field);
-          if(idx !== -1) go(MEMO_STEPS[idx]);
-        }
       }
       return;
     }
