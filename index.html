@@ -332,11 +332,15 @@
   .revise-memo-link:hover, .revise-memo-link:active{color:var(--c-white);}
   .memo-list{display:flex; flex-direction:column; gap:36px;}
   .memo-field{display:flex; flex-direction:column; gap:5px;}
+  .memo-field[hidden]{display:none;}
   .memo-field--case{gap:10px;}
   .memo-label{font-size:11px; color:var(--c-700);}
   .memo-value{font-size:15px; color:var(--c-700); letter-spacing:-0.3px; line-height:1.15; margin:0;}
-  .memo-case-text{display:flex; align-items:baseline; gap:6px; flex-wrap:wrap;}
-  .case-arrow{flex:none; color:var(--c-700); position:relative; top:1px;}
+  /* Plain inline flow (not flex) so the arrow wraps as if it were the next word in the
+     sentence — it lands right after the "…" on whichever line the text ends on, instead
+     of always being forced onto its own line the way a flex item would be. */
+  .memo-case-text{display:block;}
+  .case-arrow{display:inline; color:var(--c-700); margin-left:5px; vertical-align:-1px;}
 
   /* ---------- done bar ---------- */
   .done-bar{
@@ -432,16 +436,17 @@
     -webkit-mask-image:linear-gradient(to bottom, black calc(100% - 28px), transparent 100%);
     mask-image:linear-gradient(to bottom, black calc(100% - 28px), transparent 100%);
   }
-  /* kb-compact: keyboard is open on a .split screen — reclaim vertical space so the
-     fixed fields (price/shares/duration/est. cost+weight) never end up under the keyboard.
-     Bid/Ask must stay visible, so the room comes from tighter spacing instead of hiding it. */
-  .screen.kb-compact .quote-block{padding-top:14px; padding-bottom:14px;}
-  .screen.kb-compact .bidask-bar{margin-top:12px; height:22px;}
-  .screen.kb-compact .field-list-fixed{gap:10px;}
-  .screen.kb-compact .field-bleed-divider{margin-top:10px;}
-  .screen.kb-compact .field-row:not(.readonly){padding-bottom:8px;}
-  .screen.kb-compact .field-label-row{margin-bottom:4px;}
-  .screen.kb-compact .field-row > .field-label{margin-bottom:4px;}
+  /* kb-compact: keyboard is open on a .split screen. Bid/Ask and the fixed fields
+     (price/shares/duration/est. cost+weight) must stay visible and get to breathe —
+     Positions/Orders/History (field-list-scroll) is the part that's fine to end up
+     entirely behind the keyboard, so it absorbs the squeeze, not the top section. */
+  .screen.kb-compact .quote-block{padding-top:20px; padding-bottom:18px;}
+  .screen.kb-compact .bidask-bar{margin-top:16px; height:24px;}
+  .screen.kb-compact .field-list-fixed{gap:18px;}
+  .screen.kb-compact .field-bleed-divider{margin-top:20px;}
+  .screen.kb-compact .field-row:not(.readonly){padding-bottom:12px;}
+  .screen.kb-compact .field-label-row{margin-bottom:8px;}
+  .screen.kb-compact .field-row > .field-label{margin-bottom:8px;}
   .field-list.scrollable{
     -webkit-mask-image:linear-gradient(to bottom, black calc(100% - 28px), transparent 100%);
     mask-image:linear-gradient(to bottom, black calc(100% - 28px), transparent 100%);
@@ -597,6 +602,13 @@
   .memo-back{position:absolute; left:18px; top:50%; transform:translateY(-50%); background:none; border:none; color:#fff; font-size:22px; cursor:pointer; padding:6px 10px; line-height:1;}
   .memo-body{position:absolute; left:0; right:0; top:58px; bottom:85px; overflow-y:auto; padding:0 20px; scrollbar-width:none; -ms-overflow-style:none;}
   .memo-body::-webkit-scrollbar{display:none;}
+  /* Prediction's "pinned & guided" layout: header + forecast sentence stay put while
+     the sliders/horizon/disclaimer scroll underneath, so the sentence you're building
+     is always visible as a reference point while you adjust the controls below it. */
+  .memo-body.memo-body--pinned{display:flex; flex-direction:column; overflow:hidden; padding:0;}
+  .memo-pinned-head{flex:none; padding:0 20px;}
+  .memo-scroll-area{flex:1 1 auto; min-height:0; overflow-y:auto; padding:0 20px 24px; scrollbar-width:none; -ms-overflow-style:none;}
+  .memo-scroll-area::-webkit-scrollbar{display:none;}
   .memo-title-block{padding-top:37px;}
   .memo-title-row{display:flex; align-items:baseline; justify-content:space-between; gap:10px;}
   .memo-title{font-size:18px; color:#fff; letter-spacing:-0.36px;}
@@ -628,6 +640,7 @@
 
   .memo-forecast-sentence{font-size:16px; color:#fff; font-weight:300; line-height:1.5; margin-top:30px;}
   .memo-forecast-sentence .fill{font-weight:500; text-decoration:underline; text-decoration-skip-ink:none;}
+  .memo-forecast-sentence .fill.dim{color:#565b5e; font-weight:400; text-decoration:none;}
   .memo-slider-block{margin-top:34px; padding-top:20px; border-top:1px solid var(--divider);}
   .memo-slider-block:first-of-type{border-top:none; padding-top:0;}
   .memo-slider-label{font-size:11px; color:#929292; font-weight:500;}
@@ -655,12 +668,30 @@
   .memo-ledger-value{font-size:14px; color:#c7c7c7; font-weight:500; line-height:1.33;}
   .memo-save-bar{position:absolute; left:0; right:0; bottom:0; height:64px; background:#000; display:flex; align-items:center; justify-content:center; border:none; color:#fff; font-size:14px; cursor:pointer; font-family:inherit;}
 
-  .memo-chip-block{margin-top:36px;}
-  .memo-chip-heading{font-size:11px; color:#929292; margin-bottom:4px; text-transform:uppercase; letter-spacing:0.3px;}
-  .memo-chip-desc{font-size:12px; color:#6d6d6d; line-height:1.4; margin-bottom:12px;}
+  /* Given its own elevated surface (not just more items in the black list above) so it
+     reads as a distinct control panel — "what this memo will be judged on" — rather than
+     a row of ambiguous filter pills. */
+  .memo-chip-block{
+    margin-top:36px; background:rgba(255,255,255,0.035);
+    border:1px solid #262626; padding:16px 16px 18px;
+  }
+  .memo-chip-heading-row{display:flex; align-items:center; gap:6px; margin-bottom:6px;}
+  .memo-chip-heading-row svg{flex:none; color:#929292;}
+  .memo-chip-heading{font-size:11px; color:#929292; text-transform:uppercase; letter-spacing:0.3px;}
+  .memo-chip-desc{font-size:12px; color:#6d6d6d; line-height:1.4; margin-bottom:14px;}
   .memo-chip-row{display:flex; flex-wrap:wrap; gap:8px;}
-  .memo-chip{background:none; border:1px solid #2a2a2a; border-radius:14px; padding:6px 12px; font-size:12px; color:#929292; cursor:pointer; font-family:inherit;}
-  .memo-chip.filled{border-color:#565b5e; color:#fff;}
+  .memo-chip{
+    display:inline-flex; align-items:center; gap:6px;
+    background:none; border:1px solid #2a2a2a; padding:6px 12px 6px 10px;
+    font-size:12px; color:#6d6d6d; cursor:pointer; font-family:inherit;
+    transition:border-color .15s ease, color .15s ease;
+  }
+  .memo-chip .eye{width:13px; height:13px; flex:none;}
+  .memo-chip .eye-off{display:inline;}
+  .memo-chip .eye-open{display:none;}
+  .memo-chip.filled{border-color:#fff; background:none; color:#fff;}
+  .memo-chip.filled .eye-off{display:none;}
+  .memo-chip.filled .eye-open{display:inline; color:#fff;}
 </style>
 </head>
 <body>
@@ -869,47 +900,51 @@
   <!-- ============================================================ -->
   <section class="screen memo-screen" data-screen="memo-prediction">
     <div class="memo-topbar"><button class="memo-back" data-action="back" aria-label="Back">&lsaquo;</button></div>
-    <div class="memo-body">
-      <div class="memo-title-block">
-        <div class="memo-title-row">
-          <div>
-            <div class="memo-title">Prediction</div>
-            <div class="memo-step" data-memo-step-for="memo-prediction">5 / 6</div>
-          </div>
-          <div style="text-align:right;">
-            <div class="memo-ticker-mini">ATZ<br><span data-quote="price">309.95</span> CAD <span class="chg" data-quote="change">+0.01%</span></div>
-            <div class="memo-breadcrumb" data-value="memo-tag-full" style="margin-top:6px;">&mdash;</div>
+    <div class="memo-body memo-body--pinned">
+      <div class="memo-pinned-head">
+        <div class="memo-title-block">
+          <div class="memo-title-row">
+            <div>
+              <div class="memo-title">Prediction</div>
+              <div class="memo-step" data-memo-step-for="memo-prediction">5 / 6</div>
+            </div>
+            <div style="text-align:right;">
+              <div class="memo-ticker-mini">ATZ<br><span data-quote="price">309.95</span> CAD <span class="chg" data-quote="change">+0.01%</span></div>
+              <div class="memo-breadcrumb" data-value="memo-tag-full" style="margin-top:6px;">&mdash;</div>
+            </div>
           </div>
         </div>
-      </div>
-      <p class="memo-forecast-sentence">ATZ has a <span class="fill" data-value="memo-prob-inline">50%</span> chance of compounding at <span class="fill" data-value="memo-return-inline">20%/yr</span> or more over <span class="fill" data-value="memo-horizon-inline">3 years</span>.</p>
-
-      <div class="memo-slider-block">
-        <div class="memo-slider-label">Probability</div>
-        <div class="memo-slider-desc">The likelihood you believe this investment achieves the selected return target over the selected horizon.</div>
-        <div class="memo-slider-value"><span data-value="memo-prob-num">50</span><span class="unit">%</span></div>
-        <input class="memo-slider-input" type="range" min="0" max="100" value="50" data-memo-slider="probability">
-        <div class="memo-slider-scale"><span>0</span><span>100</span></div>
+        <p class="memo-forecast-sentence">ATZ has a <span class="fill" data-value="memo-prob-inline">&mdash;</span> chance of compounding at <span class="fill" data-value="memo-return-inline">&mdash;</span> or more over <span class="fill" data-value="memo-horizon-inline">&mdash;</span>.</p>
       </div>
 
-      <div class="memo-slider-block">
-        <div class="memo-slider-label">Return Target</div>
-        <div class="memo-slider-desc">The annual return you believe this investment can achieve.</div>
-        <div class="memo-slider-value"><span data-value="memo-return-num">20</span><span class="unit">% annualized</span></div>
-        <input class="memo-slider-input" type="range" min="15" max="100" value="20" data-memo-slider="returnTarget">
-        <div class="memo-slider-scale"><span>15</span><span>100</span></div>
-      </div>
-
-      <div class="memo-slider-block">
-        <div class="memo-slider-label">Horizon</div>
-        <div class="memo-horizon-row">
-          <button class="memo-horizon-btn" type="button" data-action="memo-horizon" data-memo-horizon="1 year">1 year</button>
-          <button class="memo-horizon-btn active" type="button" data-action="memo-horizon" data-memo-horizon="3 years">3 years</button>
-          <button class="memo-horizon-btn" type="button" data-action="memo-horizon" data-memo-horizon="5+ years">5+ years</button>
+      <div class="memo-scroll-area">
+        <div class="memo-slider-block">
+          <div class="memo-slider-label">Probability</div>
+          <div class="memo-slider-desc">The likelihood you believe this investment achieves the selected return target over the selected horizon.</div>
+          <div class="memo-slider-value"><span data-value="memo-prob-num">&mdash;</span><span class="unit" data-value="memo-prob-unit"></span></div>
+          <input class="memo-slider-input" type="range" min="0" max="100" step="10" value="0" data-memo-slider="probability">
+          <div class="memo-slider-scale"><span>0</span><span>100</span></div>
         </div>
-      </div>
 
-      <p class="memo-disclaimer">This prediction reflects your judgment under uncertainty, not platform forecasts or guarantees. You make the investment decision.</p>
+        <div class="memo-slider-block">
+          <div class="memo-slider-label">Return Target</div>
+          <div class="memo-slider-desc">The annual return you believe this investment can achieve.</div>
+          <div class="memo-slider-value"><span data-value="memo-return-num">&mdash;</span><span class="unit" data-value="memo-return-unit"></span></div>
+          <input class="memo-slider-input" type="range" min="15" max="100" value="15" data-memo-slider="returnTarget">
+          <div class="memo-slider-scale"><span>15</span><span>100</span></div>
+        </div>
+
+        <div class="memo-slider-block">
+          <div class="memo-slider-label">Horizon</div>
+          <div class="memo-horizon-row">
+            <button class="memo-horizon-btn" type="button" data-action="memo-horizon" data-memo-horizon="1 year">1 year</button>
+            <button class="memo-horizon-btn" type="button" data-action="memo-horizon" data-memo-horizon="3 years">3 years</button>
+            <button class="memo-horizon-btn" type="button" data-action="memo-horizon" data-memo-horizon="5+ years">5+ years</button>
+          </div>
+        </div>
+
+        <p class="memo-disclaimer">This prediction reflects your judgment under uncertainty, not platform forecasts or guarantees. You make the investment decision.</p>
+      </div>
     </div>
     <div class="memo-bottom-bar">
       <button class="memo-exit" data-action="goto" data-target="memo-classification">Exit</button>
@@ -1015,15 +1050,42 @@
       </div>
 
       <div class="memo-chip-block">
-        <div class="memo-chip-heading">Memo fields</div>
-        <div class="memo-chip-desc">Nothing you wrote is deleted &mdash; tap a field to hide it from this memo. You decide whether it counts as part of your evaluation.</div>
+        <div class="memo-chip-heading-row">
+          <svg viewBox="0 0 16 16" width="13" height="13" fill="none"><path d="M1 8s2.7-4.5 7-4.5S15 8 15 8s-2.7 4.5-7 4.5S1 8 1 8Z" stroke="currentColor" stroke-width="1.1" stroke-linejoin="round"/><circle cx="8" cy="8" r="2" stroke="currentColor" stroke-width="1.1"/></svg>
+          <span class="memo-chip-heading">Included in this memo</span>
+        </div>
+        <div class="memo-chip-desc">Nothing you wrote is deleted. A lit field is part of your evaluation going forward; tap it to leave it out &mdash; you can always bring it back later.</div>
         <div class="memo-chip-row">
-          <button class="memo-chip" type="button" data-action="memo-toggle-dismiss" data-memo-field="classification" data-memo-chip="classification">Classification</button>
-          <button class="memo-chip" type="button" data-action="memo-toggle-dismiss" data-memo-field="role" data-memo-chip="role">Role</button>
-          <button class="memo-chip" type="button" data-action="memo-toggle-dismiss" data-memo-field="thesis" data-memo-chip="thesis">Thesis</button>
-          <button class="memo-chip" type="button" data-action="memo-toggle-dismiss" data-memo-field="killCriteria" data-memo-chip="killCriteria">Kill Criteria</button>
-          <button class="memo-chip" type="button" data-action="memo-toggle-dismiss" data-memo-field="probability" data-memo-chip="probability">Prediction</button>
-          <button class="memo-chip" type="button" data-action="memo-toggle-dismiss" data-memo-field="source" data-memo-chip="source">Source</button>
+          <button class="memo-chip" type="button" data-action="memo-toggle-dismiss" data-memo-field="classification" data-memo-chip="classification">
+            <svg class="eye eye-open" viewBox="0 0 16 16" fill="none"><path d="M1 8s2.7-4.5 7-4.5S15 8 15 8s-2.7 4.5-7 4.5S1 8 1 8Z" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/><circle cx="8" cy="8" r="2" stroke="currentColor" stroke-width="1.2"/></svg>
+            <svg class="eye eye-off" viewBox="0 0 16 16" fill="none"><path d="M2 2l12 12M2.7 5.3C1.6 6.3 1 8 1 8s2.7 4.5 7 4.5c1.4 0 2.6-.4 3.6-1M6.6 3.8C7 3.6 7.5 3.5 8 3.5c4.3 0 7 4.5 7 4.5s-.5.9-1.5 1.9" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <span>Classification</span>
+          </button>
+          <button class="memo-chip" type="button" data-action="memo-toggle-dismiss" data-memo-field="role" data-memo-chip="role">
+            <svg class="eye eye-open" viewBox="0 0 16 16" fill="none"><path d="M1 8s2.7-4.5 7-4.5S15 8 15 8s-2.7 4.5-7 4.5S1 8 1 8Z" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/><circle cx="8" cy="8" r="2" stroke="currentColor" stroke-width="1.2"/></svg>
+            <svg class="eye eye-off" viewBox="0 0 16 16" fill="none"><path d="M2 2l12 12M2.7 5.3C1.6 6.3 1 8 1 8s2.7 4.5 7 4.5c1.4 0 2.6-.4 3.6-1M6.6 3.8C7 3.6 7.5 3.5 8 3.5c4.3 0 7 4.5 7 4.5s-.5.9-1.5 1.9" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <span>Role</span>
+          </button>
+          <button class="memo-chip" type="button" data-action="memo-toggle-dismiss" data-memo-field="thesis" data-memo-chip="thesis">
+            <svg class="eye eye-open" viewBox="0 0 16 16" fill="none"><path d="M1 8s2.7-4.5 7-4.5S15 8 15 8s-2.7 4.5-7 4.5S1 8 1 8Z" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/><circle cx="8" cy="8" r="2" stroke="currentColor" stroke-width="1.2"/></svg>
+            <svg class="eye eye-off" viewBox="0 0 16 16" fill="none"><path d="M2 2l12 12M2.7 5.3C1.6 6.3 1 8 1 8s2.7 4.5 7 4.5c1.4 0 2.6-.4 3.6-1M6.6 3.8C7 3.6 7.5 3.5 8 3.5c4.3 0 7 4.5 7 4.5s-.5.9-1.5 1.9" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <span>Thesis</span>
+          </button>
+          <button class="memo-chip" type="button" data-action="memo-toggle-dismiss" data-memo-field="killCriteria" data-memo-chip="killCriteria">
+            <svg class="eye eye-open" viewBox="0 0 16 16" fill="none"><path d="M1 8s2.7-4.5 7-4.5S15 8 15 8s-2.7 4.5-7 4.5S1 8 1 8Z" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/><circle cx="8" cy="8" r="2" stroke="currentColor" stroke-width="1.2"/></svg>
+            <svg class="eye eye-off" viewBox="0 0 16 16" fill="none"><path d="M2 2l12 12M2.7 5.3C1.6 6.3 1 8 1 8s2.7 4.5 7 4.5c1.4 0 2.6-.4 3.6-1M6.6 3.8C7 3.6 7.5 3.5 8 3.5c4.3 0 7 4.5 7 4.5s-.5.9-1.5 1.9" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <span>Kill Criteria</span>
+          </button>
+          <button class="memo-chip" type="button" data-action="memo-toggle-dismiss" data-memo-field="probability" data-memo-chip="probability">
+            <svg class="eye eye-open" viewBox="0 0 16 16" fill="none"><path d="M1 8s2.7-4.5 7-4.5S15 8 15 8s-2.7 4.5-7 4.5S1 8 1 8Z" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/><circle cx="8" cy="8" r="2" stroke="currentColor" stroke-width="1.2"/></svg>
+            <svg class="eye eye-off" viewBox="0 0 16 16" fill="none"><path d="M2 2l12 12M2.7 5.3C1.6 6.3 1 8 1 8s2.7 4.5 7 4.5c1.4 0 2.6-.4 3.6-1M6.6 3.8C7 3.6 7.5 3.5 8 3.5c4.3 0 7 4.5 7 4.5s-.5.9-1.5 1.9" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <span>Prediction</span>
+          </button>
+          <button class="memo-chip" type="button" data-action="memo-toggle-dismiss" data-memo-field="source" data-memo-chip="source">
+            <svg class="eye eye-open" viewBox="0 0 16 16" fill="none"><path d="M1 8s2.7-4.5 7-4.5S15 8 15 8s-2.7 4.5-7 4.5S1 8 1 8Z" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/><circle cx="8" cy="8" r="2" stroke="currentColor" stroke-width="1.2"/></svg>
+            <svg class="eye eye-off" viewBox="0 0 16 16" fill="none"><path d="M2 2l12 12M2.7 5.3C1.6 6.3 1 8 1 8s2.7 4.5 7 4.5c1.4 0 2.6-.4 3.6-1M6.6 3.8C7 3.6 7.5 3.5 8 3.5c4.3 0 7 4.5 7 4.5s-.5.9-1.5 1.9" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <span>Source</span>
+          </button>
         </div>
       </div>
     </div>
@@ -1058,7 +1120,7 @@
     </div>
     <div class="memo-bottom-bar">
       <button class="memo-exit" data-action="goto" data-target="memo-classification">Exit</button>
-      <button class="memo-continue enabled" data-action="goto" data-target="limit-order" aria-label="Continue">&rarr;</button>
+      <button class="memo-continue" data-action="goto" data-target="limit-order" aria-label="Continue" data-memo-account-continue>&rarr;</button>
     </div>
   </section>
 
@@ -1617,31 +1679,31 @@
           <button class="revise-memo-link" type="button" data-action="goto" data-target="memo-review">Revise Memo</button>
         </div>
         <div class="memo-list">
-          <div class="memo-field">
+          <div class="memo-field" data-memo-field="classification">
             <span class="memo-label">Classification</span>
             <span class="memo-value" data-value="ledger-classification">&mdash;</span>
           </div>
-          <div class="memo-field">
+          <div class="memo-field" data-memo-field="role">
             <span class="memo-label">Role</span>
             <span class="memo-value" data-value="ledger-role">&mdash;</span>
           </div>
-          <div class="memo-field memo-field--case">
+          <div class="memo-field memo-field--case" data-memo-field="thesis">
             <span class="memo-label">Thesis</span>
             <p class="memo-value memo-case-text"><span data-value="ledger-thesis">&mdash;</span>
-              <svg class="case-arrow" viewBox="0 0 9 8" width="9" height="8" fill="none"><path d="M1 4H8M8 4L4.8 1M8 4L4.8 7" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              <svg class="case-arrow" data-case-arrow="thesis" viewBox="0 0 9 8" width="9" height="8" fill="none"><path d="M1 4H8M8 4L4.8 1M8 4L4.8 7" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
             </p>
           </div>
-          <div class="memo-field memo-field--case">
+          <div class="memo-field memo-field--case" data-memo-field="killCriteria">
             <span class="memo-label">Kill Criteria</span>
             <p class="memo-value memo-case-text"><span data-value="ledger-killcriteria">&mdash;</span>
-              <svg class="case-arrow" viewBox="0 0 9 8" width="9" height="8" fill="none"><path d="M1 4H8M8 4L4.8 1M8 4L4.8 7" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              <svg class="case-arrow" data-case-arrow="killCriteria" viewBox="0 0 9 8" width="9" height="8" fill="none"><path d="M1 4H8M8 4L4.8 1M8 4L4.8 7" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
             </p>
           </div>
-          <div class="memo-field">
+          <div class="memo-field" data-memo-field="probability">
             <span class="memo-label">Prediction</span>
             <span class="memo-value" data-value="ledger-prediction">&mdash;</span>
           </div>
-          <div class="memo-field">
+          <div class="memo-field" data-memo-field="source">
             <span class="memo-label">Source</span>
             <span class="memo-value" data-value="ledger-source">&mdash;</span>
           </div>
@@ -1773,31 +1835,31 @@
       <div class="memo-block">
         <span class="memo-title">Memo</span>
         <div class="memo-list">
-          <div class="memo-field">
+          <div class="memo-field" data-memo-field="classification">
             <span class="memo-label">Classification</span>
             <span class="memo-value" data-value="ledger-classification">&mdash;</span>
           </div>
-          <div class="memo-field">
+          <div class="memo-field" data-memo-field="role">
             <span class="memo-label">Role</span>
             <span class="memo-value" data-value="ledger-role">&mdash;</span>
           </div>
-          <div class="memo-field memo-field--case">
+          <div class="memo-field memo-field--case" data-memo-field="thesis">
             <span class="memo-label">Thesis</span>
             <p class="memo-value memo-case-text"><span data-value="ledger-thesis">&mdash;</span>
-              <svg class="case-arrow" viewBox="0 0 9 8" width="9" height="8" fill="none"><path d="M1 4H8M8 4L4.8 1M8 4L4.8 7" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              <svg class="case-arrow" data-case-arrow="thesis" viewBox="0 0 9 8" width="9" height="8" fill="none"><path d="M1 4H8M8 4L4.8 1M8 4L4.8 7" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
             </p>
           </div>
-          <div class="memo-field memo-field--case">
+          <div class="memo-field memo-field--case" data-memo-field="killCriteria">
             <span class="memo-label">Kill Criteria</span>
             <p class="memo-value memo-case-text"><span data-value="ledger-killcriteria">&mdash;</span>
-              <svg class="case-arrow" viewBox="0 0 9 8" width="9" height="8" fill="none"><path d="M1 4H8M8 4L4.8 1M8 4L4.8 7" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              <svg class="case-arrow" data-case-arrow="killCriteria" viewBox="0 0 9 8" width="9" height="8" fill="none"><path d="M1 4H8M8 4L4.8 1M8 4L4.8 7" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
             </p>
           </div>
-          <div class="memo-field">
+          <div class="memo-field" data-memo-field="probability">
             <span class="memo-label">Prediction</span>
             <span class="memo-value" data-value="ledger-prediction">&mdash;</span>
           </div>
-          <div class="memo-field">
+          <div class="memo-field" data-memo-field="source">
             <span class="memo-label">Source</span>
             <span class="memo-value" data-value="ledger-source">&mdash;</span>
           </div>
@@ -3295,7 +3357,9 @@
       role: null, roleLabel: null,
       thesis: "", killCriteria: "",
       source: null, sourceLabel: null,
-      probability: 50, returnTarget: 20, horizon: "3 years",
+      probability: 0, probabilityTouched: false,
+      returnTarget: 15, returnTargetTouched: false,
+      horizon: null,
       account: null,
       // Per Dave: every memo step is dismissible ("don't show this again") — a dismissed
       // step is skipped on future buy flows but stays reachable via a chip on the Limit
@@ -3733,32 +3797,72 @@
     document.querySelectorAll('[data-account-radio]').forEach(el=>{
       el.classList.toggle("checked", m.account === el.dataset.accountRadio);
     });
+    // Unlike the memo fields (deliberately skippable), which account to buy from is a
+    // required trade detail — Continue stays disabled/grayed out until one is picked.
+    document.querySelectorAll('[data-memo-account-continue]').forEach(el=>{
+      el.classList.toggle("enabled", !!m.account);
+    });
 
     document.querySelectorAll('[data-memo-text="thesis"]').forEach(el=>{ if(document.activeElement !== el) el.value = m.thesis; });
     document.querySelectorAll('[data-memo-text="killCriteria"]').forEach(el=>{ if(document.activeElement !== el) el.value = m.killCriteria; });
 
-    document.querySelectorAll('[data-value="memo-prob-num"]').forEach(el=> el.textContent = m.probability);
-    document.querySelectorAll('[data-value="memo-return-num"]').forEach(el=> el.textContent = m.returnTarget);
-    document.querySelectorAll('[data-value="memo-prob-inline"]').forEach(el=> el.textContent = m.probability + "%");
-    document.querySelectorAll('[data-value="memo-return-inline"]').forEach(el=> el.textContent = m.returnTarget + "%/yr");
-    document.querySelectorAll('[data-value="memo-horizon-inline"]').forEach(el=> el.textContent = m.horizon);
+    // Probability/Return Target start untouched (no default number "pre-answered" for the
+    // user) — the slider itself still needs a resting position, so it sits at its min end
+    // until the first drag, at which point memo-toggle-dismiss-style "touched" flips true.
+    document.querySelectorAll('[data-value="memo-prob-num"]').forEach(el=> el.textContent = m.probabilityTouched ? m.probability : "—");
+    document.querySelectorAll('[data-value="memo-prob-unit"]').forEach(el=> el.textContent = m.probabilityTouched ? "%" : "");
+    document.querySelectorAll('[data-value="memo-return-num"]').forEach(el=> el.textContent = m.returnTargetTouched ? m.returnTarget : "—");
+    document.querySelectorAll('[data-value="memo-return-unit"]').forEach(el=> el.textContent = m.returnTargetTouched ? "% annualized" : "");
+    // The forecast sentence lights up one blank at a time — probability is always live,
+    // return target lights up once probability is answered, horizon once return target is.
+    // A dim blank just hasn't been reached yet; nothing here blocks skipping ahead.
+    document.querySelectorAll('[data-value="memo-prob-inline"]').forEach(el=>{
+      el.textContent = m.probabilityTouched ? (m.probability + "%") : "—";
+      el.classList.remove("dim");
+    });
+    document.querySelectorAll('[data-value="memo-return-inline"]').forEach(el=>{
+      el.textContent = m.returnTargetTouched ? (m.returnTarget + "%/yr") : "—";
+      el.classList.toggle("dim", !m.probabilityTouched);
+    });
+    document.querySelectorAll('[data-value="memo-horizon-inline"]').forEach(el=>{
+      el.textContent = m.horizon || "—";
+      el.classList.toggle("dim", !m.returnTargetTouched);
+    });
     document.querySelectorAll('.memo-horizon-btn').forEach(b=> b.classList.toggle("active", b.dataset.memoHorizon === m.horizon));
     document.querySelectorAll('[data-memo-slider="probability"]').forEach(el=>{ if(document.activeElement !== el) el.value = m.probability; });
     document.querySelectorAll('[data-memo-slider="returnTarget"]').forEach(el=>{ if(document.activeElement !== el) el.value = m.returnTarget; });
 
-    const truncate = (s)=> s && s.length > 80 ? s.slice(0, 80) + "…" : (s || "—");
+    const CASE_TEXT_LIMIT = 80;
+    const truncate = (s)=> s && s.length > CASE_TEXT_LIMIT ? s.slice(0, CASE_TEXT_LIMIT) + "…" : (s || "—");
     document.querySelectorAll('[data-value="ledger-classification"]').forEach(el=> el.textContent = m.classificationLabel || "—");
     document.querySelectorAll('[data-value="ledger-role"]').forEach(el=> el.textContent = m.roleLabel || "—");
     document.querySelectorAll('[data-value="ledger-thesis"]').forEach(el=> el.textContent = truncate(m.thesis));
     document.querySelectorAll('[data-value="ledger-killcriteria"]').forEach(el=> el.textContent = truncate(m.killCriteria));
-    document.querySelectorAll('[data-value="ledger-prediction"]').forEach(el=> el.textContent = m.probability + "% Probability " + m.returnTarget + "% / yr over " + m.horizon);
+    // The Review/Order Filled "continues on the memo" arrow is only meaningful once the
+    // text actually runs past ~2 lines and gets truncated — a short answer (or "—") has
+    // nothing more to reveal, so the arrow stays hidden.
+    document.querySelectorAll('[data-case-arrow="thesis"]').forEach(el=>{
+      el.style.display = (m.thesis && m.thesis.length > CASE_TEXT_LIMIT) ? "" : "none";
+    });
+    document.querySelectorAll('[data-case-arrow="killCriteria"]').forEach(el=>{
+      el.style.display = (m.killCriteria && m.killCriteria.length > CASE_TEXT_LIMIT) ? "" : "none";
+    });
+    document.querySelectorAll('[data-value="ledger-prediction"]').forEach(el=>{
+      const parts = [];
+      if(m.probabilityTouched) parts.push(m.probability + "% Probability");
+      if(m.returnTargetTouched) parts.push(m.returnTarget + "% / yr");
+      if(m.horizon) parts.push("over " + m.horizon);
+      el.textContent = parts.length ? parts.join(" ") : "—";
+    });
     document.querySelectorAll('[data-value="ledger-source"]').forEach(el=> el.textContent = m.sourceLabel || "—");
     document.querySelectorAll('[data-value="memo-date"]').forEach(el=>{
       if(!el.textContent) el.textContent = new Date().toLocaleDateString("en-US", {month:"short", day:"numeric", year:"numeric"});
     });
 
     // Hidden fields drop out of the ledger entirely — they only exist as a chip below.
-    document.querySelectorAll('.memo-ledger-item[data-memo-field]').forEach(el=>{
+    // Same rule applies wherever the memo resurfaces downstream (Review, Order Filled):
+    // a field hidden on Memo Review stays hidden all the way through to the bought order.
+    document.querySelectorAll('.memo-ledger-item[data-memo-field], .memo-field[data-memo-field]').forEach(el=>{
       el.hidden = !!m.dismissed[el.dataset.memoField];
     });
 
@@ -3781,6 +3885,7 @@
     if(!slider) return;
     const key = slider.dataset.memoSlider;
     state.memo[key] = Number(slider.value);
+    state.memo[key + "Touched"] = true;
     renderMemo();
   });
 
