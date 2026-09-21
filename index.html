@@ -600,13 +600,13 @@
   .memo-screen{position:relative;}
   .memo-topbar{position:absolute; left:0; top:0; right:0; height:58px; border-bottom:1px solid var(--divider);}
   .memo-back{position:absolute; left:18px; top:50%; transform:translateY(-50%); background:none; border:none; color:#fff; font-size:22px; cursor:pointer; padding:6px 10px; line-height:1;}
-  .memo-body{position:absolute; left:0; right:0; top:58px; bottom:85px; overflow-y:auto; padding:0 20px; scrollbar-width:none; -ms-overflow-style:none;}
+  .memo-body{position:absolute; left:0; right:0; top:58px; bottom:115px; overflow-y:auto; padding:0 20px; scrollbar-width:none; -ms-overflow-style:none;}
   .memo-body::-webkit-scrollbar{display:none;}
   /* Prediction's "pinned & guided" layout: header + forecast sentence stay put while
      the sliders/horizon/disclaimer scroll underneath, so the sentence you're building
      is always visible as a reference point while you adjust the controls below it. */
   .memo-body.memo-body--pinned{display:flex; flex-direction:column; overflow:hidden; padding:0;}
-  .memo-pinned-head{flex:none; padding:0 20px;}
+  .memo-pinned-head{flex:none; padding:0 20px 22px; border-bottom:1px solid var(--divider);}
   .memo-scroll-area{flex:1 1 auto; min-height:0; overflow-y:auto; padding:0 20px 24px; scrollbar-width:none; -ms-overflow-style:none;}
   .memo-scroll-area::-webkit-scrollbar{display:none;}
   .memo-title-block{padding-top:37px;}
@@ -617,6 +617,66 @@
   .memo-step{font-size:11px; color:#929292; letter-spacing:0.44px; margin-top:6px;}
   .memo-ticker-mini{font-size:11px; color:#c7c7c7; text-align:right; line-height:1.5;}
   .memo-ticker-mini .chg{color:#565b5e;}
+
+  /* Customize-this-flow icon button, top-right of every memo step's topbar. */
+  .memo-customize-btn{
+    position:absolute; right:18px; top:50%; transform:translateY(-50%);
+    width:28px; height:28px; display:flex; align-items:center; justify-content:center;
+    background:none; border:none; color:#929292; cursor:pointer; padding:0;
+  }
+  .memo-customize-btn:active{color:#fff;}
+
+  /* Per-step self-toggle ("won't ask this again") — a lighter-weight sibling to the full
+     Customize panel, now living in the bottom bar. Right-aligned, above the Continue arrow
+     rather than above Exit — it's about what happens going forward, same as Continue is. */
+  .memo-self-toggle{display:flex; align-items:center; justify-content:flex-end; gap:6px; background:none; border:none; padding:0; cursor:pointer; font-family:inherit;}
+  .memo-checkbox{width:13px; height:13px; border:1px solid #2a2a2a; flex:none; display:flex; align-items:center; justify-content:center; background:none;}
+  .memo-checkbox-mark{opacity:0;}
+  .on .memo-checkbox{border-color:#fff; background:#fff;}
+  .on .memo-checkbox-mark{opacity:1;}
+  .memo-self-toggle-label{font-size:9.5px; color:#929292; white-space:nowrap;}
+
+  /* Customize panel: a bottom sheet reachable from any step, or from Order Filled. Two
+     tiers of control — presets for a quick swap, individual switches for precision. */
+  .customize-overlay{position:absolute; inset:0; background:rgba(0,0,0,0.6); opacity:0; pointer-events:none; transition:opacity .2s ease; z-index:39;}
+  .customize-overlay.open{opacity:1; pointer-events:auto;}
+  .customize-sheet{
+    position:absolute; left:0; right:0; bottom:0; z-index:40;
+    max-height:82%; overflow-y:auto; box-sizing:border-box;
+    background:#0d0d0d; border-top:1px solid #565b5e;
+    padding:20px 20px 24px; scrollbar-width:none; -ms-overflow-style:none;
+    transform:translateY(100%); transition:transform .22s ease; pointer-events:none;
+  }
+  .customize-sheet.open{transform:translateY(0); pointer-events:auto;}
+  .customize-sheet::-webkit-scrollbar{display:none;}
+  .customize-head{display:flex; align-items:center; justify-content:space-between; margin-bottom:4px;}
+  .customize-title{font-size:11px; color:#929292; text-transform:uppercase; letter-spacing:0.3px;}
+  .customize-head-actions{display:flex; align-items:center; gap:16px;}
+  .customize-reset{background:none; border:none; color:#c7c7c7; font-size:12px; cursor:pointer; padding:0; font-family:inherit;}
+  .customize-close{background:none; border:none; color:#929292; font-size:20px; line-height:1; cursor:pointer; padding:0;}
+  .customize-desc{font-size:12px; color:#6d6d6d; line-height:1.4; margin-bottom:18px;}
+  .customize-label{font-size:11px; color:#929292; text-transform:uppercase; letter-spacing:0.3px; margin-bottom:8px;}
+  .customize-preset-row{display:flex; gap:8px; margin-bottom:22px;}
+  .customize-preset{flex:1; padding:11px; background:none; border:1px solid #2a2a2a; color:#929292; font-size:12px; font-weight:500; cursor:pointer; font-family:inherit;}
+  .customize-preset.active{border-color:#fff; color:#fff;}
+  .customize-field-list{border:1px solid #2a2a2a;}
+  .customize-field-row{display:flex; align-items:center; justify-content:space-between; gap:12px; padding:13px 14px; border-bottom:1px solid #2a2a2a;}
+  .customize-field-row:last-child{border-bottom:none;}
+  .customize-field-label{font-size:13px; color:#fff; font-weight:500;}
+  .customize-field-sub{font-size:10.5px; color:#929292; margin-top:2px;}
+  /* Native/iOS-style pill switch — a deliberate exception to the "no rounded corners" rule:
+     that rule was about chip/pill SELECTION controls, this is a toggle switch, where the
+     rounded capsule shape is what reads as "a switch" rather than a button. */
+  .memo-switch{width:34px; height:20px; flex:none; background:#2a2a2a; border:none; border-radius:10px; padding:0; position:relative; cursor:pointer; transition:background .15s ease;}
+  .memo-switch-thumb{position:absolute; top:2px; left:2px; width:16px; height:16px; border-radius:50%; background:#fff; transition:left .15s ease, background .15s ease;}
+  .memo-switch.on{background:#fff;}
+  .memo-switch.on .memo-switch-thumb{left:16px; background:#000;}
+  .customize-done{display:block; width:100%; box-sizing:border-box; margin-top:18px; padding:13px; background:#fff; border:none; color:#000; font-size:12px; font-weight:600; letter-spacing:0.05em; text-transform:uppercase; cursor:pointer; font-family:inherit;}
+
+  /* Order Filled "kept in the memo" summary line — .memo-block is a flex column with its
+     own gap, so no extra margin needed here. */
+  .memo-kept-summary{font-size:12px; color:#929292; line-height:1.5;}
+  .memo-kept-summary span{color:#c7c7c7;}
   .memo-section-label{font-size:15px; color:#c7c7c7; margin:34px 0 0; padding-bottom:16px; border-bottom:1px solid var(--divider);}
   .memo-option-list{display:flex; flex-direction:column;}
   .memo-option{padding:16px 0; border-bottom:1px solid var(--divider); display:flex; justify-content:space-between; align-items:flex-start; gap:12px; cursor:pointer; background:none; border-left:none; border-right:none; border-top:none; width:100%; text-align:left; font-family:inherit;}
@@ -624,11 +684,11 @@
   .memo-option-desc{font-size:13px; color:#929292; line-height:1.32;}
   .memo-radio{width:12px; height:12px; border-radius:6px; border:1px solid #565b5e; flex:none; margin-top:3px;}
   .memo-radio.checked{border-color:#fff; background:radial-gradient(circle, #fff 40%, transparent 42%);}
-  .memo-bottom-bar{position:absolute; left:0; right:0; bottom:0; height:85px; padding:0 20px; display:flex; align-items:center; justify-content:space-between;}
+  .memo-bottom-bar{position:absolute; left:0; right:0; bottom:0; height:115px; padding:0 20px; display:flex; flex-direction:column; justify-content:center; gap:16px;}
+  .memo-bottom-actions{display:flex; align-items:center; justify-content:space-between;}
   .memo-exit{background:none; border:none; color:#c7c7c7; font-size:15px; cursor:pointer; padding:0; font-family:inherit;}
   .memo-continue{background:none; border:none; color:rgba(255,255,255,0.4); font-size:22px; cursor:pointer; padding:8px; pointer-events:none;}
   .memo-continue.enabled{color:#fff; pointer-events:auto;}
-  .memo-add-later{background:none; border:none; color:#c7c7c7; font-size:15px; cursor:pointer; display:flex; align-items:center; gap:8px; padding:0; font-family:inherit;}
 
   .memo-textarea-actions{display:flex; justify-content:space-between; align-items:center; margin-top:34px; padding-top:22px; border-top:1px solid var(--divider);}
   .memo-clear-btn{background:none; border:none; color:#929292; font-size:13px; cursor:pointer; padding:0; font-family:inherit;}
@@ -675,7 +735,15 @@
     margin-top:36px; background:rgba(255,255,255,0.035);
     border:1px solid #262626; padding:16px 16px 18px;
   }
-  .memo-chip-heading-row{display:flex; align-items:center; gap:6px; margin-bottom:6px;}
+  /* Collapsed by default on Memo Review — by this point the user has already made
+     per-field skip calls throughout the flow, so this is a "reopen if you want to
+     reconsider" panel, not something that needs to stay expanded on arrival. */
+  .memo-chip-toggle{display:flex; align-items:center; justify-content:space-between; width:100%; background:none; border:none; padding:0; cursor:pointer; font-family:inherit;}
+  .memo-chip-toggle .chev-icon{color:#929292; flex:none; transition:transform .2s ease;}
+  .memo-chip-block.open .memo-chip-toggle .chev-icon{transform:rotate(180deg);}
+  .memo-chip-collapse{display:none; margin-top:14px;}
+  .memo-chip-block.open .memo-chip-collapse{display:block;}
+  .memo-chip-heading-row{display:flex; align-items:center; gap:6px;}
   .memo-chip-heading-row svg{flex:none; color:#929292;}
   .memo-chip-heading{font-size:11px; color:#929292; text-transform:uppercase; letter-spacing:0.3px;}
   .memo-chip-desc{font-size:12px; color:#6d6d6d; line-height:1.4; margin-bottom:14px;}
@@ -721,7 +789,10 @@
   <!-- MEMO 1/6 — Classification                                     -->
   <!-- ============================================================ -->
   <section class="screen memo-screen active" data-screen="memo-classification">
-    <div class="memo-topbar"><button class="memo-back" data-action="back" aria-label="Back">&lsaquo;</button></div>
+    <div class="memo-topbar">
+      <button class="memo-back" data-action="back" aria-label="Back">&lsaquo;</button>
+      <button class="memo-customize-btn" type="button" data-action="open-customize" aria-label="Customize this flow"><svg viewBox="0 0 16 12" width="15" height="11" fill="none"><line x1="1" y1="1" x2="15" y2="1" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><line x1="1" y1="6" x2="11" y2="6" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><line x1="1" y1="11" x2="13" y2="11" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg></button>
+    </div>
     <div class="memo-body">
       <div class="memo-title-block">
         <div class="memo-title-row">
@@ -772,8 +843,11 @@
       </div>
     </div>
     <div class="memo-bottom-bar">
-      <button class="memo-exit" data-action="goto" data-target="memo-classification">Exit</button>
-      <button class="memo-continue enabled" data-action="memo-continue-from" data-memo-from="memo-classification" aria-label="Continue">&rarr;</button>
+      <button type="button" class="memo-self-toggle" data-action="memo-settings-toggle" data-memo-field="classification" aria-label="Repeat this on future positions"><span class="memo-checkbox"><svg class="memo-checkbox-mark" viewBox="0 0 12 10" width="9" height="8" fill="none"><path d="M1 5L4.5 8.5L11 1" stroke="#000" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="memo-self-toggle-label">Repeats next time</span></button>
+      <div class="memo-bottom-actions">
+        <button class="memo-exit" data-action="goto" data-target="memo-classification">Exit</button>
+        <button class="memo-continue enabled" data-action="memo-continue-from" data-memo-from="memo-classification" aria-label="Continue">&rarr;</button>
+      </div>
     </div>
   </section>
 
@@ -781,7 +855,10 @@
   <!-- MEMO 2/6 — Role                                               -->
   <!-- ============================================================ -->
   <section class="screen memo-screen" data-screen="memo-role">
-    <div class="memo-topbar"><button class="memo-back" data-action="back" aria-label="Back">&lsaquo;</button></div>
+    <div class="memo-topbar">
+      <button class="memo-back" data-action="back" aria-label="Back">&lsaquo;</button>
+      <button class="memo-customize-btn" type="button" data-action="open-customize" aria-label="Customize this flow"><svg viewBox="0 0 16 12" width="15" height="11" fill="none"><line x1="1" y1="1" x2="15" y2="1" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><line x1="1" y1="6" x2="11" y2="6" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><line x1="1" y1="11" x2="13" y2="11" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg></button>
+    </div>
     <div class="memo-body">
       <div class="memo-title-block">
         <div class="memo-title-row">
@@ -816,8 +893,11 @@
       </div>
     </div>
     <div class="memo-bottom-bar">
-      <button class="memo-exit" data-action="goto" data-target="memo-classification">Exit</button>
-      <button class="memo-continue enabled" data-action="memo-continue-from" data-memo-from="memo-role" aria-label="Continue">&rarr;</button>
+      <button type="button" class="memo-self-toggle" data-action="memo-settings-toggle" data-memo-field="role" aria-label="Repeat this on future positions"><span class="memo-checkbox"><svg class="memo-checkbox-mark" viewBox="0 0 12 10" width="9" height="8" fill="none"><path d="M1 5L4.5 8.5L11 1" stroke="#000" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="memo-self-toggle-label">Repeats next time</span></button>
+      <div class="memo-bottom-actions">
+        <button class="memo-exit" data-action="goto" data-target="memo-classification">Exit</button>
+        <button class="memo-continue enabled" data-action="memo-continue-from" data-memo-from="memo-role" aria-label="Continue">&rarr;</button>
+      </div>
     </div>
   </section>
 
@@ -825,7 +905,10 @@
   <!-- MEMO 3/6 — Thesis (skippable)                                 -->
   <!-- ============================================================ -->
   <section class="screen memo-screen" data-screen="memo-thesis">
-    <div class="memo-topbar"><button class="memo-back" data-action="back" aria-label="Back">&lsaquo;</button></div>
+    <div class="memo-topbar">
+      <button class="memo-back" data-action="back" aria-label="Back">&lsaquo;</button>
+      <button class="memo-customize-btn" type="button" data-action="open-customize" aria-label="Customize this flow"><svg viewBox="0 0 16 12" width="15" height="11" fill="none"><line x1="1" y1="1" x2="15" y2="1" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><line x1="1" y1="6" x2="11" y2="6" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><line x1="1" y1="11" x2="13" y2="11" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg></button>
+    </div>
     <div class="memo-body">
       <div class="memo-title-block">
         <div class="memo-title-row">
@@ -853,8 +936,11 @@
       <textarea class="memo-textarea" data-memo-text="thesis" placeholder="The reason this position exists: State why the market is wrong. Be specific enough to be proven wrong later."></textarea>
     </div>
     <div class="memo-bottom-bar">
-      <button class="memo-exit" data-action="goto" data-target="memo-classification">Exit</button>
-      <button class="memo-add-later" data-action="memo-text-continue" data-memo-field="thesis" data-memo-next="memo-killcriteria">Add Later <span aria-hidden="true">&rarr;</span></button>
+      <button type="button" class="memo-self-toggle" data-action="memo-settings-toggle" data-memo-field="thesis" aria-label="Repeat this on future positions"><span class="memo-checkbox"><svg class="memo-checkbox-mark" viewBox="0 0 12 10" width="9" height="8" fill="none"><path d="M1 5L4.5 8.5L11 1" stroke="#000" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="memo-self-toggle-label">Repeats next time</span></button>
+      <div class="memo-bottom-actions">
+        <button class="memo-exit" data-action="goto" data-target="memo-classification">Exit</button>
+        <button class="memo-continue enabled" data-action="memo-text-continue" data-memo-field="thesis" aria-label="Continue">&rarr;</button>
+      </div>
     </div>
   </section>
 
@@ -862,7 +948,10 @@
   <!-- MEMO 4/6 — Kill Criteria (skippable)                          -->
   <!-- ============================================================ -->
   <section class="screen memo-screen" data-screen="memo-killcriteria">
-    <div class="memo-topbar"><button class="memo-back" data-action="back" aria-label="Back">&lsaquo;</button></div>
+    <div class="memo-topbar">
+      <button class="memo-back" data-action="back" aria-label="Back">&lsaquo;</button>
+      <button class="memo-customize-btn" type="button" data-action="open-customize" aria-label="Customize this flow"><svg viewBox="0 0 16 12" width="15" height="11" fill="none"><line x1="1" y1="1" x2="15" y2="1" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><line x1="1" y1="6" x2="11" y2="6" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><line x1="1" y1="11" x2="13" y2="11" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg></button>
+    </div>
     <div class="memo-body">
       <div class="memo-title-block">
         <div class="memo-title-row">
@@ -890,8 +979,11 @@
       <textarea class="memo-textarea" data-memo-text="killCriteria" placeholder="The conditions that invalidate your thesis. Be specific — if any of these are met, the position no longer deserves capital."></textarea>
     </div>
     <div class="memo-bottom-bar">
-      <button class="memo-exit" data-action="goto" data-target="memo-classification">Exit</button>
-      <button class="memo-add-later" data-action="memo-text-continue" data-memo-field="killCriteria" data-memo-next="memo-prediction">Add Later <span aria-hidden="true">&rarr;</span></button>
+      <button type="button" class="memo-self-toggle" data-action="memo-settings-toggle" data-memo-field="killCriteria" aria-label="Repeat this on future positions"><span class="memo-checkbox"><svg class="memo-checkbox-mark" viewBox="0 0 12 10" width="9" height="8" fill="none"><path d="M1 5L4.5 8.5L11 1" stroke="#000" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="memo-self-toggle-label">Repeats next time</span></button>
+      <div class="memo-bottom-actions">
+        <button class="memo-exit" data-action="goto" data-target="memo-classification">Exit</button>
+        <button class="memo-continue enabled" data-action="memo-text-continue" data-memo-field="killCriteria" aria-label="Continue">&rarr;</button>
+      </div>
     </div>
   </section>
 
@@ -899,7 +991,10 @@
   <!-- MEMO 5/6 — Prediction                                         -->
   <!-- ============================================================ -->
   <section class="screen memo-screen" data-screen="memo-prediction">
-    <div class="memo-topbar"><button class="memo-back" data-action="back" aria-label="Back">&lsaquo;</button></div>
+    <div class="memo-topbar">
+      <button class="memo-back" data-action="back" aria-label="Back">&lsaquo;</button>
+      <button class="memo-customize-btn" type="button" data-action="open-customize" aria-label="Customize this flow"><svg viewBox="0 0 16 12" width="15" height="11" fill="none"><line x1="1" y1="1" x2="15" y2="1" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><line x1="1" y1="6" x2="11" y2="6" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><line x1="1" y1="11" x2="13" y2="11" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg></button>
+    </div>
     <div class="memo-body memo-body--pinned">
       <div class="memo-pinned-head">
         <div class="memo-title-block">
@@ -947,8 +1042,11 @@
       </div>
     </div>
     <div class="memo-bottom-bar">
-      <button class="memo-exit" data-action="goto" data-target="memo-classification">Exit</button>
-      <button class="memo-continue enabled" data-action="memo-continue-from" data-memo-from="memo-prediction" aria-label="Continue">&rarr;</button>
+      <button type="button" class="memo-self-toggle" data-action="memo-settings-toggle" data-memo-field="probability" aria-label="Repeat this on future positions"><span class="memo-checkbox"><svg class="memo-checkbox-mark" viewBox="0 0 12 10" width="9" height="8" fill="none"><path d="M1 5L4.5 8.5L11 1" stroke="#000" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="memo-self-toggle-label">Repeats next time</span></button>
+      <div class="memo-bottom-actions">
+        <button class="memo-exit" data-action="goto" data-target="memo-classification">Exit</button>
+        <button class="memo-continue enabled" data-action="memo-continue-from" data-memo-from="memo-prediction" aria-label="Continue">&rarr;</button>
+      </div>
     </div>
   </section>
 
@@ -956,7 +1054,10 @@
   <!-- MEMO 6/6 — Source                                             -->
   <!-- ============================================================ -->
   <section class="screen memo-screen" data-screen="memo-source">
-    <div class="memo-topbar"><button class="memo-back" data-action="back" aria-label="Back">&lsaquo;</button></div>
+    <div class="memo-topbar">
+      <button class="memo-back" data-action="back" aria-label="Back">&lsaquo;</button>
+      <button class="memo-customize-btn" type="button" data-action="open-customize" aria-label="Customize this flow"><svg viewBox="0 0 16 12" width="15" height="11" fill="none"><line x1="1" y1="1" x2="15" y2="1" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><line x1="1" y1="6" x2="11" y2="6" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><line x1="1" y1="11" x2="13" y2="11" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg></button>
+    </div>
     <div class="memo-body">
       <div class="memo-title-block">
         <div class="memo-title-row">
@@ -1004,8 +1105,11 @@
       </div>
     </div>
     <div class="memo-bottom-bar">
-      <button class="memo-exit" data-action="goto" data-target="memo-classification">Exit</button>
-      <button class="memo-continue enabled" data-action="goto" data-target="memo-review" aria-label="Continue">&rarr;</button>
+      <button type="button" class="memo-self-toggle" data-action="memo-settings-toggle" data-memo-field="source" aria-label="Repeat this on future positions"><span class="memo-checkbox"><svg class="memo-checkbox-mark" viewBox="0 0 12 10" width="9" height="8" fill="none"><path d="M1 5L4.5 8.5L11 1" stroke="#000" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="memo-self-toggle-label">Repeats next time</span></button>
+      <div class="memo-bottom-actions">
+        <button class="memo-exit" data-action="goto" data-target="memo-classification">Exit</button>
+        <button class="memo-continue enabled" data-action="goto" data-target="memo-review" aria-label="Continue">&rarr;</button>
+      </div>
     </div>
   </section>
 
@@ -1050,10 +1154,14 @@
       </div>
 
       <div class="memo-chip-block">
-        <div class="memo-chip-heading-row">
-          <svg viewBox="0 0 16 16" width="13" height="13" fill="none"><path d="M1 8s2.7-4.5 7-4.5S15 8 15 8s-2.7 4.5-7 4.5S1 8 1 8Z" stroke="currentColor" stroke-width="1.1" stroke-linejoin="round"/><circle cx="8" cy="8" r="2" stroke="currentColor" stroke-width="1.1"/></svg>
-          <span class="memo-chip-heading">Included in this memo</span>
-        </div>
+        <button type="button" class="memo-chip-toggle" data-action="toggle-memo-chips" aria-expanded="false">
+          <div class="memo-chip-heading-row">
+            <svg viewBox="0 0 16 16" width="13" height="13" fill="none"><path d="M1 8s2.7-4.5 7-4.5S15 8 15 8s-2.7 4.5-7 4.5S1 8 1 8Z" stroke="currentColor" stroke-width="1.1" stroke-linejoin="round"/><circle cx="8" cy="8" r="2" stroke="currentColor" stroke-width="1.1"/></svg>
+            <span class="memo-chip-heading">Included in this memo</span>
+          </div>
+          <svg class="chev-icon" viewBox="0 0 8 5" width="8" height="5" fill="none"><path d="M1 1L4 4L7 1" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <div class="memo-chip-collapse">
         <div class="memo-chip-desc">Nothing you wrote is deleted. A lit field is part of your evaluation going forward; tap it to leave it out &mdash; you can always bring it back later.</div>
         <div class="memo-chip-row">
           <button class="memo-chip" type="button" data-action="memo-toggle-dismiss" data-memo-field="classification" data-memo-chip="classification">
@@ -1087,6 +1195,7 @@
             <span>Source</span>
           </button>
         </div>
+        </div>
       </div>
     </div>
     <button class="memo-save-bar" type="button" data-action="goto" data-target="account-select">Save memo</button>
@@ -1119,10 +1228,69 @@
       </div>
     </div>
     <div class="memo-bottom-bar">
-      <button class="memo-exit" data-action="goto" data-target="memo-classification">Exit</button>
-      <button class="memo-continue" data-action="goto" data-target="limit-order" aria-label="Continue" data-memo-account-continue>&rarr;</button>
+      <div class="memo-bottom-actions">
+        <button class="memo-exit" data-action="goto" data-target="memo-classification">Exit</button>
+        <button class="memo-continue" data-action="goto" data-target="limit-order" aria-label="Continue" data-memo-account-continue>&rarr;</button>
+      </div>
     </div>
   </section>
+
+  <!-- ============================================================ -->
+  <!-- CUSTOMIZE THIS FLOW — reachable from any memo step's topbar,   -->
+  <!-- and from Order Filled. Presets + per-field switches control    -->
+  <!-- state.memoSettings, a standing preference that also syncs      -->
+  <!-- state.memo.dismissed so it applies immediately, this position  -->
+  <!-- included (see setMemoSettingField in the script).              -->
+  <!-- ============================================================ -->
+  <div class="customize-overlay" data-action="close-customize"></div>
+  <div class="customize-sheet">
+    <div class="customize-head">
+      <div class="customize-title">Customize this flow</div>
+      <div class="customize-head-actions">
+        <button type="button" class="customize-reset" data-action="memo-settings-reset">Reset</button>
+        <button type="button" class="customize-close" data-action="close-customize" aria-label="Close">&times;</button>
+      </div>
+    </div>
+    <div class="customize-desc">Applies now, and to every position you buy after this one.</div>
+
+    <div class="customize-label">Preset</div>
+    <div class="customize-preset-row">
+      <button type="button" class="customize-preset" data-action="memo-settings-preset" data-preset="full">Full &middot; All 6</button>
+      <button type="button" class="customize-preset" data-action="memo-settings-preset" data-preset="trimmed">Trimmed &middot; 2</button>
+    </div>
+
+    <div class="customize-label">Individual fields</div>
+    <div class="customize-field-list">
+      <div class="customize-field-row">
+        <div class="customize-field-label">Classification</div>
+        <button type="button" class="memo-switch" data-action="memo-settings-toggle" data-memo-field="classification" aria-label="Toggle Classification"><span class="memo-switch-thumb"></span></button>
+      </div>
+      <div class="customize-field-row">
+        <div class="customize-field-label">Role</div>
+        <button type="button" class="memo-switch" data-action="memo-settings-toggle" data-memo-field="role" aria-label="Toggle Role"><span class="memo-switch-thumb"></span></button>
+      </div>
+      <div class="customize-field-row">
+        <div class="customize-field-label">Thesis</div>
+        <button type="button" class="memo-switch" data-action="memo-settings-toggle" data-memo-field="thesis" aria-label="Toggle Thesis"><span class="memo-switch-thumb"></span></button>
+      </div>
+      <div class="customize-field-row">
+        <div class="customize-field-label">Kill Criteria</div>
+        <button type="button" class="memo-switch" data-action="memo-settings-toggle" data-memo-field="killCriteria" aria-label="Toggle Kill Criteria"><span class="memo-switch-thumb"></span></button>
+      </div>
+      <div class="customize-field-row">
+        <div>
+          <div class="customize-field-label">Prediction</div>
+          <div class="customize-field-sub">Probability, return target &amp; horizon</div>
+        </div>
+        <button type="button" class="memo-switch" data-action="memo-settings-toggle" data-memo-field="probability" aria-label="Toggle Prediction"><span class="memo-switch-thumb"></span></button>
+      </div>
+      <div class="customize-field-row">
+        <div class="customize-field-label">Source</div>
+        <button type="button" class="memo-switch" data-action="memo-settings-toggle" data-memo-field="source" aria-label="Toggle Source"><span class="memo-switch-thumb"></span></button>
+      </div>
+    </div>
+    <button type="button" class="customize-done" data-action="close-customize">Done</button>
+  </div>
 
   <section class="screen" data-screen="limit-order" data-node-id="14327:12306">
     <div class="header">
@@ -1833,7 +2001,11 @@
       </div>
 
       <div class="memo-block">
-        <span class="memo-title">Memo</span>
+        <div class="memo-title-row">
+          <span class="memo-title">Memo</span>
+          <button type="button" class="revise-memo-link" data-action="open-customize">Customize</button>
+        </div>
+        <div class="memo-kept-summary">Kept in the memo: <span data-value="memo-kept-summary">&mdash;</span></div>
         <div class="memo-list">
           <div class="memo-field" data-memo-field="classification">
             <span class="memo-label">Classification</span>
@@ -3323,6 +3495,7 @@
   // markup) so "every part of that buy flow optional" only has to be implemented once.
   const MEMO_STEPS = ["memo-classification", "memo-role", "memo-thesis", "memo-killcriteria", "memo-prediction", "memo-source"];
   const MEMO_FIELD_KEYS = ["classification", "role", "thesis", "killCriteria", "probability", "source"];
+  const MEMO_FIELD_LABELS = { classification: "Classification", role: "Role", thesis: "Thesis", killCriteria: "Kill Criteria", probability: "Prediction", source: "Source" };
   function firstMemoStep(){
     for(let i = 0; i < MEMO_STEPS.length; i++){
       if(!state.memo.dismissed[MEMO_FIELD_KEYS[i]]) return MEMO_STEPS[i];
@@ -3335,6 +3508,28 @@
       if(!state.memo.dismissed[MEMO_FIELD_KEYS[i]]) return MEMO_STEPS[i];
     }
     return "memo-review";
+  }
+  // Quick presets for "Customize this flow". Full asks everything; Trimmed keeps only the
+  // two fields that need actual judgment (Thesis, Prediction) and skips the quicker taps.
+  const MEMO_PRESETS = {
+    full: { classification: true, role: true, thesis: true, killCriteria: true, probability: true, source: true },
+    trimmed: { classification: false, role: false, thesis: true, killCriteria: false, probability: true, source: false }
+  };
+  // memoSettings is a STANDING preference ("ask this on future positions too") — separate
+  // from state.memo.dismissed, which is scoped to just the memo in progress right now.
+  // Changing a setting applies immediately by also syncing dismissed for that field, so the
+  // current flow's step order updates live; the Memo Review chips still only ever touch
+  // dismissed, never memoSettings, so hiding a field there doesn't change future defaults.
+  function setMemoSettingField(key, on){
+    state.memoSettings[key] = on;
+    state.memo.dismissed[key] = !on;
+  }
+  function applyMemoPreset(name){
+    const preset = MEMO_PRESETS[name];
+    MEMO_FIELD_KEYS.forEach(k => setMemoSettingField(k, preset[k]));
+  }
+  function resetMemoSettings(){
+    applyMemoPreset("full");
   }
   const state = {
     priceCents: 0,
@@ -3365,7 +3560,10 @@
       // step is skipped on future buy flows but stays reachable via a chip on the Limit
       // Price screen ("they're not in this flow, but you can turn it on in that moment").
       dismissed: { classification: false, role: false, thesis: false, killCriteria: false, probability: false, source: false }
-    }
+    },
+    // Standing default across positions — see setMemoSettingField above.
+    memoSettings: { classification: true, role: true, thesis: true, killCriteria: true, probability: true, source: true },
+    uiCustomizeOpen: false
   };
   // Same account (availableCashCents lives on `state`), same live quote (renders into both
   // iterations via the shared data-quote attributes) — only the order being entered differs.
@@ -3872,11 +4070,35 @@
       el.classList.toggle("filled", !m.dismissed[el.dataset.memoChip]);
     });
 
-    // Step counter reflects only the currently-active (non-hidden) steps.
-    const activeSteps = MEMO_STEPS.filter((s,i)=> !m.dismissed[MEMO_FIELD_KEYS[i]]);
+    // Step counter reflects only the currently-active (non-hidden) steps. The screen
+    // you're actually standing on always counts even if you've just turned it off via the
+    // self-toggle — otherwise the denominator would shrink out from under you mid-view.
+    const currentScreen = document.querySelector('.screen.active');
+    const currentScreenId = currentScreen ? currentScreen.dataset.screen : null;
+    const activeSteps = MEMO_STEPS.filter((s,i)=> !m.dismissed[MEMO_FIELD_KEYS[i]] || s === currentScreenId);
     document.querySelectorAll('[data-memo-step-for]').forEach(el=>{
       const pos = activeSteps.indexOf(el.dataset.memoStepFor);
       el.textContent = (pos === -1 ? activeSteps.length : pos + 1) + " / " + activeSteps.length;
+    });
+
+    // "Customize this flow": memoSettings is the standing preference (see
+    // setMemoSettingField). One selector drives both the per-step header self-toggle and
+    // the sheet's own switches, since both share the same data-action/data-memo-field.
+    document.querySelectorAll('[data-action="memo-settings-toggle"][data-memo-field]').forEach(el=>{
+      el.classList.toggle("on", !!state.memoSettings[el.dataset.memoField]);
+    });
+    const matchesPreset = (name)=> MEMO_FIELD_KEYS.every(k => state.memoSettings[k] === MEMO_PRESETS[name][k]);
+    document.querySelectorAll('[data-action="memo-settings-preset"]').forEach(el=>{
+      el.classList.toggle("active", matchesPreset(el.dataset.preset));
+    });
+    document.querySelectorAll('.customize-sheet, .customize-overlay').forEach(el=>{
+      el.classList.toggle("open", !!state.uiCustomizeOpen);
+    });
+
+    // Order Filled: one-line summary of what actually got kept, alongside the full rows.
+    const keptLabels = MEMO_FIELD_KEYS.filter(k => !m.dismissed[k]).map(k => MEMO_FIELD_LABELS[k]);
+    document.querySelectorAll('[data-value="memo-kept-summary"]').forEach(el=>{
+      el.textContent = keptLabels.length ? keptLabels.join(", ") : "nothing this time";
     });
   }
 
@@ -4031,6 +4253,26 @@
         const field = navEl.dataset.memoField;
         state.memo.dismissed[field] = !state.memo.dismissed[field];
         renderMemo();
+      } else if(action === "open-customize"){
+        state.uiCustomizeOpen = true;
+        renderMemo();
+      } else if(action === "close-customize"){
+        state.uiCustomizeOpen = false;
+        renderMemo();
+      } else if(action === "memo-settings-toggle"){
+        const field = navEl.dataset.memoField;
+        setMemoSettingField(field, !state.memoSettings[field]);
+        renderMemo();
+      } else if(action === "memo-settings-preset"){
+        applyMemoPreset(navEl.dataset.preset);
+        renderMemo();
+      } else if(action === "memo-settings-reset"){
+        resetMemoSettings();
+        renderMemo();
+      } else if(action === "toggle-memo-chips"){
+        const block = navEl.closest(".memo-chip-block");
+        const open = block.classList.toggle("open");
+        navEl.setAttribute("aria-expanded", open ? "true" : "false");
       }
       return;
     }

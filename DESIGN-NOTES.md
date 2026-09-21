@@ -4,6 +4,34 @@ Running log of notable design decisions and the reasoning behind them. Newest en
 
 ---
 
+## 2026-09-21 (latest)
+
+**Removed "Add Later" as a special label.** Thesis and Kill Criteria's continue button now just shows the plain arrow, same as every other step — they're skippable like the rest of the memo, so there's no need to call that out with different button copy. (Underlying behavior unchanged: it still saves whatever's typed in the textarea before moving on.)
+
+**Moved "Repeats next time" from the header to the bottom bar, right-aligned above the Continue arrow.** Previously sat next to the title, at the very top of the screen. Two reasons: (1) it reads better in this order — engage with the question first, then decide whether to keep being asked it, rather than seeing a meta-decision before you've even looked at the content; (2) it decluttered the header, which already carries the back button, the customize icon, the title, and the step counter. Aligned to the right (above Continue) rather than the left (above Exit) since it's about what happens *going forward*, same as Continue is — pairing it with Exit would misleadingly suggest it's related to leaving.
+
+## 2026-09-21 (even later)
+
+**"Included in this memo" on Memo Review is now collapsed by default**, reachable by tapping its header (chevron flips open/closed, matching the same collapse pattern already used for Positions/Orders/History on Select Shares). Kept the section itself rather than removing it — see the paragraph below for the reasoning.
+
+## 2026-09-21 (later)
+
+**Two different toggle styles, on purpose, for two different controls.** The per-step "Ask again next time" toggle is now a plain checkbox (square, checkmark). The Customize panel's field switches are now full rounded/Apple-style pill switches (colored track, circular thumb) — a deliberate, explicit exception to the "no rounded corners" rule from earlier: that rule was about chip/pill-shaped *selection* controls (Memo Fields, option chips), not toggle *switches*, where the rounded capsule is the shape that reads as "a switch" rather than a button. If a future toggle gets added, match it to whichever of these two it's closer to in spirit rather than picking a third style.
+
+**Customize icon simplified.** Dropped the bordered box around it — bare icon only, top-right of each step's topbar — and swapped the 3-line-plus-circles "equalizer" glyph for a plain 3-line icon.
+
+## 2026-09-21
+
+**Standing flow preferences ("Customize this flow") — the biggest functional addition since the hide/skip overhaul.** Built from a gap analysis against a reference prototype (function only, not its visual style — kept our own design language throughout, including no rounded corners on the new switches/panel).
+- New concept: `state.memoSettings` — a standing, persists-across-positions preference for which of the 6 memo fields get asked at all. Separate from `state.memo.dismissed`, which stays scoped to just the memo in progress (unchanged from before).
+- A settings icon in every memo step's header opens a bottom-sheet "Customize this flow" panel, reachable mid-flow (not just from Memo Review) and also from Order Filled.
+- Two quick presets: "Full · All 6" and "Trimmed · 2" (Thesis + Prediction only), plus a per-field switch list, plus Reset (back to Full).
+- A lighter-weight per-step toggle ("Ask again next time") sits right in that step's own header, for turning off just the one you're looking at without opening the full panel.
+- Changing a setting (via panel or per-step toggle) applies immediately — it also syncs `state.memo.dismissed` for that field, so the current flow's step order updates live. The Memo Review chips still only ever touch `dismissed`, never `memoSettings` — hiding a field there doesn't change the standing default. Verified this separation holds in both directions.
+- Step counter fix: the screen you're currently standing on always counts toward "n / total," even if you just turned it off — otherwise the denominator would visibly shrink under you mid-view.
+- Order Filled gained a one-line "Kept in the memo: X, Y, Z" summary alongside the existing per-field rows, plus its own "Customize" link (reusing the same panel).
+- Deliberately skipped from the reference: a separate "add back — not asked this time" UI section. Our existing chip (reveal) + ledger-row-tap (fill in) combo on Memo Review already does the same job, so a second affordance would've been redundant. Also skipped: discrete tap-to-select value chips for Probability/Return/Horizon (kept our slider) and dimming instead of fully hiding a field (kept full-hide) — both flagged in the analysis as deliberate, not settled-for, differences.
+
 ## 2026-09-17
 
 **Thesis/Kill Criteria's arrow attaches right after the "…" instead of dropping to its own line.**
