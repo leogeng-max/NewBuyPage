@@ -600,7 +600,7 @@
   .memo-screen{position:relative;}
   .memo-topbar{position:absolute; left:0; top:0; right:0; height:58px; border-bottom:1px solid var(--divider);}
   .memo-back{position:absolute; left:18px; top:50%; transform:translateY(-50%); background:none; border:none; color:#fff; font-size:22px; cursor:pointer; padding:6px 10px; line-height:1;}
-  .memo-body{position:absolute; left:0; right:0; top:58px; bottom:115px; overflow-y:auto; padding:0 20px; scrollbar-width:none; -ms-overflow-style:none;}
+  .memo-body{position:absolute; left:0; right:0; top:58px; bottom:85px; overflow-y:auto; padding:0 20px; scrollbar-width:none; -ms-overflow-style:none;}
   .memo-body::-webkit-scrollbar{display:none;}
   /* Prediction's "pinned & guided" layout: header + forecast sentence stay put while
      the sliders/horizon/disclaimer scroll underneath, so the sentence you're building
@@ -611,7 +611,8 @@
   .memo-scroll-area::-webkit-scrollbar{display:none;}
   .memo-title-block{padding-top:37px;}
   .memo-title-row{display:flex; align-items:baseline; justify-content:space-between; gap:10px;}
-  .memo-title{font-size:18px; color:#fff; letter-spacing:-0.36px;}
+  .memo-title{font-size:18px; color:#fff; letter-spacing:-0.36px; transition:color .15s ease;}
+  .memo-title.dim{color:#565b5e;}
   .memo-breadcrumb{text-align:right; font-size:11px; color:#c7c7c7; letter-spacing:1.26px; white-space:nowrap;}
   .memo-breadcrumb .dim{opacity:.55;}
   .memo-step{font-size:11px; color:#929292; letter-spacing:0.44px; margin-top:6px;}
@@ -629,12 +630,17 @@
   /* Per-step self-toggle ("won't ask this again") — a lighter-weight sibling to the full
      Customize panel, now living in the bottom bar. Right-aligned, above the Continue arrow
      rather than above Exit — it's about what happens going forward, same as Continue is. */
-  .memo-self-toggle{display:flex; align-items:center; justify-content:flex-end; gap:6px; background:none; border:none; padding:0; cursor:pointer; font-family:inherit;}
-  .memo-checkbox{width:13px; height:13px; border:1px solid #2a2a2a; flex:none; display:flex; align-items:center; justify-content:center; background:none;}
-  .memo-checkbox-mark{opacity:0;}
-  .on .memo-checkbox{border-color:#fff; background:#fff;}
-  .on .memo-checkbox-mark{opacity:1;}
-  .memo-self-toggle-label{font-size:9.5px; color:#929292; white-space:nowrap;}
+  /* Repeat toggle — "Exploration > Repeat Toggle Concepts, I" brought into the real flow.
+     Sits right next to the title (not the bottom bar): a repeat-icon that stays lit or
+     dims permanently to reflect the standing setting, plus a one-line confirmation that
+     flashes in on tap ("Repeats next time" / "Hide next time") and fades back out —
+     the icon alone carries the state once the confirmation has receded. */
+  .memo-title-line{display:flex; align-items:center; gap:8px;}
+  .memo-repeat-toggle{display:flex; align-items:center; gap:8px; background:none; border:none; padding:0; cursor:pointer; font-family:inherit;}
+  .memo-repeat-icon{color:#565b5e; flex:none; transition:color .15s ease;}
+  .memo-repeat-toggle.on .memo-repeat-icon{color:#fff;}
+  .memo-repeat-label{font-size:11px; color:#929292; white-space:nowrap; opacity:0; transition:opacity .2s ease;}
+  .memo-repeat-toggle.show-label .memo-repeat-label{opacity:1;}
 
   /* Customize panel: a bottom sheet reachable from any step, or from Order Filled. Two
      tiers of control — presets for a quick swap, individual switches for precision. */
@@ -684,8 +690,7 @@
   .memo-option-desc{font-size:13px; color:#929292; line-height:1.32;}
   .memo-radio{width:12px; height:12px; border-radius:6px; border:1px solid #565b5e; flex:none; margin-top:3px;}
   .memo-radio.checked{border-color:#fff; background:radial-gradient(circle, #fff 40%, transparent 42%);}
-  .memo-bottom-bar{position:absolute; left:0; right:0; bottom:0; height:115px; padding:0 20px; display:flex; flex-direction:column; justify-content:center; gap:16px;}
-  .memo-bottom-actions{display:flex; align-items:center; justify-content:space-between;}
+  .memo-bottom-bar{position:absolute; left:0; right:0; bottom:0; height:85px; padding:0 20px; display:flex; align-items:center; justify-content:space-between;}
   .memo-exit{background:none; border:none; color:#c7c7c7; font-size:15px; cursor:pointer; padding:0; font-family:inherit;}
   .memo-continue{background:none; border:none; color:rgba(255,255,255,0.4); font-size:22px; cursor:pointer; padding:8px; pointer-events:none;}
   .memo-continue.enabled{color:#fff; pointer-events:auto;}
@@ -760,6 +765,66 @@
   .memo-chip.filled{border-color:#fff; background:none; color:#fff;}
   .memo-chip.filled .eye-off{display:none;}
   .memo-chip.filled .eye-open{display:inline; color:#fff;}
+
+  /* ---------- design exploration: repeat-toggle concepts (drawer > Exploration) ---------- */
+  .explore-screen{position:absolute; inset:0; background:#000; z-index:70; display:none; overflow-y:auto;}
+  .explore-screen.open{display:block;}
+  .explore-topbar{position:sticky; top:0; background:#000; display:flex; align-items:center; gap:14px; padding:20px 20px 16px; border-bottom:1px solid var(--divider); z-index:1;}
+  .explore-back{background:none; border:none; color:#fff; font-size:22px; cursor:pointer; padding:6px 4px; line-height:1;}
+  .explore-title{font-size:15px; color:#fff; font-weight:500;}
+  .explore-body{padding:8px 20px 40px;}
+  .explore-intro{font-size:12px; color:#929292; line-height:1.5; margin-top:16px;}
+  .explore-block{border-top:1px solid var(--divider); padding-top:24px; margin-top:28px;}
+  .explore-label{font-size:11px; color:#929292; text-transform:uppercase; letter-spacing:0.3px; margin-bottom:16px;}
+  .explore-demo{display:flex; margin-bottom:12px; min-height:22px; align-items:center;}
+  .explore-note{font-size:11.5px; color:#6d6d6d; line-height:1.5;}
+
+  .ex-toggle{display:flex; align-items:center; gap:8px; background:none; border:none; padding:0; cursor:pointer; font-family:inherit;}
+  .ex-label{font-size:12px; color:#929292; white-space:nowrap;}
+
+  .ex-a .ex-dot, .ex-d .ex-dot{border-radius:50%; border:1px solid #565b5e; background:none; flex:none;}
+  .ex-a .ex-dot{width:9px; height:9px;}
+  .ex-d .ex-dot{width:16px; height:16px; border-width:1.5px;}
+  .ex-a.on .ex-dot, .ex-d.on .ex-dot{background:#fff; border-color:#fff;}
+  .ex-a .ex-label, .ex-d .ex-label{display:none;}
+  .ex-a.revealed .ex-label, .ex-d.revealed .ex-label{display:inline;}
+
+  .ex-b .ex-dot{width:9px; height:9px; border-radius:50%; border:1px solid #565b5e; background:none; flex:none; transition:background .15s ease, border-color .15s ease;}
+  .ex-b.on .ex-dot{background:#fff; border-color:#fff;}
+  .ex-b .ex-label{opacity:0; transition:opacity .25s ease;}
+  .ex-b.show-label .ex-label{opacity:1;}
+
+  .ex-c .ex-dot{width:8px; height:8px; border-radius:50%; border:1px solid #565b5e; background:none; flex:none;}
+  .ex-c.on .ex-dot{background:#fff; border-color:#fff;}
+  .ex-c .ex-label{color:#6d6d6d;}
+
+  .ex-title-demo{justify-content:flex-start; gap:10px; width:100%;}
+  .ex-mini-title{font-size:18px; font-weight:500; color:#fff; letter-spacing:-0.36px; transition:color .15s ease;}
+  .ex-mini-title.dim{color:#565b5e;}
+  .ex-e .ex-dot{width:9px; height:9px; border-radius:50%; border:1px solid #565b5e; background:none; flex:none;}
+  .ex-e.on .ex-dot{background:#fff; border-color:#fff;}
+  .ex-e .ex-label{display:none;}
+  .ex-e.revealed .ex-label{display:inline;}
+
+  .ex-f .ex-repeat-icon{color:#565b5e; flex:none;}
+  .ex-f.on .ex-repeat-icon{color:#fff;}
+  .ex-f .ex-label{display:none;}
+  .ex-f.revealed .ex-label{display:inline;}
+
+  .ex-g-title{font-size:15px; font-weight:500; color:#fff; border-bottom:1px solid transparent; padding-bottom:3px;}
+  .ex-g.on .ex-g-title{border-bottom-color:#fff;}
+  .ex-g .ex-label{display:none; margin-left:10px;}
+  .ex-g.revealed .ex-label{display:inline;}
+
+  .ex-h .ex-square{width:8px; height:8px; border:1px solid #565b5e; background:none; flex:none;}
+  .ex-h.on .ex-square{background:#fff; border-color:#fff;}
+  .ex-h .ex-label{display:none;}
+  .ex-h.revealed .ex-label{display:inline;}
+
+  .ex-i .ex-repeat-icon{color:#565b5e; flex:none; transition:color .15s ease;}
+  .ex-i.on .ex-repeat-icon{color:#fff;}
+  .ex-i .ex-label{opacity:0; transition:opacity .2s ease;}
+  .ex-i.show-label .ex-label{opacity:1;}
 </style>
 </head>
 <body>
@@ -776,6 +841,8 @@
   <a href="#" data-iteration-target="usd">USD</a>
   <div class="d-group">Design</div>
   <a href="#" data-iteration-target="v2">Page Update</a>
+  <div class="d-group">Exploration</div>
+  <a href="#" id="exploreLink">Repeat Toggle — Concepts</a>
 </nav>
 
 <div class="phone-shell">
@@ -797,7 +864,13 @@
       <div class="memo-title-block">
         <div class="memo-title-row">
           <div>
-            <div class="memo-title">Classification</div>
+            <div class="memo-title-line">
+              <div class="memo-title">Classification</div>
+              <button type="button" class="memo-repeat-toggle on" data-action="memo-repeat-toggle" data-memo-field="classification" aria-label="Repeat this on future positions">
+                <svg class="memo-repeat-icon" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>
+                <span class="memo-repeat-label" data-on-label="Repeats next time" data-off-label="Hide next time"></span>
+              </button>
+            </div>
             <div class="memo-step" data-memo-step-for="memo-classification">1 / 6</div>
           </div>
           <div class="memo-ticker-mini">ATZ<br><span data-quote="price">309.95</span> CAD <span class="chg" data-quote="change">+0.01%</span></div>
@@ -843,11 +916,8 @@
       </div>
     </div>
     <div class="memo-bottom-bar">
-      <button type="button" class="memo-self-toggle" data-action="memo-settings-toggle" data-memo-field="classification" aria-label="Repeat this on future positions"><span class="memo-checkbox"><svg class="memo-checkbox-mark" viewBox="0 0 12 10" width="9" height="8" fill="none"><path d="M1 5L4.5 8.5L11 1" stroke="#000" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="memo-self-toggle-label">Repeats next time</span></button>
-      <div class="memo-bottom-actions">
         <button class="memo-exit" data-action="goto" data-target="memo-classification">Exit</button>
         <button class="memo-continue enabled" data-action="memo-continue-from" data-memo-from="memo-classification" aria-label="Continue">&rarr;</button>
-      </div>
     </div>
   </section>
 
@@ -863,7 +933,13 @@
       <div class="memo-title-block">
         <div class="memo-title-row">
           <div>
-            <div class="memo-title">Role</div>
+            <div class="memo-title-line">
+              <div class="memo-title">Role</div>
+              <button type="button" class="memo-repeat-toggle on" data-action="memo-repeat-toggle" data-memo-field="role" aria-label="Repeat this on future positions">
+                <svg class="memo-repeat-icon" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>
+                <span class="memo-repeat-label" data-on-label="Repeats next time" data-off-label="Hide next time"></span>
+              </button>
+            </div>
             <div class="memo-step" data-memo-step-for="memo-role">2 / 6</div>
           </div>
           <div style="text-align:right;">
@@ -893,11 +969,8 @@
       </div>
     </div>
     <div class="memo-bottom-bar">
-      <button type="button" class="memo-self-toggle" data-action="memo-settings-toggle" data-memo-field="role" aria-label="Repeat this on future positions"><span class="memo-checkbox"><svg class="memo-checkbox-mark" viewBox="0 0 12 10" width="9" height="8" fill="none"><path d="M1 5L4.5 8.5L11 1" stroke="#000" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="memo-self-toggle-label">Repeats next time</span></button>
-      <div class="memo-bottom-actions">
         <button class="memo-exit" data-action="goto" data-target="memo-classification">Exit</button>
         <button class="memo-continue enabled" data-action="memo-continue-from" data-memo-from="memo-role" aria-label="Continue">&rarr;</button>
-      </div>
     </div>
   </section>
 
@@ -913,7 +986,13 @@
       <div class="memo-title-block">
         <div class="memo-title-row">
           <div>
-            <div class="memo-title">Thesis</div>
+            <div class="memo-title-line">
+              <div class="memo-title">Thesis</div>
+              <button type="button" class="memo-repeat-toggle on" data-action="memo-repeat-toggle" data-memo-field="thesis" aria-label="Repeat this on future positions">
+                <svg class="memo-repeat-icon" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>
+                <span class="memo-repeat-label" data-on-label="Repeats next time" data-off-label="Hide next time"></span>
+              </button>
+            </div>
             <div class="memo-step" data-memo-step-for="memo-thesis">3 / 6</div>
           </div>
           <div style="text-align:right;">
@@ -936,11 +1015,8 @@
       <textarea class="memo-textarea" data-memo-text="thesis" placeholder="The reason this position exists: State why the market is wrong. Be specific enough to be proven wrong later."></textarea>
     </div>
     <div class="memo-bottom-bar">
-      <button type="button" class="memo-self-toggle" data-action="memo-settings-toggle" data-memo-field="thesis" aria-label="Repeat this on future positions"><span class="memo-checkbox"><svg class="memo-checkbox-mark" viewBox="0 0 12 10" width="9" height="8" fill="none"><path d="M1 5L4.5 8.5L11 1" stroke="#000" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="memo-self-toggle-label">Repeats next time</span></button>
-      <div class="memo-bottom-actions">
         <button class="memo-exit" data-action="goto" data-target="memo-classification">Exit</button>
         <button class="memo-continue enabled" data-action="memo-text-continue" data-memo-field="thesis" aria-label="Continue">&rarr;</button>
-      </div>
     </div>
   </section>
 
@@ -956,7 +1032,13 @@
       <div class="memo-title-block">
         <div class="memo-title-row">
           <div>
-            <div class="memo-title">Kill Criteria</div>
+            <div class="memo-title-line">
+              <div class="memo-title">Kill Criteria</div>
+              <button type="button" class="memo-repeat-toggle on" data-action="memo-repeat-toggle" data-memo-field="killCriteria" aria-label="Repeat this on future positions">
+                <svg class="memo-repeat-icon" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>
+                <span class="memo-repeat-label" data-on-label="Repeats next time" data-off-label="Hide next time"></span>
+              </button>
+            </div>
             <div class="memo-step" data-memo-step-for="memo-killcriteria">4 / 6</div>
           </div>
           <div style="text-align:right;">
@@ -979,11 +1061,8 @@
       <textarea class="memo-textarea" data-memo-text="killCriteria" placeholder="The conditions that invalidate your thesis. Be specific — if any of these are met, the position no longer deserves capital."></textarea>
     </div>
     <div class="memo-bottom-bar">
-      <button type="button" class="memo-self-toggle" data-action="memo-settings-toggle" data-memo-field="killCriteria" aria-label="Repeat this on future positions"><span class="memo-checkbox"><svg class="memo-checkbox-mark" viewBox="0 0 12 10" width="9" height="8" fill="none"><path d="M1 5L4.5 8.5L11 1" stroke="#000" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="memo-self-toggle-label">Repeats next time</span></button>
-      <div class="memo-bottom-actions">
         <button class="memo-exit" data-action="goto" data-target="memo-classification">Exit</button>
         <button class="memo-continue enabled" data-action="memo-text-continue" data-memo-field="killCriteria" aria-label="Continue">&rarr;</button>
-      </div>
     </div>
   </section>
 
@@ -1000,7 +1079,13 @@
         <div class="memo-title-block">
           <div class="memo-title-row">
             <div>
-              <div class="memo-title">Prediction</div>
+              <div class="memo-title-line">
+                <div class="memo-title">Prediction</div>
+                <button type="button" class="memo-repeat-toggle on" data-action="memo-repeat-toggle" data-memo-field="probability" aria-label="Repeat this on future positions">
+                  <svg class="memo-repeat-icon" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>
+                  <span class="memo-repeat-label" data-on-label="Repeats next time" data-off-label="Hide next time"></span>
+                </button>
+              </div>
               <div class="memo-step" data-memo-step-for="memo-prediction">5 / 6</div>
             </div>
             <div style="text-align:right;">
@@ -1042,11 +1127,8 @@
       </div>
     </div>
     <div class="memo-bottom-bar">
-      <button type="button" class="memo-self-toggle" data-action="memo-settings-toggle" data-memo-field="probability" aria-label="Repeat this on future positions"><span class="memo-checkbox"><svg class="memo-checkbox-mark" viewBox="0 0 12 10" width="9" height="8" fill="none"><path d="M1 5L4.5 8.5L11 1" stroke="#000" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="memo-self-toggle-label">Repeats next time</span></button>
-      <div class="memo-bottom-actions">
         <button class="memo-exit" data-action="goto" data-target="memo-classification">Exit</button>
         <button class="memo-continue enabled" data-action="memo-continue-from" data-memo-from="memo-prediction" aria-label="Continue">&rarr;</button>
-      </div>
     </div>
   </section>
 
@@ -1062,7 +1144,13 @@
       <div class="memo-title-block">
         <div class="memo-title-row">
           <div>
-            <div class="memo-title">Source</div>
+            <div class="memo-title-line">
+              <div class="memo-title">Source</div>
+              <button type="button" class="memo-repeat-toggle on" data-action="memo-repeat-toggle" data-memo-field="source" aria-label="Repeat this on future positions">
+                <svg class="memo-repeat-icon" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>
+                <span class="memo-repeat-label" data-on-label="Repeats next time" data-off-label="Hide next time"></span>
+              </button>
+            </div>
             <div class="memo-step" data-memo-step-for="memo-source">6 / 6</div>
           </div>
           <div style="text-align:right;">
@@ -1105,11 +1193,8 @@
       </div>
     </div>
     <div class="memo-bottom-bar">
-      <button type="button" class="memo-self-toggle" data-action="memo-settings-toggle" data-memo-field="source" aria-label="Repeat this on future positions"><span class="memo-checkbox"><svg class="memo-checkbox-mark" viewBox="0 0 12 10" width="9" height="8" fill="none"><path d="M1 5L4.5 8.5L11 1" stroke="#000" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="memo-self-toggle-label">Repeats next time</span></button>
-      <div class="memo-bottom-actions">
         <button class="memo-exit" data-action="goto" data-target="memo-classification">Exit</button>
         <button class="memo-continue enabled" data-action="goto" data-target="memo-review" aria-label="Continue">&rarr;</button>
-      </div>
     </div>
   </section>
 
@@ -1228,10 +1313,8 @@
       </div>
     </div>
     <div class="memo-bottom-bar">
-      <div class="memo-bottom-actions">
-        <button class="memo-exit" data-action="goto" data-target="memo-classification">Exit</button>
-        <button class="memo-continue" data-action="goto" data-target="limit-order" aria-label="Continue" data-memo-account-continue>&rarr;</button>
-      </div>
+      <button class="memo-exit" data-action="goto" data-target="memo-classification">Exit</button>
+      <button class="memo-continue" data-action="goto" data-target="limit-order" aria-label="Continue" data-memo-account-continue>&rarr;</button>
     </div>
   </section>
 
@@ -3481,6 +3564,123 @@
 </div>
 <!-- /iteration: v2 -->
 
+<!-- ============================================================ -->
+<!-- DESIGN EXPLORATION — visual/interaction directions for the     -->
+<!-- "repeat this on future positions" control. Self-contained,     -->
+<!-- doesn't touch state.memo/memoSettings — purely for comparing   -->
+<!-- looks. Reached via the drawer, sits on top of everything.      -->
+<!-- ============================================================ -->
+<div class="explore-screen" id="exploreScreen">
+  <div class="explore-topbar">
+    <button class="explore-back" id="exploreBack" aria-label="Close">&lsaquo;</button>
+    <div class="explore-title">Repeat Toggle — Concepts</div>
+  </div>
+  <div class="explore-body">
+    <p class="explore-intro">Same idea as the checkbox on the buy flow — "this question is skippable right now, and you can also turn it off for next time" — explored as a range of interactions, not all of them dot-based. Tap any of them.</p>
+
+    <div class="explore-block">
+      <div class="explore-label">A &middot; Dot only — the label reveals itself once you've tapped</div>
+      <div class="explore-demo">
+        <button type="button" class="ex-toggle ex-a" data-action="explore-toggle-reveal">
+          <span class="ex-dot"></span>
+          <span class="ex-label">Repeats next time</span>
+        </button>
+      </div>
+      <p class="explore-note">Nothing to read until you've interacted with it once — after that, the label stays, and just reflects on/off.</p>
+    </div>
+
+    <div class="explore-block">
+      <div class="explore-label">B &middot; Tap for a quick confirmation, then it recedes</div>
+      <div class="explore-demo">
+        <button type="button" class="ex-toggle ex-b" data-action="explore-toggle-transient">
+          <span class="ex-dot"></span>
+          <span class="ex-label">Repeats next time</span>
+        </button>
+      </div>
+      <p class="explore-note">Tapping confirms with the label for a moment, then it quiets back to just the dot. Worth flagging: this is the one option here that uses motion for feedback — everywhere else in this prototype deliberately avoids that.</p>
+    </div>
+
+    <div class="explore-block">
+      <div class="explore-label">C &middot; Label always present, just quiet</div>
+      <div class="explore-demo">
+        <button type="button" class="ex-toggle ex-c" data-action="explore-toggle-reveal">
+          <span class="ex-label">Repeats next time</span>
+          <span class="ex-dot"></span>
+        </button>
+      </div>
+      <p class="explore-note">No hidden state to discover — the label is always there, just small and low-contrast so it stays out of the way of the actual question above it.</p>
+    </div>
+
+    <div class="explore-block">
+      <div class="explore-label">D &middot; Larger single ring, no separate checkbox glyph</div>
+      <div class="explore-demo">
+        <button type="button" class="ex-toggle ex-d" data-action="explore-toggle-reveal">
+          <span class="ex-dot"></span>
+          <span class="ex-label">Repeats next time</span>
+        </button>
+      </div>
+      <p class="explore-note">Same "reveal on first tap" behavior as A, with a bigger, more deliberate ring instead of a small dot — reads as a single considered mark rather than a form control.</p>
+    </div>
+
+    <div class="explore-block">
+      <div class="explore-label">E &middot; The title itself carries the state</div>
+      <div class="explore-demo ex-title-demo">
+        <div class="ex-mini-title" id="exTitleE">Role</div>
+        <button type="button" class="ex-toggle ex-e" data-action="explore-toggle-title" data-explore-title="exTitleE">
+          <span class="ex-dot"></span>
+          <span class="ex-label">Repeats next time</span>
+        </button>
+      </div>
+      <p class="explore-note">Tap the dot: it fills, the label reveals, and the title itself brightens to confirm this step is "on" for next time. Tap again and the title dims to gray, the dot empties — a quieter, in-place way of saying "this one's fading out of your future flow." The idea being explored: the on/off state doesn't need its own separate visual language, it can borrow the title's own weight.</p>
+    </div>
+
+    <div class="explore-block">
+      <div class="explore-label">F &middot; A repeat/loop glyph instead of an abstract dot</div>
+      <div class="explore-demo">
+        <button type="button" class="ex-toggle ex-f" data-action="explore-toggle-reveal">
+          <svg class="ex-repeat-icon" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>
+          <span class="ex-label">Repeats next time</span>
+        </button>
+      </div>
+      <p class="explore-note">Same reveal-on-tap behavior, but the mark is literally a repeat icon instead of an abstract dot — filled/lit when it'll come back, just an outline when it won't. More literal, less "which setting is this again?"</p>
+    </div>
+
+    <div class="explore-block">
+      <div class="explore-label">G &middot; No separate control — the title is the tap target</div>
+      <div class="explore-demo">
+        <button type="button" class="ex-toggle ex-g" data-action="explore-toggle-reveal">
+          <span class="ex-g-title">Role</span>
+          <span class="ex-label">Repeats next time</span>
+        </button>
+      </div>
+      <p class="explore-note">No dot, no icon — tap the title itself. An underline appears under it while it's set to repeat; tap again and the underline goes away. The most minimal option here, at the cost of the tap target being less obviously interactive.</p>
+    </div>
+
+    <div class="explore-block">
+      <div class="explore-label">H &middot; Square mark instead of a circle</div>
+      <div class="explore-demo">
+        <button type="button" class="ex-toggle ex-h" data-action="explore-toggle-reveal">
+          <span class="ex-square"></span>
+          <span class="ex-label">Repeats next time</span>
+        </button>
+      </div>
+      <p class="explore-note">Identical to A, swapping the circle for a small square — closer to the squared-off shapes used everywhere else in this prototype (chips, cards) instead of introducing a new, perfectly round form.</p>
+    </div>
+
+    <div class="explore-block">
+      <div class="explore-label">I &middot; E + F combined — icon next to the title, confirms itself, then quiets down</div>
+      <div class="explore-demo ex-title-demo">
+        <div class="ex-mini-title" id="exTitleI">Role</div>
+        <button type="button" class="ex-toggle ex-i on" data-action="explore-toggle-i">
+          <svg class="ex-repeat-icon" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>
+          <span class="ex-label" data-ex-on-label="Repeats next time" data-ex-off-label="Hide next time"></span>
+        </button>
+      </div>
+      <p class="explore-note">Starts lit (matches the real default — every field starts "on"). Tap it off and the icon fades to gray while a one-line "Hide next time" confirms what just happened, then the text recedes and the gray icon carries the state on its own. Tap it back on and "Repeats next time" flashes the same way. Unlike E, the title itself stays neutral — only the icon and its momentary label do the talking.</p>
+    </div>
+  </div>
+</div>
+
 </div>
 
 <script>
@@ -4087,6 +4287,15 @@
     document.querySelectorAll('[data-action="memo-settings-toggle"][data-memo-field]').forEach(el=>{
       el.classList.toggle("on", !!state.memoSettings[el.dataset.memoField]);
     });
+    // Repeat-toggle icon state, and the title right next to it dims/brightens in step —
+    // never touch "show-label" here, its fade timing is owned entirely by the click
+    // handler's own setTimeout.
+    document.querySelectorAll('[data-action="memo-repeat-toggle"][data-memo-field]').forEach(el=>{
+      const on = !!state.memoSettings[el.dataset.memoField];
+      el.classList.toggle("on", on);
+      const title = el.parentElement ? el.parentElement.querySelector(".memo-title") : null;
+      if(title) title.classList.toggle("dim", !on);
+    });
     const matchesPreset = (name)=> MEMO_FIELD_KEYS.every(k => state.memoSettings[k] === MEMO_PRESETS[name][k]);
     document.querySelectorAll('[data-action="memo-settings-preset"]').forEach(el=>{
       el.classList.toggle("active", matchesPreset(el.dataset.preset));
@@ -4263,6 +4472,19 @@
         const field = navEl.dataset.memoField;
         setMemoSettingField(field, !state.memoSettings[field]);
         renderMemo();
+      } else if(action === "memo-repeat-toggle"){
+        // Lives next to the title now (see Exploration > Repeat Toggle Concepts, "I").
+        // The icon itself carries the on/off state permanently; the label is a one-line,
+        // direction-aware confirmation that flashes in on tap and fades back out on its own.
+        const field = navEl.dataset.memoField;
+        const nowOn = !state.memoSettings[field];
+        setMemoSettingField(field, nowOn);
+        const label = navEl.querySelector(".memo-repeat-label");
+        if(label) label.textContent = nowOn ? label.dataset.onLabel : label.dataset.offLabel;
+        navEl.classList.add("show-label");
+        window.clearTimeout(navEl._repeatTimer);
+        navEl._repeatTimer = window.setTimeout(()=>{ navEl.classList.remove("show-label"); }, 1800);
+        renderMemo();
       } else if(action === "memo-settings-preset"){
         applyMemoPreset(navEl.dataset.preset);
         renderMemo();
@@ -4333,7 +4555,58 @@
         closeDrawer();
       });
     });
+
+    var exploreLink = document.getElementById("exploreLink");
+    var exploreScreen = document.getElementById("exploreScreen");
+    var exploreBack = document.getElementById("exploreBack");
+    exploreLink.addEventListener("click", function(e){
+      e.preventDefault();
+      exploreScreen.classList.add("open");
+      closeDrawer();
+    });
+    exploreBack.addEventListener("click", function(){ exploreScreen.classList.remove("open"); });
   })();
+
+  // ---------- design exploration: repeat-toggle concepts ----------
+  // Self-contained — doesn't read or write state.memo/memoSettings, purely for comparing
+  // interaction/visual directions before picking one to bring into the real flow.
+  document.addEventListener("click", function(e){
+    var revealBtn = e.target.closest('[data-action="explore-toggle-reveal"]');
+    if(revealBtn){
+      revealBtn.classList.toggle("on");
+      revealBtn.classList.add("revealed");
+      return;
+    }
+    var transientBtn = e.target.closest('[data-action="explore-toggle-transient"]');
+    if(transientBtn){
+      transientBtn.classList.toggle("on");
+      transientBtn.classList.add("show-label");
+      window.clearTimeout(transientBtn._exTimer);
+      transientBtn._exTimer = window.setTimeout(function(){
+        transientBtn.classList.remove("show-label");
+      }, 1600);
+      return;
+    }
+    var titleBtn = e.target.closest('[data-action="explore-toggle-title"]');
+    if(titleBtn){
+      var on = titleBtn.classList.toggle("on");
+      titleBtn.classList.add("revealed");
+      var title = document.getElementById(titleBtn.dataset.exploreTitle);
+      if(title) title.classList.toggle("dim", !on);
+      return;
+    }
+    var iBtn = e.target.closest('[data-action="explore-toggle-i"]');
+    if(iBtn){
+      var nowOn = iBtn.classList.toggle("on");
+      var label = iBtn.querySelector(".ex-label");
+      label.textContent = nowOn ? label.dataset.exOnLabel : label.dataset.exOffLabel;
+      iBtn.classList.add("show-label");
+      window.clearTimeout(iBtn._exTimer);
+      iBtn._exTimer = window.setTimeout(function(){
+        iBtn.classList.remove("show-label");
+      }, 1800);
+    }
+  });
 
   // ---------- execute buy ----------
   // Tap swaps the arrow for a pulsing dot for a beat, then hands off to the "submitting"

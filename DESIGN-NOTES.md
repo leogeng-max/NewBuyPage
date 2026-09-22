@@ -4,6 +4,25 @@ Running log of notable design decisions and the reasoning behind them. Newest en
 
 ---
 
+## 2026-09-22
+
+**New drawer section: "Exploration → Repeat Toggle — Concepts."** The checkbox for "repeats next time" was flagged as feeling unserious for the product. Built a self-contained comparison screen (doesn't touch `state.memo`/`memoSettings` — pure visual/interaction exploration) with 4 directions, all dot-based instead of checkbox-based:
+- **A** — bare dot, label hidden until first tap, then stays revealed.
+- **B** — dot + label flashes as a one-time confirmation on tap, then recedes to just the dot. Flagged explicitly: this is the only option that uses motion for feedback, which cuts against the "no blinking" rule established earlier — included anyway since it's user-triggered, not ambient, and worth having in the comparison.
+- **C** — label always visible but quiet/low-contrast, dot as the status indicator. Safest/most discoverable of the four.
+- **D** — same reveal-on-tap behavior as A, with a larger, more deliberate ring instead of a small dot.
+Not yet applied to the real flow — waiting on which direction to take before touching the actual per-step toggle.
+
+**Concept I added (E + F combined), then brought into the real flow, replacing the bottom-bar checkbox entirely.** Repeat icon (from F) sits directly next to the title (from E's positioning), starts lit to match the real default. Tapping it flips the standing setting immediately (icon fades to gray/lit accordingly) and flashes a one-line, direction-aware confirmation — "Hide next time" going off, "Repeats next time" going back on — that fades out on its own after ~1.8s while the icon's own color keeps carrying the state. Verified live: toggling from the title icon and toggling the same field from the Customize panel both read/write the same `state.memoSettings`, so they always agree. The per-step self-toggle checkbox and its bottom-bar placement are gone — this replaces them.
+- *Why the transient label, despite the earlier "no motion for feedback" rule:* explicit, deliberate direction from this exploration process, not an accidental reintroduction — flagged at each step along the way. Treat this as the one intentional exception in the flow, not a reopening of the rule generally.
+- **Follow-up:** the title itself now dims/brightens in step with the icon too (E's core idea, folded into I) — so "Role" going gray and the icon going gray happen together, reinforcing each other instead of the title being a bystander.
+
+**Expanded to 8 concepts, non-dot options included, per feedback that 4 wasn't enough range:**
+- **E** — your own proposal: dot beside the title, but the title's own color carries the state too — full white when it'll repeat, dims to gray when it won't. Default is bright (matches the real app's actual default of "on"), so the first tap confirms/keeps it lit rather than turning something on from a false "off" starting point — flagging this in case the intent was actually to start dim.
+- **F** — a literal repeat/loop icon instead of an abstract dot.
+- **G** — no separate control at all — tap the title itself, an underline is the state indicator.
+- **H** — same as A, circle swapped for a square (closer to the squared-off shapes used everywhere else in this prototype).
+
 ## 2026-09-21 (latest)
 
 **Removed "Add Later" as a special label.** Thesis and Kill Criteria's continue button now just shows the plain arrow, same as every other step — they're skippable like the rest of the memo, so there's no need to call that out with different button copy. (Underlying behavior unchanged: it still saves whatever's typed in the textarea before moving on.)
