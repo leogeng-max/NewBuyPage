@@ -637,8 +637,8 @@
      the icon alone carries the state once the confirmation has receded. */
   .memo-title-line{display:flex; align-items:center; gap:8px;}
   .memo-repeat-toggle{display:flex; align-items:center; gap:8px; background:none; border:none; padding:0; cursor:pointer; font-family:inherit;}
-  .memo-repeat-icon{color:#565b5e; flex:none; transition:color .15s ease;}
-  .memo-repeat-toggle.on .memo-repeat-icon{color:#fff;}
+  .memo-repeat-radio{width:13px; height:13px; border-radius:50%; border:1px solid #565b5e; flex:none; transition:border-color .15s ease, background .15s ease;}
+  .memo-repeat-toggle.on .memo-repeat-radio{border-color:#fff; background:radial-gradient(circle, #fff 40%, transparent 42%);}
   .memo-repeat-label{font-size:11px; color:#929292; white-space:nowrap; opacity:0; transition:opacity .2s ease;}
   .memo-repeat-toggle.show-label .memo-repeat-label{opacity:1;}
 
@@ -821,8 +821,7 @@
   .ex-h .ex-label{display:none;}
   .ex-h.revealed .ex-label{display:inline;}
 
-  .ex-i .ex-repeat-icon{color:#565b5e; flex:none; transition:color .15s ease;}
-  .ex-i.on .ex-repeat-icon{color:#fff;}
+  .ex-i.on .memo-repeat-radio{border-color:#fff; background:radial-gradient(circle, #fff 40%, transparent 42%);}
   .ex-i .ex-label{opacity:0; transition:opacity .2s ease;}
   .ex-i.show-label .ex-label{opacity:1;}
 </style>
@@ -867,7 +866,7 @@
             <div class="memo-title-line">
               <div class="memo-title">Classification</div>
               <button type="button" class="memo-repeat-toggle on" data-action="memo-repeat-toggle" data-memo-field="classification" aria-label="Repeat this on future positions">
-                <svg class="memo-repeat-icon" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>
+                <span class="memo-repeat-radio"></span>
                 <span class="memo-repeat-label" data-on-label="Repeats next time" data-off-label="Hide next time"></span>
               </button>
             </div>
@@ -936,7 +935,7 @@
             <div class="memo-title-line">
               <div class="memo-title">Role</div>
               <button type="button" class="memo-repeat-toggle on" data-action="memo-repeat-toggle" data-memo-field="role" aria-label="Repeat this on future positions">
-                <svg class="memo-repeat-icon" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>
+                <span class="memo-repeat-radio"></span>
                 <span class="memo-repeat-label" data-on-label="Repeats next time" data-off-label="Hide next time"></span>
               </button>
             </div>
@@ -989,7 +988,7 @@
             <div class="memo-title-line">
               <div class="memo-title">Thesis</div>
               <button type="button" class="memo-repeat-toggle on" data-action="memo-repeat-toggle" data-memo-field="thesis" aria-label="Repeat this on future positions">
-                <svg class="memo-repeat-icon" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>
+                <span class="memo-repeat-radio"></span>
                 <span class="memo-repeat-label" data-on-label="Repeats next time" data-off-label="Hide next time"></span>
               </button>
             </div>
@@ -1035,7 +1034,7 @@
             <div class="memo-title-line">
               <div class="memo-title">Kill Criteria</div>
               <button type="button" class="memo-repeat-toggle on" data-action="memo-repeat-toggle" data-memo-field="killCriteria" aria-label="Repeat this on future positions">
-                <svg class="memo-repeat-icon" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>
+                <span class="memo-repeat-radio"></span>
                 <span class="memo-repeat-label" data-on-label="Repeats next time" data-off-label="Hide next time"></span>
               </button>
             </div>
@@ -1082,7 +1081,7 @@
               <div class="memo-title-line">
                 <div class="memo-title">Prediction</div>
                 <button type="button" class="memo-repeat-toggle on" data-action="memo-repeat-toggle" data-memo-field="probability" aria-label="Repeat this on future positions">
-                  <svg class="memo-repeat-icon" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>
+                  <span class="memo-repeat-radio"></span>
                   <span class="memo-repeat-label" data-on-label="Repeats next time" data-off-label="Hide next time"></span>
                 </button>
               </div>
@@ -1147,7 +1146,7 @@
             <div class="memo-title-line">
               <div class="memo-title">Source</div>
               <button type="button" class="memo-repeat-toggle on" data-action="memo-repeat-toggle" data-memo-field="source" aria-label="Repeat this on future positions">
-                <svg class="memo-repeat-icon" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>
+                <span class="memo-repeat-radio"></span>
                 <span class="memo-repeat-label" data-on-label="Repeats next time" data-off-label="Hide next time"></span>
               </button>
             </div>
@@ -3672,7 +3671,7 @@
       <div class="explore-demo ex-title-demo">
         <div class="ex-mini-title" id="exTitleI">Role</div>
         <button type="button" class="ex-toggle ex-i on" data-action="explore-toggle-i">
-          <svg class="ex-repeat-icon" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>
+          <span class="memo-repeat-radio"></span>
           <span class="ex-label" data-ex-on-label="Repeats next time" data-ex-off-label="Hide next time"></span>
         </button>
       </div>
