@@ -610,9 +610,8 @@
   .memo-scroll-area{flex:1 1 auto; min-height:0; overflow-y:auto; padding:0 20px 24px; scrollbar-width:none; -ms-overflow-style:none;}
   .memo-scroll-area::-webkit-scrollbar{display:none;}
   .memo-title-block{padding-top:37px;}
-  .memo-title-row{display:flex; align-items:baseline; justify-content:space-between; gap:10px;}
-  .memo-title{font-size:18px; color:#fff; letter-spacing:-0.36px; transition:color .15s ease;}
-  .memo-title.dim{color:#565b5e;}
+  .memo-title-row{display:flex; align-items:flex-start; justify-content:space-between; gap:10px;}
+  .memo-title{font-size:18px; color:#fff; letter-spacing:-0.36px;}
   .memo-breadcrumb{text-align:right; font-size:11px; color:#c7c7c7; letter-spacing:1.26px; white-space:nowrap;}
   .memo-breadcrumb .dim{opacity:.55;}
   .memo-step{font-size:11px; color:#929292; letter-spacing:0.44px; margin-top:6px;}
@@ -627,17 +626,17 @@
   }
   .memo-customize-btn:active{color:#fff;}
 
-  /* Per-step self-toggle ("won't ask this again") — a lighter-weight sibling to the full
-     Customize panel, now living in the bottom bar. Right-aligned, above the Continue arrow
-     rather than above Exit — it's about what happens going forward, same as Continue is. */
   /* Repeat toggle — "Exploration > Repeat Toggle Concepts, I" brought into the real flow.
-     Sits right next to the title (not the bottom bar): a repeat-icon that stays lit or
-     dims permanently to reflect the standing setting, plus a one-line confirmation that
-     flashes in on tap ("Repeats next time" / "Hide next time") and fades back out —
-     the icon alone carries the state once the confirmation has receded. */
-  .memo-title-line{display:flex; align-items:center; gap:8px;}
-  .memo-repeat-toggle{display:flex; align-items:center; gap:8px; background:none; border:none; padding:0; cursor:pointer; font-family:inherit;}
-  .memo-repeat-radio{width:13px; height:13px; border-radius:50%; border:1px solid #565b5e; flex:none; transition:border-color .15s ease, background .15s ease;}
+     Sits directly above the ticker/price on the right, right-aligned to match it — label
+     on the left, radio on the right, packed with justify-content:flex-end so the radio's
+     position never moves whether or not the label is currently showing. A plain radio (no
+     title color change) that stays lit or dims to reflect the standing setting, plus a
+     one-line confirmation that flashes in on tap and fades back out on its own. */
+  .memo-repeat-toggle{
+    display:flex; align-items:center; justify-content:flex-end; gap:6px; width:100%;
+    margin-bottom:10px; background:none; border:none; padding:0; cursor:pointer; font-family:inherit;
+  }
+  .memo-repeat-radio{display:inline-block; width:9px; height:9px; border-radius:50%; border:1px solid #565b5e; flex:none; transition:border-color .15s ease, background .15s ease;}
   .memo-repeat-toggle.on .memo-repeat-radio{border-color:#fff; background:radial-gradient(circle, #fff 40%, transparent 42%);}
   .memo-repeat-label{font-size:11px; color:#929292; white-space:nowrap; opacity:0; transition:opacity .2s ease;}
   .memo-repeat-toggle.show-label .memo-repeat-label{opacity:1;}
@@ -863,16 +862,16 @@
       <div class="memo-title-block">
         <div class="memo-title-row">
           <div>
-            <div class="memo-title-line">
-              <div class="memo-title">Classification</div>
-              <button type="button" class="memo-repeat-toggle on" data-action="memo-repeat-toggle" data-memo-field="classification" aria-label="Repeat this on future positions">
-                <span class="memo-repeat-radio"></span>
-                <span class="memo-repeat-label" data-on-label="Repeats next time" data-off-label="Hide next time"></span>
-              </button>
-            </div>
+            <div class="memo-title">Classification</div>
             <div class="memo-step" data-memo-step-for="memo-classification">1 / 6</div>
           </div>
-          <div class="memo-ticker-mini">ATZ<br><span data-quote="price">309.95</span> CAD <span class="chg" data-quote="change">+0.01%</span></div>
+          <div>
+            <button type="button" class="memo-repeat-toggle on" data-action="memo-repeat-toggle" data-memo-field="classification" aria-label="Repeat this on future positions">
+              <span class="memo-repeat-label" data-on-label="Repeats next time" data-off-label="Hide next time"></span>
+              <span class="memo-repeat-radio"></span>
+            </button>
+            <div class="memo-ticker-mini">ATZ<br><span data-quote="price">309.95</span> CAD <span class="chg" data-quote="change">+0.01%</span></div>
+          </div>
         </div>
       </div>
       <div class="memo-section-label">Classify</div>
@@ -932,16 +931,14 @@
       <div class="memo-title-block">
         <div class="memo-title-row">
           <div>
-            <div class="memo-title-line">
-              <div class="memo-title">Role</div>
-              <button type="button" class="memo-repeat-toggle on" data-action="memo-repeat-toggle" data-memo-field="role" aria-label="Repeat this on future positions">
-                <span class="memo-repeat-radio"></span>
-                <span class="memo-repeat-label" data-on-label="Repeats next time" data-off-label="Hide next time"></span>
-              </button>
-            </div>
+            <div class="memo-title">Role</div>
             <div class="memo-step" data-memo-step-for="memo-role">2 / 6</div>
           </div>
           <div style="text-align:right;">
+            <button type="button" class="memo-repeat-toggle on" data-action="memo-repeat-toggle" data-memo-field="role" aria-label="Repeat this on future positions">
+              <span class="memo-repeat-label" data-on-label="Repeats next time" data-off-label="Hide next time"></span>
+              <span class="memo-repeat-radio"></span>
+            </button>
             <div class="memo-ticker-mini">ATZ<br><span data-quote="price">309.95</span> CAD <span class="chg" data-quote="change">+0.01%</span></div>
             <div class="memo-breadcrumb" data-value="memo-tag-classification" style="margin-top:6px;">&mdash;</div>
           </div>
@@ -985,16 +982,14 @@
       <div class="memo-title-block">
         <div class="memo-title-row">
           <div>
-            <div class="memo-title-line">
-              <div class="memo-title">Thesis</div>
-              <button type="button" class="memo-repeat-toggle on" data-action="memo-repeat-toggle" data-memo-field="thesis" aria-label="Repeat this on future positions">
-                <span class="memo-repeat-radio"></span>
-                <span class="memo-repeat-label" data-on-label="Repeats next time" data-off-label="Hide next time"></span>
-              </button>
-            </div>
+            <div class="memo-title">Thesis</div>
             <div class="memo-step" data-memo-step-for="memo-thesis">3 / 6</div>
           </div>
           <div style="text-align:right;">
+            <button type="button" class="memo-repeat-toggle on" data-action="memo-repeat-toggle" data-memo-field="thesis" aria-label="Repeat this on future positions">
+              <span class="memo-repeat-label" data-on-label="Repeats next time" data-off-label="Hide next time"></span>
+              <span class="memo-repeat-radio"></span>
+            </button>
             <div class="memo-ticker-mini">ATZ<br><span data-quote="price">309.95</span> CAD <span class="chg" data-quote="change">+0.01%</span></div>
             <div class="memo-breadcrumb" data-value="memo-tag-full" style="margin-top:6px;">&mdash;</div>
           </div>
@@ -1031,16 +1026,14 @@
       <div class="memo-title-block">
         <div class="memo-title-row">
           <div>
-            <div class="memo-title-line">
-              <div class="memo-title">Kill Criteria</div>
-              <button type="button" class="memo-repeat-toggle on" data-action="memo-repeat-toggle" data-memo-field="killCriteria" aria-label="Repeat this on future positions">
-                <span class="memo-repeat-radio"></span>
-                <span class="memo-repeat-label" data-on-label="Repeats next time" data-off-label="Hide next time"></span>
-              </button>
-            </div>
+            <div class="memo-title">Kill Criteria</div>
             <div class="memo-step" data-memo-step-for="memo-killcriteria">4 / 6</div>
           </div>
           <div style="text-align:right;">
+            <button type="button" class="memo-repeat-toggle on" data-action="memo-repeat-toggle" data-memo-field="killCriteria" aria-label="Repeat this on future positions">
+              <span class="memo-repeat-label" data-on-label="Repeats next time" data-off-label="Hide next time"></span>
+              <span class="memo-repeat-radio"></span>
+            </button>
             <div class="memo-ticker-mini">ATZ<br><span data-quote="price">309.95</span> CAD <span class="chg" data-quote="change">+0.01%</span></div>
             <div class="memo-breadcrumb" data-value="memo-tag-full" style="margin-top:6px;">&mdash;</div>
           </div>
@@ -1078,16 +1071,14 @@
         <div class="memo-title-block">
           <div class="memo-title-row">
             <div>
-              <div class="memo-title-line">
-                <div class="memo-title">Prediction</div>
-                <button type="button" class="memo-repeat-toggle on" data-action="memo-repeat-toggle" data-memo-field="probability" aria-label="Repeat this on future positions">
-                  <span class="memo-repeat-radio"></span>
-                  <span class="memo-repeat-label" data-on-label="Repeats next time" data-off-label="Hide next time"></span>
-                </button>
-              </div>
+              <div class="memo-title">Prediction</div>
               <div class="memo-step" data-memo-step-for="memo-prediction">5 / 6</div>
             </div>
             <div style="text-align:right;">
+              <button type="button" class="memo-repeat-toggle on" data-action="memo-repeat-toggle" data-memo-field="probability" aria-label="Repeat this on future positions">
+                <span class="memo-repeat-label" data-on-label="Repeats next time" data-off-label="Hide next time"></span>
+                <span class="memo-repeat-radio"></span>
+              </button>
               <div class="memo-ticker-mini">ATZ<br><span data-quote="price">309.95</span> CAD <span class="chg" data-quote="change">+0.01%</span></div>
               <div class="memo-breadcrumb" data-value="memo-tag-full" style="margin-top:6px;">&mdash;</div>
             </div>
@@ -1143,16 +1134,14 @@
       <div class="memo-title-block">
         <div class="memo-title-row">
           <div>
-            <div class="memo-title-line">
-              <div class="memo-title">Source</div>
-              <button type="button" class="memo-repeat-toggle on" data-action="memo-repeat-toggle" data-memo-field="source" aria-label="Repeat this on future positions">
-                <span class="memo-repeat-radio"></span>
-                <span class="memo-repeat-label" data-on-label="Repeats next time" data-off-label="Hide next time"></span>
-              </button>
-            </div>
+            <div class="memo-title">Source</div>
             <div class="memo-step" data-memo-step-for="memo-source">6 / 6</div>
           </div>
           <div style="text-align:right;">
+            <button type="button" class="memo-repeat-toggle on" data-action="memo-repeat-toggle" data-memo-field="source" aria-label="Repeat this on future positions">
+              <span class="memo-repeat-label" data-on-label="Repeats next time" data-off-label="Hide next time"></span>
+              <span class="memo-repeat-radio"></span>
+            </button>
             <div class="memo-ticker-mini">ATZ<br><span data-quote="price">309.95</span> CAD <span class="chg" data-quote="change">+0.01%</span></div>
             <div class="memo-breadcrumb" data-value="memo-tag-full" style="margin-top:6px;">&mdash;</div>
           </div>
@@ -4286,14 +4275,10 @@
     document.querySelectorAll('[data-action="memo-settings-toggle"][data-memo-field]').forEach(el=>{
       el.classList.toggle("on", !!state.memoSettings[el.dataset.memoField]);
     });
-    // Repeat-toggle icon state, and the title right next to it dims/brightens in step —
-    // never touch "show-label" here, its fade timing is owned entirely by the click
-    // handler's own setTimeout.
+    // Repeat-toggle radio state only — never touch "show-label" here, its fade timing is
+    // owned entirely by the click handler's own setTimeout.
     document.querySelectorAll('[data-action="memo-repeat-toggle"][data-memo-field]').forEach(el=>{
-      const on = !!state.memoSettings[el.dataset.memoField];
-      el.classList.toggle("on", on);
-      const title = el.parentElement ? el.parentElement.querySelector(".memo-title") : null;
-      if(title) title.classList.toggle("dim", !on);
+      el.classList.toggle("on", !!state.memoSettings[el.dataset.memoField]);
     });
     const matchesPreset = (name)=> MEMO_FIELD_KEYS.every(k => state.memoSettings[k] === MEMO_PRESETS[name][k]);
     document.querySelectorAll('[data-action="memo-settings-preset"]').forEach(el=>{
@@ -4472,9 +4457,10 @@
         setMemoSettingField(field, !state.memoSettings[field]);
         renderMemo();
       } else if(action === "memo-repeat-toggle"){
-        // Lives next to the title now (see Exploration > Repeat Toggle Concepts, "I").
-        // The icon itself carries the on/off state permanently; the label is a one-line,
-        // direction-aware confirmation that flashes in on tap and fades back out on its own.
+        // Sits above the ticker/price, right-aligned (see Exploration > Repeat Toggle
+        // Concepts, "I"). The radio itself carries the on/off state permanently; the label
+        // is a one-line, direction-aware confirmation that flashes in on tap and fades
+        // back out on its own. The title no longer changes color with it.
         const field = navEl.dataset.memoField;
         const nowOn = !state.memoSettings[field];
         setMemoSettingField(field, nowOn);
