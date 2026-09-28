@@ -655,27 +655,33 @@
   .customize-sheet.open{transform:translateY(0); pointer-events:auto;}
   .customize-sheet::-webkit-scrollbar{display:none;}
   .customize-head{display:flex; align-items:center; justify-content:space-between; margin-bottom:4px;}
-  .customize-title{font-size:11px; color:#929292; text-transform:uppercase; letter-spacing:0.3px;}
+  .customize-title{font-size:11px; color:#929292; letter-spacing:0.3px;}
   .customize-head-actions{display:flex; align-items:center; gap:16px;}
   .customize-reset{background:none; border:none; color:#c7c7c7; font-size:12px; cursor:pointer; padding:0; font-family:inherit;}
   .customize-close{background:none; border:none; color:#929292; font-size:20px; line-height:1; cursor:pointer; padding:0;}
   .customize-desc{font-size:12px; color:#6d6d6d; line-height:1.4; margin-bottom:18px;}
-  .customize-label{font-size:11px; color:#929292; text-transform:uppercase; letter-spacing:0.3px; margin-bottom:8px;}
+  .customize-label{font-size:11px; color:#929292; letter-spacing:0.3px; margin-bottom:8px;}
   .customize-preset-row{display:flex; gap:8px; margin-bottom:22px;}
   .customize-preset{flex:1; padding:11px; background:none; border:1px solid #2a2a2a; color:#929292; font-size:12px; font-weight:500; cursor:pointer; font-family:inherit;}
   .customize-preset.active{border-color:#fff; color:#fff;}
+  /* Field rows regroup live under "Currently selected"/"Not selected" as memoSettings
+     changes (see renderCustomizeFields) — the divider is what makes that regrouping legible. */
+  .customize-group-head{display:flex; align-items:center; gap:10px; margin:18px 0 8px;}
+  .customize-group-head:first-child{margin-top:0;}
+  .customize-group-label{font-size:11px; color:#929292; letter-spacing:0.3px; white-space:nowrap;}
+  .customize-group-line{flex:1; height:1px; background:#2a2a2a;}
   .customize-field-list{border:1px solid #2a2a2a;}
   .customize-field-row{display:flex; align-items:center; justify-content:space-between; gap:12px; padding:13px 14px; border-bottom:1px solid #2a2a2a;}
   .customize-field-row:last-child{border-bottom:none;}
   .customize-field-label{font-size:13px; color:#fff; font-weight:500;}
   .customize-field-sub{font-size:10.5px; color:#929292; margin-top:2px;}
-  /* Native/iOS-style pill switch — a deliberate exception to the "no rounded corners" rule:
-     that rule was about chip/pill SELECTION controls, this is a toggle switch, where the
-     rounded capsule shape is what reads as "a switch" rather than a button. */
-  .memo-switch{width:34px; height:20px; flex:none; background:#2a2a2a; border:none; border-radius:10px; padding:0; position:relative; cursor:pointer; transition:background .15s ease;}
-  .memo-switch-thumb{position:absolute; top:2px; left:2px; width:16px; height:16px; border-radius:50%; background:#fff; transition:left .15s ease, background .15s ease;}
-  .memo-switch.on{background:#fff;}
-  .memo-switch.on .memo-switch-thumb{left:16px; background:#000;}
+  /* Checkbox, not a switch — a plain square reads as "include this field" and keeps the
+     same filled-white-on-selected treatment as .memo-radio elsewhere in the memo flow,
+     rather than the capsule/pill shape a switch needs. */
+  .memo-checkbox{width:18px; height:18px; flex:none; display:flex; align-items:center; justify-content:center; background:none; border:1px solid #565b5e; border-radius:0; padding:0; cursor:pointer; transition:border-color .15s ease, background .15s ease;}
+  .memo-checkbox svg{opacity:0; transition:opacity .1s ease;}
+  .memo-checkbox.on{border-color:#fff; background:#fff;}
+  .memo-checkbox.on svg{opacity:1;}
   .customize-done{display:block; width:100%; box-sizing:border-box; margin-top:18px; padding:13px; background:#fff; border:none; color:#000; font-size:12px; font-weight:600; letter-spacing:0.05em; text-transform:uppercase; cursor:pointer; font-family:inherit;}
 
   /* Order Filled "kept in the memo" summary line — .memo-block is a flex column with its
@@ -1330,36 +1336,9 @@
       <button type="button" class="customize-preset" data-action="memo-settings-preset" data-preset="trimmed">Trimmed &middot; 2</button>
     </div>
 
-    <div class="customize-label">Individual fields</div>
-    <div class="customize-field-list">
-      <div class="customize-field-row">
-        <div class="customize-field-label">Classification</div>
-        <button type="button" class="memo-switch" data-action="memo-settings-toggle" data-memo-field="classification" aria-label="Toggle Classification"><span class="memo-switch-thumb"></span></button>
-      </div>
-      <div class="customize-field-row">
-        <div class="customize-field-label">Role</div>
-        <button type="button" class="memo-switch" data-action="memo-settings-toggle" data-memo-field="role" aria-label="Toggle Role"><span class="memo-switch-thumb"></span></button>
-      </div>
-      <div class="customize-field-row">
-        <div class="customize-field-label">Thesis</div>
-        <button type="button" class="memo-switch" data-action="memo-settings-toggle" data-memo-field="thesis" aria-label="Toggle Thesis"><span class="memo-switch-thumb"></span></button>
-      </div>
-      <div class="customize-field-row">
-        <div class="customize-field-label">Kill Criteria</div>
-        <button type="button" class="memo-switch" data-action="memo-settings-toggle" data-memo-field="killCriteria" aria-label="Toggle Kill Criteria"><span class="memo-switch-thumb"></span></button>
-      </div>
-      <div class="customize-field-row">
-        <div>
-          <div class="customize-field-label">Prediction</div>
-          <div class="customize-field-sub">Probability, return target &amp; horizon</div>
-        </div>
-        <button type="button" class="memo-switch" data-action="memo-settings-toggle" data-memo-field="probability" aria-label="Toggle Prediction"><span class="memo-switch-thumb"></span></button>
-      </div>
-      <div class="customize-field-row">
-        <div class="customize-field-label">Source</div>
-        <button type="button" class="memo-switch" data-action="memo-settings-toggle" data-memo-field="source" aria-label="Toggle Source"><span class="memo-switch-thumb"></span></button>
-      </div>
-    </div>
+    <!-- Populated by renderCustomizeFields(): rows regroup under "Currently selected" /
+         "Not selected" live as memoSettings changes, each with its field description. -->
+    <div class="customize-fields" data-customize-fields></div>
     <button type="button" class="customize-done" data-action="close-customize">Done</button>
   </div>
 
@@ -3684,6 +3663,14 @@
   const MEMO_STEPS = ["memo-classification", "memo-role", "memo-thesis", "memo-killcriteria", "memo-prediction", "memo-source"];
   const MEMO_FIELD_KEYS = ["classification", "role", "thesis", "killCriteria", "probability", "source"];
   const MEMO_FIELD_LABELS = { classification: "Classification", role: "Role", thesis: "Thesis", killCriteria: "Kill Criteria", probability: "Prediction", source: "Source" };
+  const MEMO_FIELD_DESCRIPTIONS = {
+    classification: "Classify the position (Compounder, Speculative, etc.)",
+    role: "Set the position's role in your portfolio",
+    thesis: "Write why this deserves capital",
+    killCriteria: "Define what would invalidate the case",
+    probability: "Set probability, return target & horizon",
+    source: "Note where the idea came from"
+  };
   function firstMemoStep(){
     for(let i = 0; i < MEMO_STEPS.length; i++){
       if(!state.memo.dismissed[MEMO_FIELD_KEYS[i]]) return MEMO_STEPS[i];
@@ -3718,6 +3705,28 @@
   }
   function resetMemoSettings(){
     applyMemoPreset("full");
+  }
+  const CHECK_SVG = '<svg viewBox="0 0 12 9" width="10" height="8" fill="none"><path d="M1 4.3L4.3 7.5L11 1" stroke="#0d0d0d" stroke-width="1.6" stroke-linecap="butt" stroke-linejoin="miter"/></svg>';
+  // Rebuilds the "Customize this flow" field list every renderMemo() call — the one spot
+  // in this file generating markup in JS, since the Currently-selected/Not-selected split
+  // has to reorder rows live as memoSettings changes, not just toggle a class on them.
+  function renderCustomizeFields(){
+    const container = document.querySelector('[data-customize-fields]');
+    if(!container) return;
+    const row = (k)=> `
+      <div class="customize-field-row">
+        <div>
+          <div class="customize-field-label">${MEMO_FIELD_LABELS[k]}</div>
+          <div class="customize-field-sub">${MEMO_FIELD_DESCRIPTIONS[k]}</div>
+        </div>
+        <button type="button" class="memo-checkbox" data-action="memo-settings-toggle" data-memo-field="${k}" aria-label="Toggle ${MEMO_FIELD_LABELS[k]}">${CHECK_SVG}</button>
+      </div>`;
+    const group = (label, keys)=> keys.length ? `
+      <div class="customize-group-head"><div class="customize-group-label">${label}</div><div class="customize-group-line"></div></div>
+      <div class="customize-field-list">${keys.map(row).join("")}</div>` : "";
+    const selected = MEMO_FIELD_KEYS.filter(k => state.memoSettings[k]);
+    const unselected = MEMO_FIELD_KEYS.filter(k => !state.memoSettings[k]);
+    container.innerHTML = group("Currently selected", selected) + group("Not selected", unselected);
   }
   const state = {
     priceCents: 0,
@@ -4271,7 +4280,8 @@
 
     // "Customize this flow": memoSettings is the standing preference (see
     // setMemoSettingField). One selector drives both the per-step header self-toggle and
-    // the sheet's own switches, since both share the same data-action/data-memo-field.
+    // the sheet's own checkboxes, since both share the same data-action/data-memo-field.
+    renderCustomizeFields();
     document.querySelectorAll('[data-action="memo-settings-toggle"][data-memo-field]').forEach(el=>{
       el.classList.toggle("on", !!state.memoSettings[el.dataset.memoField]);
     });

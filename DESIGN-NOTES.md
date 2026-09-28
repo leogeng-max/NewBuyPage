@@ -4,6 +4,13 @@ Running log of notable design decisions and the reasoning behind them. Newest en
 
 ---
 
+## 2026-09-28
+
+**"Customize this flow" sheet reworked to match the structure of a separate reference prototype (`buy-flow-prototype.html`, a design-canvas export), while staying in this file's own visual system:**
+- **Switches → checkboxes.** `.memo-switch` (the pill/thumb toggle) is gone; each field now has a plain 18px square `.memo-checkbox` with a checkmark, filling white when on — the same filled-white-on-selected language as `.memo-radio` elsewhere in the memo flow, not a new pattern.
+- **Per-field descriptions added**, one line under each label (e.g. Thesis → "Write why this deserves capital"), matching the reference's copy — previously only Prediction had a sub-line.
+- **Rows now regroup live under "Currently selected" / "Not selected"** as you toggle, instead of one static list in fixed order — matching the reference's behavior of fields visibly moving into place. This is the one spot in this file where markup gets generated in JS rather than toggled via classes on static HTML (`renderCustomizeFields()`, called every `renderMemo()`): the two-group split has to reorder rows, which plain class-toggling on fixed DOM can't express. Every other row-level piece of state (presets, the repeat-toggle radio, memo chips) stays on the existing "static HTML + class toggle" convention.
+
 ## 2026-09-22
 
 **New drawer section: "Exploration → Repeat Toggle — Concepts."** The checkbox for "repeats next time" was flagged as feeling unserious for the product. Built a self-contained comparison screen (doesn't touch `state.memo`/`memoSettings` — pure visual/interaction exploration) with 4 directions, all dot-based instead of checkbox-based:
