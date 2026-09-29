@@ -4,6 +4,14 @@ Running log of notable design decisions and the reasoning behind them. Newest en
 
 ---
 
+## 2026-09-29
+
+**Two features ported from external reference screenshots (a real app's "Memo questions" settings screen and its per-step "Hidden" state), applied to both memo flows — cad and "Memo Update — Sept 29" (renamed from "Sept 28").**
+
+- **A step now reads as genuinely hidden wherever you land on it**, not just quietly skipped. Whenever a step's field is currently off (via its repeat-toggle or the Customize sheet), landing on that step's own screen — however you get there — dims its content (~35% opacity, non-interactive) and shows a callout: "Hidden" / "Won't be asked on future positions. Show it again any time from here." / a "Show this question" button that flips the field back on immediately, no reload. Reuses the existing `memo-settings-toggle`/`pill-settings-toggle` actions for the button, so it's just another entry point into state that already existed — no new state model. New pieces: `.memo-step-hidden` (added to the `.screen` itself, computed from a screen→field map — `MEMO_SCREEN_FIELD` for cad, the pill iteration already had `PILL_SCREEN_KEY`) and `.memo-hidden-callout` (one per step, always a *sibling* of the content it describes, never nested inside it — Prediction's callout sits between the pinned forecast sentence and the scrollable chip/slider area specifically so dimming the scroll area wholesale doesn't also dim the callout's own "Show this question" button).
+- **"Included in this memo" redesigned from a chip row (small pills + eye icons) into a bordered switch-list** — same visual language as the Customize sheet's field list (checkbox on the right, one row per field), on the observation that the two panels were already doing conceptually the same job (toggle a field's inclusion) with two different visual languages for no real reason. Cad's version is static markup (fixed 6 rows, like it always was); the pill iteration's version is generated in `renderPillReview()` same as before, just emitting the new row shape. Old `.memo-chip`/`.eye`/`.eye-open`/`.eye-off` CSS removed as dead code now that nothing renders it.
+- Explicitly **not** ported: the reference's master "Whole memo" toggle (would let a whole position skip the memo flow entirely) — confirmed out of scope; kept to per-field granularity only, matching what both iterations already do.
+
 ## 2026-09-28 (even later)
 
 **"Memo Flow — Pills" renamed to "Memo Update — Sept 28" in the drawer, plus a round of selection/layout polish, all scoped to that one iteration:**
