@@ -684,6 +684,58 @@
   .memo-checkbox.on svg{opacity:1;}
   .customize-done{display:block; width:100%; box-sizing:border-box; margin-top:18px; padding:13px; background:#fff; border:none; color:#000; font-size:12px; font-weight:600; letter-spacing:0.05em; text-transform:uppercase; cursor:pointer; font-family:inherit;}
 
+  /* "Memo Flow — Pills" iteration — same tokens/classes as the cad memo flow throughout
+     (see the .iteration[data-iteration="pill"] block); these are only the pieces that
+     don't already exist: tap-to-light-up pills for Prediction/Source (reference used
+     sliders/plain chips, this replaces both with the same lit-up-on-tap language), the
+     add-back chips on Memo Review, and the confirmation screen's icon/buttons. */
+  .pill-chip-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:8px;}
+  .pill-chip-grid.cols-5{grid-template-columns:repeat(5,1fr);}
+  .pill-chip-row{display:flex; flex-wrap:wrap; gap:8px;}
+  .pill-chip{background:none; border:1px solid #2a2a2a; color:#929292; font-size:12px; font-weight:500; padding:11px 4px; text-align:center; cursor:pointer; font-family:inherit; transition:border-color .15s ease, color .15s ease, background .15s ease;}
+  .pill-chip.wide{padding:10px 14px;}
+  .pill-chip.selected{border-color:#fff; color:#fff; background:#161616;}
+  .pill-empty{padding:24px 0; text-align:center; font-size:12px; color:#565b5e;}
+  .pill-addback-label{font-size:10.5px; color:#565b5e; margin:18px 0 8px;}
+  .pill-addback-row{display:flex; flex-wrap:wrap; gap:8px;}
+  .pill-addback-chip{padding:8px 12px; background:none; color:#929292; font-size:11px; border:1px dashed #2a2a2a; cursor:pointer; font-family:inherit;}
+  .pill-confirm-icon{width:36px; height:36px; border:1px solid #fff; display:flex; align-items:center; justify-content:center; margin-bottom:18px;}
+  .pill-primary-btn{display:block; width:100%; box-sizing:border-box; padding:14px; background:#fff; border:none; color:#000; font-size:12px; font-weight:600; cursor:pointer; font-family:inherit;}
+  .pill-ghost-btn{display:block; width:100%; box-sizing:border-box; padding:12px; background:none; border:1px solid #2a2a2a; color:#929292; font-size:11px; cursor:pointer; font-family:inherit; margin-top:8px;}
+  /* Own overlay/sheet wrapper classes (not .customize-sheet/.customize-overlay) so this
+     iteration's open/close state can't cross-toggle the cad Customize sheet, which is
+     synced by a global class selector — identical rules otherwise. */
+  .pill-customize-overlay{position:absolute; inset:0; background:rgba(0,0,0,0.6); opacity:0; pointer-events:none; transition:opacity .2s ease; z-index:39;}
+  .pill-customize-overlay.open{opacity:1; pointer-events:auto;}
+  .pill-customize-sheet{
+    position:absolute; left:0; right:0; bottom:0; z-index:40;
+    max-height:82%; overflow-y:auto; box-sizing:border-box;
+    background:#0d0d0d; border-top:1px solid #565b5e;
+    padding:20px 20px 24px; scrollbar-width:none; -ms-overflow-style:none;
+    transform:translateY(100%); transition:transform .22s ease; pointer-events:none;
+  }
+  .pill-customize-sheet.open{transform:translateY(0); pointer-events:auto;}
+  .pill-customize-sheet::-webkit-scrollbar{display:none;}
+
+  /* 2026-09-28 pass: a progress bar (reference had this, cad's own memo flow never did) —
+     drawn right on top of .memo-topbar's own existing bottom divider instead of adding a
+     second line underneath it: the divider is already the "track", this is just the "fill". */
+  .pill-progress-fill{position:absolute; left:0; bottom:0; height:1px; width:0%; background:#fff; transition:width .2s ease;}
+  /* Classification/Role selection: a highlighted row instead of a radio dot — no checkmark,
+     just a visible (but not blazing-white) gray fill, so the row itself reads as "selected"
+     the way the reference's option rows do, minus its checkmark icon. Scoped to pill-option
+     so the cad memo flow's own .memo-radio rows are untouched. */
+  .pill-option-list{margin:0 -14px;}
+  .pill-option-list .memo-option{padding:16px 14px;}
+  .pill-option-list .memo-option.selected{background:#2a2a2a; border-left:3px solid #fff;}
+  /* Probability/Return target/Horizon sit directly above their own box grids — the label's
+     usual bottom divider is redundant there and was removed on request. */
+  .memo-section-label.pill-label-plain{border-bottom:none; padding-bottom:0;}
+  /* Thesis/Kill Criteria get a real bordered box (sharp corners, not the reference's rounded
+     one) that grows taller as the user types, instead of a fixed-height plain textarea. */
+  .pill-textarea-box{border:1px solid #2a2a2a; padding:14px; margin-top:22px;}
+  .pill-textarea-box .memo-textarea{margin-top:0; height:auto; min-height:120px; overflow:hidden;}
+
   /* Order Filled "kept in the memo" summary line — .memo-block is a flex column with its
      own gap, so no extra margin needed here. */
   .memo-kept-summary{font-size:12px; color:#929292; line-height:1.5;}
@@ -845,6 +897,7 @@
   <a href="#" data-iteration-target="usd">USD</a>
   <div class="d-group">Design</div>
   <a href="#" data-iteration-target="v2">Page Update</a>
+  <a href="#" data-iteration-target="pill">Memo Update — Sept 28</a>
   <div class="d-group">Exploration</div>
   <a href="#" id="exploreLink">Repeat Toggle — Concepts</a>
 </nav>
@@ -3532,6 +3585,357 @@
 <!-- /iteration: v2 -->
 
 <!-- ============================================================ -->
+<!-- "MEMO FLOW — PILLS" — a second reflection-flow concept, scoped -->
+<!-- like the reference prototype it's based on: Classification →   -->
+<!-- Source → Review → Confirmation, entered directly from the      -->
+<!-- drawer (no limit-order entry). Same tokens/classes as the cad   -->
+<!-- memo flow throughout; the interaction difference is Prediction -->
+<!-- and Source using tap-to-light-up pills instead of sliders/rows, -->
+<!-- and Memo Review adding the reference's "add back just for this -->
+<!-- position" chips for steps that weren't asked. Fully self-       -->
+<!-- contained state (pillState) — never touches state.memo.        -->
+<!-- ============================================================ -->
+<div class="iteration" data-iteration="pill">
+
+  <section class="screen memo-screen" data-screen="pill-classification">
+    <div class="memo-topbar">
+      <button class="memo-back" data-action="back" aria-label="Back">&lsaquo;</button>
+      <button class="memo-customize-btn" type="button" data-action="pill-open-customize" aria-label="Customize this flow"><svg viewBox="0 0 16 12" width="15" height="11" fill="none"><line x1="1" y1="1" x2="15" y2="1" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><line x1="1" y1="6" x2="11" y2="6" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><line x1="1" y1="11" x2="13" y2="11" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg></button>
+      <div class="pill-progress-fill" data-pill-progress-for="classification"></div>
+    </div>
+    <div class="memo-body">
+      <div class="memo-title-block">
+        <div class="memo-title-row">
+          <div>
+            <div class="memo-title">Classification</div>
+            <div class="memo-step" data-pill-step-for="classification">1 / 6</div>
+          </div>
+          <div>
+            <div class="memo-ticker-mini">ATZ<br>309.95 CAD <span class="chg">+0.01%</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="memo-section-label">Classify</div>
+      <div class="memo-option-list pill-option-list">
+        <button class="memo-option pill-option" type="button" data-action="pill-select" data-pill-field="classification" data-pill-value="compounder" data-pill-label="Compounder" data-pill-option="classification:compounder">
+          <div><div class="memo-option-title">Compounder</div><div class="memo-option-desc">Businesses compounding capital at above-market rates with durable competitive position.</div></div>
+        </button>
+        <button class="memo-option pill-option" type="button" data-action="pill-select" data-pill-field="classification" data-pill-value="emerging-compounder" data-pill-label="Emerging compounder" data-pill-option="classification:emerging-compounder">
+          <div><div class="memo-option-title">Emerging compounder</div><div class="memo-option-desc">Businesses early in their compounding lifecycle, with conviction they will graduate.</div></div>
+        </button>
+        <button class="memo-option pill-option" type="button" data-action="pill-select" data-pill-field="classification" data-pill-value="situational-mispricing" data-pill-label="Situational mispricing" data-pill-option="classification:situational-mispricing">
+          <div><div class="memo-option-title">Situational mispricing</div><div class="memo-option-desc">Businesses trading materially below reasonable estimates of value due to identifiable dislocation.</div></div>
+        </button>
+        <button class="memo-option pill-option" type="button" data-action="pill-select" data-pill-field="classification" data-pill-value="speculative" data-pill-label="Speculative" data-pill-option="classification:speculative">
+          <div><div class="memo-option-title">Speculative</div><div class="memo-option-desc">Businesses with asymmetric upside and acknowledged binary or high-variance risk.</div></div>
+        </button>
+        <button class="memo-option pill-option" type="button" style="border-bottom:none;" data-action="pill-select" data-pill-field="classification" data-pill-value="treasury-allocation" data-pill-label="Treasury allocation" data-pill-option="classification:treasury-allocation">
+          <div><div class="memo-option-title">Treasury allocation</div><div class="memo-option-desc">This allocation exists for broad market exposure, liquidity preservation, or long-term compounding.</div></div>
+        </button>
+      </div>
+    </div>
+    <div class="memo-bottom-bar">
+        <button class="memo-exit" data-action="goto" data-target="pill-classification">Exit</button>
+        <button class="memo-continue enabled" data-action="pill-continue-from" data-pill-from="classification" aria-label="Continue">&rarr;</button>
+    </div>
+  </section>
+
+  <section class="screen memo-screen" data-screen="pill-role">
+    <div class="memo-topbar">
+      <button class="memo-back" data-action="back" aria-label="Back">&lsaquo;</button>
+      <button class="memo-customize-btn" type="button" data-action="pill-open-customize" aria-label="Customize this flow"><svg viewBox="0 0 16 12" width="15" height="11" fill="none"><line x1="1" y1="1" x2="15" y2="1" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><line x1="1" y1="6" x2="11" y2="6" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><line x1="1" y1="11" x2="13" y2="11" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg></button>
+      <div class="pill-progress-fill" data-pill-progress-for="role"></div>
+    </div>
+    <div class="memo-body">
+      <div class="memo-title-block">
+        <div class="memo-title-row">
+          <div>
+            <div class="memo-title">Role</div>
+            <div class="memo-step" data-pill-step-for="role">2 / 6</div>
+          </div>
+          <div style="text-align:right;">
+            <div class="memo-ticker-mini">ATZ<br>309.95 CAD <span class="chg">+0.01%</span></div>
+            <div class="memo-breadcrumb" data-value="pill-tag" style="margin-top:6px;">&mdash;</div>
+          </div>
+        </div>
+      </div>
+      <div class="memo-section-label">Size position</div>
+      <div class="memo-option-list pill-option-list">
+        <button class="memo-option pill-option" type="button" data-action="pill-select" data-pill-field="role" data-pill-value="core" data-pill-label="Core Position" data-pill-option="role:core">
+          <div><div class="memo-option-title">Core</div><div class="memo-option-desc">Highest-conviction long-term positions.</div></div>
+        </button>
+        <button class="memo-option pill-option" type="button" data-action="pill-select" data-pill-field="role" data-pill-value="conviction" data-pill-label="Conviction Position" data-pill-option="role:conviction">
+          <div><div class="memo-option-title">Conviction</div><div class="memo-option-desc">High-confidence investments intended to play a meaningful, but smaller, role than core positions.</div></div>
+        </button>
+        <button class="memo-option pill-option" type="button" data-action="pill-select" data-pill-field="role" data-pill-value="starter" data-pill-label="Starter Position" data-pill-option="role:starter">
+          <div><div class="memo-option-title">Starter</div><div class="memo-option-desc">An initial position while building conviction.</div></div>
+        </button>
+        <button class="memo-option pill-option" type="button" style="border-bottom:none;" data-action="pill-select" data-pill-field="role" data-pill-value="capped" data-pill-label="Capped Position" data-pill-option="role:capped">
+          <div><div class="memo-option-title">Capped</div><div class="memo-option-desc">A position intentionally limited in size due to higher uncertainty.</div></div>
+        </button>
+      </div>
+    </div>
+    <div class="memo-bottom-bar">
+        <button class="memo-exit" data-action="goto" data-target="pill-classification">Exit</button>
+        <button class="memo-continue enabled" data-action="pill-continue-from" data-pill-from="role" aria-label="Continue">&rarr;</button>
+    </div>
+  </section>
+
+  <section class="screen memo-screen" data-screen="pill-thesis">
+    <div class="memo-topbar">
+      <button class="memo-back" data-action="back" aria-label="Back">&lsaquo;</button>
+      <button class="memo-customize-btn" type="button" data-action="pill-open-customize" aria-label="Customize this flow"><svg viewBox="0 0 16 12" width="15" height="11" fill="none"><line x1="1" y1="1" x2="15" y2="1" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><line x1="1" y1="6" x2="11" y2="6" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><line x1="1" y1="11" x2="13" y2="11" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg></button>
+      <div class="pill-progress-fill" data-pill-progress-for="thesis"></div>
+    </div>
+    <div class="memo-body">
+      <div class="memo-title-block">
+        <div class="memo-title-row">
+          <div>
+            <div class="memo-title">Thesis</div>
+            <div class="memo-step" data-pill-step-for="thesis">3 / 6</div>
+          </div>
+          <div style="text-align:right;">
+            <div class="memo-ticker-mini">ATZ<br>309.95 CAD <span class="chg">+0.01%</span></div>
+            <div class="memo-breadcrumb" data-value="pill-tag" style="margin-top:6px;">&mdash;</div>
+          </div>
+        </div>
+      </div>
+      <div class="memo-textarea-actions">
+        <button class="memo-clear-btn" type="button" data-action="pill-clear-text" data-pill-field="thesis">Clear</button>
+        <div class="memo-icon-actions">
+          <button class="memo-icon-btn" type="button" aria-label="Copy">
+            <svg viewBox="0 0 16 16" width="15" height="15" fill="none"><rect x="1" y="1" width="9.5" height="9.5" rx="1.5" stroke="currentColor" stroke-width="1"/><path d="M5 5H13.5a1 1 0 0 1 1 1V14a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V5Z" fill="#000" stroke="currentColor" stroke-width="1"/></svg>
+          </button>
+          <button class="memo-icon-btn" type="button" aria-label="Paste from clipboard">
+            <svg viewBox="0 0 16 16" width="15" height="15" fill="none"><rect x="3" y="2.5" width="10" height="12" rx="1.5" stroke="currentColor" stroke-width="1"/><rect x="6" y="1" width="4" height="2.5" rx="1" fill="currentColor"/></svg>
+          </button>
+        </div>
+      </div>
+      <div class="pill-textarea-box">
+        <textarea class="memo-textarea" data-pill-text="thesis" placeholder="The reason this position exists: State why the market is wrong. Be specific enough to be proven wrong later."></textarea>
+      </div>
+    </div>
+    <div class="memo-bottom-bar">
+        <button class="memo-exit" data-action="goto" data-target="pill-classification">Exit</button>
+        <button class="memo-continue enabled" data-action="pill-text-continue" data-pill-field="thesis" aria-label="Continue">&rarr;</button>
+    </div>
+  </section>
+
+  <section class="screen memo-screen" data-screen="pill-killcriteria">
+    <div class="memo-topbar">
+      <button class="memo-back" data-action="back" aria-label="Back">&lsaquo;</button>
+      <button class="memo-customize-btn" type="button" data-action="pill-open-customize" aria-label="Customize this flow"><svg viewBox="0 0 16 12" width="15" height="11" fill="none"><line x1="1" y1="1" x2="15" y2="1" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><line x1="1" y1="6" x2="11" y2="6" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><line x1="1" y1="11" x2="13" y2="11" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg></button>
+      <div class="pill-progress-fill" data-pill-progress-for="killCriteria"></div>
+    </div>
+    <div class="memo-body">
+      <div class="memo-title-block">
+        <div class="memo-title-row">
+          <div>
+            <div class="memo-title">Kill Criteria</div>
+            <div class="memo-step" data-pill-step-for="killCriteria">4 / 6</div>
+          </div>
+          <div style="text-align:right;">
+            <div class="memo-ticker-mini">ATZ<br>309.95 CAD <span class="chg">+0.01%</span></div>
+            <div class="memo-breadcrumb" data-value="pill-tag" style="margin-top:6px;">&mdash;</div>
+          </div>
+        </div>
+      </div>
+      <div class="memo-textarea-actions">
+        <button class="memo-clear-btn" type="button" data-action="pill-clear-text" data-pill-field="killCriteria">Clear</button>
+        <div class="memo-icon-actions">
+          <button class="memo-icon-btn" type="button" aria-label="Copy">
+            <svg viewBox="0 0 16 16" width="15" height="15" fill="none"><rect x="1" y="1" width="9.5" height="9.5" rx="1.5" stroke="currentColor" stroke-width="1"/><path d="M5 5H13.5a1 1 0 0 1 1 1V14a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V5Z" fill="#000" stroke="currentColor" stroke-width="1"/></svg>
+          </button>
+          <button class="memo-icon-btn" type="button" aria-label="Paste from clipboard">
+            <svg viewBox="0 0 16 16" width="15" height="15" fill="none"><rect x="3" y="2.5" width="10" height="12" rx="1.5" stroke="currentColor" stroke-width="1"/><rect x="6" y="1" width="4" height="2.5" rx="1" fill="currentColor"/></svg>
+          </button>
+        </div>
+      </div>
+      <div class="pill-textarea-box">
+        <textarea class="memo-textarea" data-pill-text="killCriteria" placeholder="The conditions that invalidate your thesis. Be specific — if any of these are met, the position no longer deserves capital."></textarea>
+      </div>
+    </div>
+    <div class="memo-bottom-bar">
+        <button class="memo-exit" data-action="goto" data-target="pill-classification">Exit</button>
+        <button class="memo-continue enabled" data-action="pill-text-continue" data-pill-field="killCriteria" aria-label="Continue">&rarr;</button>
+    </div>
+  </section>
+
+  <section class="screen memo-screen" data-screen="pill-prediction">
+    <div class="memo-topbar">
+      <button class="memo-back" data-action="back" aria-label="Back">&lsaquo;</button>
+      <button class="memo-customize-btn" type="button" data-action="pill-open-customize" aria-label="Customize this flow"><svg viewBox="0 0 16 12" width="15" height="11" fill="none"><line x1="1" y1="1" x2="15" y2="1" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><line x1="1" y1="6" x2="11" y2="6" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><line x1="1" y1="11" x2="13" y2="11" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg></button>
+      <div class="pill-progress-fill" data-pill-progress-for="probability"></div>
+    </div>
+    <div class="memo-body memo-body--pinned">
+      <div class="memo-pinned-head">
+        <div class="memo-title-block">
+          <div class="memo-title-row">
+            <div>
+              <div class="memo-title">Prediction</div>
+              <div class="memo-step" data-pill-step-for="probability">5 / 6</div>
+            </div>
+            <div style="text-align:right;">
+              <div class="memo-ticker-mini">ATZ<br>309.95 CAD <span class="chg">+0.01%</span></div>
+              <div class="memo-breadcrumb" data-value="pill-tag" style="margin-top:6px;">&mdash;</div>
+            </div>
+          </div>
+        </div>
+        <p class="memo-forecast-sentence">ATZ has a <span class="fill" data-value="pill-prob-inline">&mdash;</span> chance of compounding at <span class="fill" data-value="pill-return-inline">&mdash;</span> or more over <span class="fill" data-value="pill-horizon-inline">&mdash;</span>.</p>
+      </div>
+
+      <div class="memo-scroll-area">
+        <div class="memo-section-label pill-label-plain" style="margin-top:0;">Probability</div>
+        <div class="pill-chip-grid" style="margin-top:14px;">
+          <button type="button" class="pill-chip" data-action="pill-chip-select" data-pill-field="probability" data-pill-value="25" data-pill-chip="probability:25">25%</button>
+          <button type="button" class="pill-chip" data-action="pill-chip-select" data-pill-field="probability" data-pill-value="40" data-pill-chip="probability:40">40%</button>
+          <button type="button" class="pill-chip" data-action="pill-chip-select" data-pill-field="probability" data-pill-value="50" data-pill-chip="probability:50">50%</button>
+          <button type="button" class="pill-chip" data-action="pill-chip-select" data-pill-field="probability" data-pill-value="65" data-pill-chip="probability:65">65%</button>
+          <button type="button" class="pill-chip" data-action="pill-chip-select" data-pill-field="probability" data-pill-value="80" data-pill-chip="probability:80">80%</button>
+          <button type="button" class="pill-chip" data-action="pill-chip-select" data-pill-field="probability" data-pill-value="90" data-pill-chip="probability:90">90%</button>
+        </div>
+
+        <div class="memo-section-label pill-label-plain">Return target</div>
+        <div class="pill-chip-grid cols-5" style="margin-top:14px;">
+          <button type="button" class="pill-chip" data-action="pill-chip-select" data-pill-field="returnTarget" data-pill-value="10" data-pill-chip="returnTarget:10">10%</button>
+          <button type="button" class="pill-chip" data-action="pill-chip-select" data-pill-field="returnTarget" data-pill-value="15" data-pill-chip="returnTarget:15">15%</button>
+          <button type="button" class="pill-chip" data-action="pill-chip-select" data-pill-field="returnTarget" data-pill-value="20" data-pill-chip="returnTarget:20">20%</button>
+          <button type="button" class="pill-chip" data-action="pill-chip-select" data-pill-field="returnTarget" data-pill-value="25" data-pill-chip="returnTarget:25">25%</button>
+          <button type="button" class="pill-chip" data-action="pill-chip-select" data-pill-field="returnTarget" data-pill-value="30" data-pill-chip="returnTarget:30">30%</button>
+        </div>
+
+        <div class="memo-section-label pill-label-plain">Horizon</div>
+        <div class="memo-horizon-row">
+          <button class="memo-horizon-btn" type="button" data-action="pill-horizon" data-pill-horizon="1 year">1 year</button>
+          <button class="memo-horizon-btn" type="button" data-action="pill-horizon" data-pill-horizon="3 years">3 years</button>
+          <button class="memo-horizon-btn" type="button" data-action="pill-horizon" data-pill-horizon="5+ years">5+ years</button>
+        </div>
+
+        <p class="memo-disclaimer">This prediction reflects your judgment under uncertainty, not platform forecasts or guarantees. You make the investment decision.</p>
+      </div>
+    </div>
+    <div class="memo-bottom-bar">
+        <button class="memo-exit" data-action="goto" data-target="pill-classification">Exit</button>
+        <button class="memo-continue enabled" data-action="pill-continue-from" data-pill-from="probability" aria-label="Continue">&rarr;</button>
+    </div>
+  </section>
+
+  <section class="screen memo-screen" data-screen="pill-source">
+    <div class="memo-topbar">
+      <button class="memo-back" data-action="back" aria-label="Back">&lsaquo;</button>
+      <button class="memo-customize-btn" type="button" data-action="pill-open-customize" aria-label="Customize this flow"><svg viewBox="0 0 16 12" width="15" height="11" fill="none"><line x1="1" y1="1" x2="15" y2="1" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><line x1="1" y1="6" x2="11" y2="6" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><line x1="1" y1="11" x2="13" y2="11" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg></button>
+      <div class="pill-progress-fill" data-pill-progress-for="source"></div>
+    </div>
+    <div class="memo-body">
+      <div class="memo-title-block">
+        <div class="memo-title-row">
+          <div>
+            <div class="memo-title">Source</div>
+            <div class="memo-step" data-pill-step-for="source">6 / 6</div>
+          </div>
+          <div style="text-align:right;">
+            <div class="memo-ticker-mini">ATZ<br>309.95 CAD <span class="chg">+0.01%</span></div>
+            <div class="memo-breadcrumb" data-value="pill-tag" style="margin-top:6px;">&mdash;</div>
+          </div>
+        </div>
+      </div>
+      <div class="memo-section-label" style="margin-top:20px;">Origin of the idea.</div>
+      <p style="font-size:12.5px; color:#565b5e; margin:14px 0 0; line-height:1.5;">Tracks which inputs convert into good positions.</p>
+      <div class="pill-chip-row" style="margin-top:16px;">
+        <button type="button" class="pill-chip wide" data-action="pill-select" data-pill-field="source" data-pill-value="social-media" data-pill-label="Social media" data-pill-chip="source:social-media">Social media</button>
+        <button type="button" class="pill-chip wide" data-action="pill-select" data-pill-field="source" data-pill-value="screener" data-pill-label="Screener" data-pill-chip="source:screener">Screener</button>
+        <button type="button" class="pill-chip wide" data-action="pill-select" data-pill-field="source" data-pill-value="podcast" data-pill-label="Podcast" data-pill-chip="source:podcast">Podcast</button>
+        <button type="button" class="pill-chip wide" data-action="pill-select" data-pill-field="source" data-pill-value="newsletter" data-pill-label="Newsletter" data-pill-chip="source:newsletter">Newsletter</button>
+        <button type="button" class="pill-chip wide" data-action="pill-select" data-pill-field="source" data-pill-value="friend" data-pill-label="Friend" data-pill-chip="source:friend">Friend</button>
+        <button type="button" class="pill-chip wide" data-action="pill-select" data-pill-field="source" data-pill-value="13f" data-pill-label="13F" data-pill-chip="source:13f">13F</button>
+        <button type="button" class="pill-chip wide" data-action="pill-select" data-pill-field="source" data-pill-value="other" data-pill-label="Other" data-pill-chip="source:other">Other</button>
+      </div>
+    </div>
+    <div class="memo-bottom-bar">
+        <button class="memo-exit" data-action="goto" data-target="pill-classification">Exit</button>
+        <button class="memo-continue enabled" data-action="pill-continue-from" data-pill-from="source" aria-label="Continue">&rarr;</button>
+    </div>
+  </section>
+
+  <section class="screen memo-screen" data-screen="pill-review">
+    <div class="memo-topbar"><button class="memo-back" data-action="back" aria-label="Back">&lsaquo;</button></div>
+    <div class="memo-body" style="bottom:64px;">
+      <div style="padding-top:37px;">
+        <div style="font-size:22px; color:#fff; letter-spacing:-1.32px;">ATZ Memo</div>
+        <div style="display:flex; justify-content:space-between; align-items:baseline; margin-top:14px; padding-bottom:16px; border-bottom:1px solid var(--divider);">
+          <span style="font-size:11px; color:#565b5e;">Reflection pass</span>
+          <span style="font-size:9px; color:#929292; letter-spacing:0.9px;">TAP EACH TO UPDATE</span>
+        </div>
+      </div>
+      <div class="memo-ledger-list" data-pill-ledger></div>
+
+      <div class="memo-chip-block" style="margin-top:34px;">
+        <button type="button" class="memo-chip-toggle" data-action="toggle-memo-chips" aria-expanded="false">
+          <div class="memo-chip-heading-row">
+            <svg viewBox="0 0 16 16" width="13" height="13" fill="none"><path d="M1 8s2.7-4.5 7-4.5S15 8 15 8s-2.7 4.5-7 4.5S1 8 1 8Z" stroke="currentColor" stroke-width="1.1" stroke-linejoin="round"/><circle cx="8" cy="8" r="2" stroke="currentColor" stroke-width="1.1"/></svg>
+            <span class="memo-chip-heading">Included in this memo</span>
+          </div>
+          <svg class="chev-icon" viewBox="0 0 8 5" width="8" height="5" fill="none"><path d="M1 1L4 4L7 1" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <div class="memo-chip-collapse">
+          <div class="memo-chip-desc">Nothing you wrote is deleted. A lit field is part of your evaluation going forward; tap it to leave it out &mdash; you can always bring it back later.</div>
+          <div class="memo-chip-row" data-pill-chips></div>
+        </div>
+      </div>
+
+      <div data-pill-addback></div>
+    </div>
+    <button class="memo-save-bar" type="button" data-action="goto" data-target="pill-confirmation">Save</button>
+  </section>
+
+  <section class="screen memo-screen" data-screen="pill-confirmation">
+    <div class="memo-topbar"><button class="memo-back" data-action="back" aria-label="Back">&lsaquo;</button></div>
+    <div style="position:absolute; left:0; right:0; top:58px; bottom:0; padding:0 20px; display:flex; flex-direction:column;">
+      <div style="padding-top:56px;">
+        <div class="pill-confirm-icon"><svg viewBox="0 0 14 11" width="14" height="11" fill="none"><path d="M1 5.5L5 9.5L13 1" stroke="#fff" stroke-width="1.6" stroke-linecap="butt" stroke-linejoin="miter"/></svg></div>
+        <div style="font-size:11px; color:#929292; letter-spacing:0.3px;">Position recorded</div>
+        <div style="font-size:22px; color:#fff; letter-spacing:-1.1px; margin-top:10px;">ATZ</div>
+        <div style="font-size:12.5px; color:#929292; line-height:1.6; margin-top:14px;">Kept in the memo: <span data-value="pill-kept-summary">nothing yet</span>.</div>
+      </div>
+      <div style="flex:1;"></div>
+      <div style="padding-bottom:28px;">
+        <button type="button" class="pill-primary-btn" data-action="pill-new-position">New position</button>
+        <button type="button" class="pill-ghost-btn" data-action="pill-open-customize">Customize &middot; <span data-value="pill-active-count">6</span>/6 asked</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- CUSTOMIZE THIS FLOW (pill) — same presets/checkbox/regrouping -->
+  <!-- pattern as the cad iteration's sheet (renderPillCustomizeFields), -->
+  <!-- own wrapper classes + own pillState.settings so the two never  -->
+  <!-- cross-toggle each other.                                       -->
+  <!-- ============================================================ -->
+  <div class="pill-customize-overlay" data-action="pill-close-customize"></div>
+  <div class="pill-customize-sheet">
+    <div class="customize-head">
+      <div class="customize-title">Customize this flow</div>
+      <div class="customize-head-actions">
+        <button type="button" class="customize-reset" data-action="pill-settings-reset">Reset</button>
+        <button type="button" class="customize-close" data-action="pill-close-customize" aria-label="Close">&times;</button>
+      </div>
+    </div>
+    <div class="customize-desc">Applies now, and to every position you buy after this one.</div>
+
+    <div class="customize-label">Preset</div>
+    <div class="customize-preset-row">
+      <button type="button" class="customize-preset" data-action="pill-settings-preset" data-pill-preset="full">Full &middot; All 6</button>
+      <button type="button" class="customize-preset" data-action="pill-settings-preset" data-pill-preset="trimmed">Trimmed &middot; 2</button>
+    </div>
+
+    <div class="customize-fields" data-pill-customize-fields></div>
+    <button type="button" class="customize-done" data-action="pill-close-customize">Done</button>
+  </div>
+
+</div>
+<!-- /iteration: pill -->
+
+<!-- ============================================================ -->
 <!-- DESIGN EXPLORATION — visual/interaction directions for the     -->
 <!-- "repeat this on future positions" control. Self-contained,     -->
 <!-- doesn't touch state.memo/memoSettings — purely for comparing   -->
@@ -3728,6 +4132,198 @@
     const unselected = MEMO_FIELD_KEYS.filter(k => !state.memoSettings[k]);
     container.innerHTML = group("Currently selected", selected) + group("Not selected", unselected);
   }
+
+  // ============================================================
+  // "Memo Flow — Pills" iteration — fully self-contained state and
+  // logic, modeled closely on the reference prototype's own state
+  // shape (settings/answers/visited/memoIncluded/adhocReturn), but
+  // rendered with this file's classes/tokens. Never reads or writes
+  // state.memo/state.memoSettings, so it can't affect the cad flow.
+  // ============================================================
+  const PILL_ORDER = ["classification", "role", "thesis", "killCriteria", "probability", "source"];
+  const PILL_LABELS = { classification: "Classification", role: "Role", thesis: "Thesis", killCriteria: "Kill Criteria", probability: "Prediction", source: "Source" };
+  const PILL_DESCRIPTIONS = {
+    classification: "Classify the position (Compounder, Speculative, etc.)",
+    role: "Set the position's role in your portfolio",
+    thesis: "Write why this deserves capital",
+    killCriteria: "Define what would invalidate the case",
+    probability: "Set probability, return target & horizon",
+    source: "Note where the idea came from"
+  };
+  const PILL_KEY_SCREEN = { classification: "pill-classification", role: "pill-role", thesis: "pill-thesis", killCriteria: "pill-killcriteria", probability: "pill-prediction", source: "pill-source" };
+  const PILL_SCREEN_KEY = {};
+  Object.keys(PILL_KEY_SCREEN).forEach(k => { PILL_SCREEN_KEY[PILL_KEY_SCREEN[k]] = k; });
+  const PILL_PRESETS = {
+    full: { classification: true, role: true, thesis: true, killCriteria: true, probability: true, source: true },
+    trimmed: { classification: false, role: false, thesis: true, killCriteria: false, probability: true, source: false }
+  };
+  function pillFreshAnswers(){
+    return { classification: null, classificationLabel: null, role: null, roleLabel: null, thesis: "", killCriteria: "", probability: null, returnTarget: null, horizon: null, source: null, sourceLabel: null };
+  }
+  function pillFreshVisited(){ return { classification: false, role: false, thesis: false, killCriteria: false, probability: false, source: false }; }
+  function pillFreshIncluded(){ return { classification: true, role: true, thesis: true, killCriteria: true, probability: true, source: true }; }
+  const pillState = {
+    settings: { ...PILL_PRESETS.full },
+    answers: pillFreshAnswers(),
+    visited: pillFreshVisited(),
+    included: pillFreshIncluded(),
+    adhocReturn: false,
+    customizeOpen: false
+  };
+  function pillEsc(s){ return String(s == null ? "" : s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
+  function pillActiveSteps(){ return PILL_ORDER.filter(k => pillState.settings[k]); }
+  function pillFirstStep(){
+    const active = pillActiveSteps();
+    return active.length ? PILL_KEY_SCREEN[active[0]] : "pill-review";
+  }
+  // Mirrors the reference's continueFrom(): an ad-hoc add-back always returns straight to
+  // the review screen regardless of where it sits in PILL_ORDER; otherwise walk forward to
+  // the next step this pass is still asking.
+  function pillNextStep(fromKey){
+    if(pillState.adhocReturn){ pillState.adhocReturn = false; return "pill-review"; }
+    const idx = PILL_ORDER.indexOf(fromKey);
+    for(let i = idx + 1; i < PILL_ORDER.length; i++){
+      if(pillState.settings[PILL_ORDER[i]]) return PILL_KEY_SCREEN[PILL_ORDER[i]];
+    }
+    return "pill-review";
+  }
+  function pillApplyPreset(name){ pillState.settings = { ...PILL_PRESETS[name] }; }
+  function pillResetToFresh(){
+    pillState.answers = pillFreshAnswers();
+    pillState.visited = pillFreshVisited();
+    pillState.included = pillFreshIncluded();
+    pillState.adhocReturn = false;
+  }
+  function pillFieldValue(key){
+    const a = pillState.answers;
+    if(key === "classification") return a.classificationLabel || "—";
+    if(key === "role") return a.roleLabel || "—";
+    if(key === "thesis") return a.thesis || "—";
+    if(key === "killCriteria") return a.killCriteria || "—";
+    if(key === "source") return a.sourceLabel || "—";
+    if(key === "probability"){
+      const p = a.probability != null ? a.probability + "%" : "—";
+      const r = a.returnTarget != null ? a.returnTarget + "%/yr" : "—";
+      const h = a.horizon || "—";
+      return p + " · " + r + " · " + h;
+    }
+    return "—";
+  }
+  // Same checkbox/preset/regrouping pattern as renderCustomizeFields(), against pillState
+  // instead of state.memoSettings, into the pill iteration's own container.
+  function renderPillCustomizeFields(){
+    const container = document.querySelector('[data-pill-customize-fields]');
+    if(!container) return;
+    const row = (k)=> `
+      <div class="customize-field-row">
+        <div>
+          <div class="customize-field-label">${PILL_LABELS[k]}</div>
+          <div class="customize-field-sub">${PILL_DESCRIPTIONS[k]}</div>
+        </div>
+        <button type="button" class="memo-checkbox${pillState.settings[k] ? " on" : ""}" data-action="pill-settings-toggle" data-pill-field="${k}" aria-label="Toggle ${PILL_LABELS[k]}">${CHECK_SVG}</button>
+      </div>`;
+    const group = (label, keys)=> keys.length ? `
+      <div class="customize-group-head"><div class="customize-group-label">${label}</div><div class="customize-group-line"></div></div>
+      <div class="customize-field-list">${keys.map(row).join("")}</div>` : "";
+    const selected = PILL_ORDER.filter(k => pillState.settings[k]);
+    const unselected = PILL_ORDER.filter(k => !pillState.settings[k]);
+    container.innerHTML = group("Currently selected", selected) + group("Not selected", unselected);
+  }
+  // Memo Review: ledger rows (tap to jump back and edit), inclusion chips, and the
+  // reference's "add back just for this position" chips for steps not asked this pass.
+  function renderPillReview(){
+    const ledgerEl = document.querySelector('[data-pill-ledger]');
+    if(!ledgerEl) return;
+    const chipsEl = document.querySelector('[data-pill-chips]');
+    const addBackEl = document.querySelector('[data-pill-addback]');
+    const visitedKeys = PILL_ORDER.filter(k => pillState.visited[k]);
+
+    ledgerEl.innerHTML = visitedKeys.length ? visitedKeys.map(k => `
+      <button type="button" class="memo-ledger-item" data-action="goto" data-target="${PILL_KEY_SCREEN[k]}" style="opacity:${pillState.included[k] ? "1" : ".4"};">
+        <div class="memo-ledger-label">${PILL_LABELS[k]}</div>
+        <div class="memo-ledger-value">${pillEsc(pillFieldValue(k))}</div>
+      </button>
+    `).join("") : `<div class="pill-empty">No fields answered yet on this pass.</div>`;
+
+    chipsEl.innerHTML = visitedKeys.map(k => {
+      const on = pillState.included[k];
+      return `<button type="button" class="memo-chip${on ? " filled" : ""}" data-action="pill-toggle-included" data-pill-field="${k}">
+        <svg class="eye eye-open" viewBox="0 0 16 16" fill="none"><path d="M1 8s2.7-4.5 7-4.5S15 8 15 8s-2.7 4.5-7 4.5S1 8 1 8Z" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/><circle cx="8" cy="8" r="2" stroke="currentColor" stroke-width="1.2"/></svg>
+        <svg class="eye eye-off" viewBox="0 0 16 16" fill="none"><path d="M2 2l12 12M2.7 5.3C1.6 6.3 1 8 1 8s2.7 4.5 7 4.5c1.4 0 2.6-.4 3.6-1M6.6 3.8C7 3.6 7.5 3.5 8 3.5c4.3 0 7 4.5 7 4.5s-.5.9-1.5 1.9" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span>${PILL_LABELS[k]}</span>
+      </button>`;
+    }).join("");
+
+    const addBack = PILL_ORDER.filter(k => !pillState.visited[k]);
+    addBackEl.innerHTML = addBack.length ? `
+      <div class="pill-addback-label">Not asked this time &mdash; add for just this position:</div>
+      <div class="pill-addback-row">
+        ${addBack.map(k => `<button type="button" class="pill-addback-chip" data-action="pill-add-back" data-pill-field="${k}">+ ${PILL_LABELS[k]}</button>`).join("")}
+      </div>` : "";
+  }
+  function renderPill(){
+    const a = pillState.answers;
+    // 2026-09-28: Classification/Role selection reads as a highlighted row, not a radio dot
+    // — see .pill-option-list. The button itself carries the state now, not a child element.
+    document.querySelectorAll('[data-pill-option]').forEach(el=>{
+      const parts = el.dataset.pillOption.split(":");
+      el.classList.toggle("selected", a[parts[0]] === parts[1]);
+    });
+    document.querySelectorAll('[data-pill-chip]').forEach(el=>{
+      const parts = el.dataset.pillChip.split(":");
+      const current = a[parts[0]];
+      el.classList.toggle("selected", current != null && String(current) === parts[1]);
+    });
+    document.querySelectorAll('[data-action="pill-horizon"]').forEach(el=>{
+      el.classList.toggle("active", el.dataset.pillHorizon === a.horizon);
+    });
+    // Auto-growing box (see .pill-textarea-box): resize on every render too, not just on
+    // input, so navigating back to a filled-in step shows it at full height immediately.
+    document.querySelectorAll('[data-pill-text="thesis"]').forEach(el=>{
+      if(document.activeElement !== el) el.value = a.thesis;
+      el.style.height = "auto"; el.style.height = el.scrollHeight + "px";
+    });
+    document.querySelectorAll('[data-pill-text="killCriteria"]').forEach(el=>{
+      if(document.activeElement !== el) el.value = a.killCriteria;
+      el.style.height = "auto"; el.style.height = el.scrollHeight + "px";
+    });
+
+    const activeSteps = pillActiveSteps();
+    const currentScreenEl = document.querySelector('.iteration[data-iteration="pill"] .screen.active');
+    const currentKey = currentScreenEl ? PILL_SCREEN_KEY[currentScreenEl.dataset.screen] : null;
+    const stepsForCounter = PILL_ORDER.filter(k => pillState.settings[k] || k === currentKey);
+    document.querySelectorAll('[data-pill-step-for]').forEach(el=>{
+      const pos = stepsForCounter.indexOf(el.dataset.pillStepFor);
+      el.textContent = (pos === -1 ? stepsForCounter.length : pos + 1) + " / " + stepsForCounter.length;
+    });
+    document.querySelectorAll('[data-pill-progress-for]').forEach(el=>{
+      const pos = stepsForCounter.indexOf(el.dataset.pillProgressFor);
+      const pct = stepsForCounter.length ? ((pos === -1 ? stepsForCounter.length : pos + 1) / stepsForCounter.length) * 100 : 0;
+      el.style.width = pct + "%";
+    });
+    document.querySelectorAll('[data-value="pill-tag"]').forEach(el=>{
+      el.textContent = a.classificationLabel ? (a.classificationLabel + (a.roleLabel ? " · " + a.roleLabel : "")) : "—";
+    });
+    document.querySelectorAll('[data-value="pill-prob-inline"]').forEach(el=> el.textContent = a.probability != null ? a.probability + "%" : "—");
+    document.querySelectorAll('[data-value="pill-return-inline"]').forEach(el=> el.textContent = a.returnTarget != null ? a.returnTarget + "%" : "—");
+    document.querySelectorAll('[data-value="pill-horizon-inline"]').forEach(el=> el.textContent = a.horizon || "—");
+
+    renderPillCustomizeFields();
+    document.querySelectorAll('.pill-customize-sheet, .pill-customize-overlay').forEach(el=>{
+      el.classList.toggle("open", !!pillState.customizeOpen);
+    });
+    const matchesPillPreset = (name)=> PILL_ORDER.every(k => pillState.settings[k] === PILL_PRESETS[name][k]);
+    document.querySelectorAll('[data-action="pill-settings-preset"]').forEach(el=>{
+      el.classList.toggle("active", matchesPillPreset(el.dataset.pillPreset));
+    });
+
+    renderPillReview();
+
+    const includedKeys = PILL_ORDER.filter(k => pillState.visited[k] && pillState.included[k]).map(k => PILL_LABELS[k]);
+    document.querySelectorAll('[data-value="pill-kept-summary"]').forEach(el=> el.textContent = includedKeys.length ? includedKeys.join(", ") : "nothing yet");
+    document.querySelectorAll('[data-value="pill-active-count"]').forEach(el=> el.textContent = activeSteps.length);
+  }
+
   const state = {
     priceCents: 0,
     priceStr: "",
@@ -3903,6 +4499,7 @@
       s.classList.toggle("active", s.dataset.screen === id);
     });
     renderMemo();
+    renderPill();
     if(id.slice(-"submitting".length) === "submitting"){
       var filledId = id.slice(0, -"submitting".length) + "order-filled";
       window.clearTimeout(window.__submitTimer);
@@ -4314,6 +4911,15 @@
     renderMemo();
   });
 
+  // Thesis/Kill Criteria boxes grow with content as you type (see .pill-textarea-box);
+  // renderPill() does the same resize on render, for text set programmatically instead.
+  document.addEventListener("input", (e)=>{
+    const ta = e.target.closest("[data-pill-text]");
+    if(!ta) return;
+    ta.style.height = "auto";
+    ta.style.height = ta.scrollHeight + "px";
+  });
+
   document.addEventListener("click", (e)=>{
     const titleBtn = e.target.closest(".header-title");
     const menuItem = e.target.closest(".order-type-item");
@@ -4418,6 +5024,9 @@
         if(target === "memo-classification"){
           target = firstMemoStep();
           historyStack = [target]; showScreen(target);
+        } else if(target === "pill-classification"){
+          target = pillFirstStep();
+          historyStack = [target]; showScreen(target);
         } else if(target === "usd-limit-order" || target === "v2-limit-order"){ historyStack = [target]; showScreen(target); }
         else { go(target); }
       } else if(action === "back"){
@@ -4490,6 +5099,61 @@
         const block = navEl.closest(".memo-chip-block");
         const open = block.classList.toggle("open");
         navEl.setAttribute("aria-expanded", open ? "true" : "false");
+      } else if(action === "pill-select"){
+        const field = navEl.dataset.pillField;
+        pillState.answers[field] = navEl.dataset.pillValue;
+        pillState.answers[field + "Label"] = navEl.dataset.pillLabel;
+        renderPill();
+      } else if(action === "pill-chip-select"){
+        const field = navEl.dataset.pillField;
+        pillState.answers[field] = Number(navEl.dataset.pillValue);
+        renderPill();
+      } else if(action === "pill-horizon"){
+        pillState.answers.horizon = navEl.dataset.pillHorizon;
+        renderPill();
+      } else if(action === "pill-clear-text"){
+        const field = navEl.dataset.pillField;
+        pillState.answers[field] = "";
+        const ta = document.querySelector('[data-pill-text="' + field + '"]');
+        if(ta) ta.value = "";
+      } else if(action === "pill-text-continue"){
+        const field = navEl.dataset.pillField;
+        const ta = navEl.closest(".memo-screen").querySelector('[data-pill-text="' + field + '"]');
+        pillState.answers[field] = ta ? ta.value : "";
+        pillState.visited[field] = true;
+        go(pillNextStep(field));
+      } else if(action === "pill-continue-from"){
+        const field = navEl.dataset.pillFrom;
+        pillState.visited[field] = true;
+        go(pillNextStep(field));
+      } else if(action === "pill-toggle-included"){
+        const field = navEl.dataset.pillField;
+        pillState.included[field] = !pillState.included[field];
+        renderPill();
+      } else if(action === "pill-add-back"){
+        pillState.adhocReturn = true;
+        go(PILL_KEY_SCREEN[navEl.dataset.pillField]);
+      } else if(action === "pill-open-customize"){
+        pillState.customizeOpen = true;
+        renderPill();
+      } else if(action === "pill-close-customize"){
+        pillState.customizeOpen = false;
+        renderPill();
+      } else if(action === "pill-settings-toggle"){
+        const field = navEl.dataset.pillField;
+        pillState.settings[field] = !pillState.settings[field];
+        renderPill();
+      } else if(action === "pill-settings-preset"){
+        pillApplyPreset(navEl.dataset.pillPreset);
+        renderPill();
+      } else if(action === "pill-settings-reset"){
+        pillApplyPreset("full");
+        renderPill();
+      } else if(action === "pill-new-position"){
+        pillResetToFresh();
+        const target = pillFirstStep();
+        historyStack = [target];
+        showScreen(target);
       }
       return;
     }
@@ -4544,7 +5208,7 @@
         drawer.querySelectorAll("a[data-iteration-target]").forEach(function(l){
           l.classList.toggle("active", l === a);
         });
-        var entry = name === "usd" ? "usd-limit-order" : name === "v2" ? "v2-limit-order" : firstMemoStep();
+        var entry = name === "usd" ? "usd-limit-order" : name === "v2" ? "v2-limit-order" : name === "pill" ? pillFirstStep() : firstMemoStep();
         historyStack = [entry];
         showScreen(entry);
         closeDrawer();
